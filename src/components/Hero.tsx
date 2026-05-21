@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useGSAP } from "@gsap/react";
 import { ChevronDown, ArrowRight, Play } from "lucide-react";
 import { gsap } from "@/lib/gsap";
@@ -23,6 +24,7 @@ export default function Hero({
   const scrollRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useGSAP(
     () => {
@@ -228,7 +230,7 @@ export default function Hero({
 
           <button
             onClick={() => {
-              window.location.href = "/vr-tour";
+              router.push("/vr-tour");
             }}
             className="hero-cta-btn group relative px-8 py-4 border border-[#dc2626] text-[#dc2626] font-medium tracking-wider uppercase text-sm rounded-sm overflow-hidden btn-outline"
           >

@@ -162,7 +162,7 @@ export default function Footer({
             © {currentYear} {siteName}. All rights reserved.
           </p>
           <p className="text-xs text-zinc-700">
-            Always bringing the fight.
+            Empowering the next generation of innovators.
           </p>
         </div>
       </div>

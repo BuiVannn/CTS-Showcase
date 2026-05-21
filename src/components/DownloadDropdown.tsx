@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
-import { Smartphone, Heart, Bot, ChevronRight, Paintbrush, GraduationCap } from "lucide-react";
+import { Mic, Paintbrush, Film, Music, MessageCircle, ChevronRight } from "lucide-react";
 
 interface DownloadApp {
   id: string;
@@ -16,38 +16,31 @@ interface DownloadApp {
 
 const downloadApps: DownloadApp[] = [
   {
-    id: "kid-mentor",
-    name: "Kid Mentor",
-    description: "AI-powered learning companion for children",
-    icon: <Smartphone size={18} />,
-    href: "/products#kid-mentor",
-  },
-  {
-    id: "elder-care",
-    name: "Elder Care",
-    description: "Smart health monitoring for elderly family members",
-    icon: <Heart size={18} />,
-    href: "/products#elder-care",
-  },
-  {
-    id: "p-assistant",
-    name: "P-Assistant",
-    description: "Your personal AI assistant for daily tasks",
-    icon: <Bot size={18} />,
-    href: "/products#p-assistant",
+    id: "ptalk",
+    name: "PTalk",
+    description: "AI voice assistant for speaking practice & curriculum-aligned learning",
+    icon: <Mic size={18} />,
+    href: "/products#ptalk",
   },
   {
     id: "viet-creative",
-    name: "Viet Creative",
-    description: "Creative platform for Vietnamese content creators",
+    name: "VietCreative",
+    description: "Vietnamese lessons, AI tutor, and smart drawing — all in one tablet app",
     icon: <Paintbrush size={18} />,
     href: "/products#viet-creative",
   },
   {
+    id: "vision-tale",
+    name: "Vision Tale",
+    description: "AI filmmaking tool — write scripts, design characters, render videos",
+    icon: <Film size={18} />,
+    href: "/products#vision-tale",
+  },
+  {
     id: "unilearn",
     name: "Unilearn",
-    description: "Universal learning platform for students & educators",
-    icon: <GraduationCap size={18} />,
+    description: "Dual-module AI for math problem-solving and music composition",
+    icon: <Music size={18} />,
     href: "/products#unilearn",
   },
 ];

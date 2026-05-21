@@ -5,9 +5,11 @@ import Footer from "@/components/Footer";
 import ProductsAnimations from "@/components/ProductsAnimations";
 import {
   Shield,
-  Smartphone,
-  Heart,
-  Bot,
+  Mic,
+  Paintbrush,
+  Film,
+  Music,
+  MessageCircle,
   ArrowRight,
   Check,
   ChevronRight,
@@ -16,7 +18,7 @@ import {
 export const metadata: Metadata = {
   title: "Products — CTS Lab",
   description:
-    "Explore our unified ecosystem of apps. One account, single sign-on — access Kid Mentor, Elder Care, P-Assistant, and more.",
+    "Explore our AI-powered educational ecosystem — PTalk, VietCreative, Vision Tale, Unilearn, and more from the STEM-AI Classroom.",
 };
 
 const defaultSettings = {
@@ -45,48 +47,63 @@ interface DownloadApp {
 
 const downloadApps: DownloadApp[] = [
   {
-    id: "kid-mentor",
-    name: "Kid Mentor",
-    slug: "kid-mentor",
+    id: "ptalk",
+    name: "PTalk",
+    slug: "ptalk",
     description:
-      "AI-powered learning companion for children. Personalized lessons, progress tracking, and safe content curation.",
+      "An AI voice learning assistant that listens, responds, and guides students through curriculum-aligned exercises. Speak up, get instant feedback, and build confidence — a safe space for every student to find their voice.",
     features: [
-      "Adaptive learning paths powered by AI",
-      "Progress dashboard for parents & teachers",
-      "Safe, curated content library",
+      "AI-powered speech recognition & natural language processing",
+      "Curriculum-aligned content following the national textbook program",
+      "Instant spoken feedback with guided follow-up questions",
     ],
-    icon: <Smartphone size={28} />,
+    icon: <Mic size={28} />,
     color: "#dc2626",
     downloadHref: "#",
   },
   {
-    id: "elder-care",
-    name: "Elder Care",
-    slug: "elder-care",
+    id: "viet-creative",
+    name: "VietCreative",
+    slug: "viet-creative",
     description:
-      "Smart health monitoring and companion app for elderly family members. Medication reminders, activity tracking, and emergency alerts.",
+      "An all-in-one creative studio on a tablet — Vietnamese language lessons, a personal AI tutor for instant Q&A, and an intelligent drawing tool that transforms rough sketches into polished artwork.",
     features: [
-      "Medication & appointment reminders",
-      "Real-time health monitoring & alerts",
-      "Family-connected emergency system",
+      "Vietnamese language lessons with structured exercises",
+      "Personal AI tutor for 1-on-1 Q&A anytime",
+      "Smart drawing canvas with AI-assisted artwork completion",
     ],
-    icon: <Heart size={28} />,
+    icon: <Paintbrush size={28} />,
     color: "#ef4444",
     downloadHref: "#",
   },
   {
-    id: "p-assistant",
-    name: "P-Assistant",
-    slug: "p-assistant",
+    id: "vision-tale",
+    name: "Vision Tale",
+    slug: "vision-tale",
     description:
-      "Your personal AI assistant for daily tasks, scheduling, and smart home integration. One account, infinite possibilities.",
+      "An AI-powered filmmaking tool where students write scripts, design custom characters, and arrange scene-by-scene storyboards — then watch their vision rendered into a fully animated video.",
     features: [
-      "Natural language task management",
-      "Calendar & smart home integration",
-      "Cross-app data sync via SSO",
+      "Generative AI video rendering from text prompts",
+      "Deep character customization & scene-by-scene control",
+      "Storyboard workflow teaching narrative structure & visual logic",
     ],
-    icon: <Bot size={28} />,
+    icon: <Film size={28} />,
     color: "#b91c1c",
+    downloadHref: "#",
+  },
+  {
+    id: "unilearn",
+    name: "Unilearn",
+    slug: "unilearn",
+    description:
+      "A dual-module AI platform that sharpens both hemispheres of the brain — step-by-step math problem solving with guided hints, and interactive music theory, rhythm training, and basic composition.",
+    features: [
+      "AI-guided math from basic to advanced with step-by-step hints",
+      "Music theory, rhythm training, and basic composition module",
+      "Balanced left-brain logic and right-brain creativity development",
+    ],
+    icon: <Music size={28} />,
+    color: "#dc2626",
     downloadHref: "#",
   },
 ];

@@ -21,44 +21,44 @@ interface ShowcaseSectionProps {
 
 const placeholderApps: FlagshipApp[] = [
   {
-    id: "pcar",
-    title: "PCar",
+    id: "robot-clover",
+    title: "Robot Clover",
     category: "Robotics",
     description:
-      "An autonomous robotic car platform for STEM education and research. Programmable control, sensor integration, and real-time navigation.",
+      "A compact line-following robot equipped with precision optical sensors. Students program its path, test on the track, and debug in real time — learning the fundamental principle that machines only work flawlessly when human logic is set up correctly.",
+    image: { url: "/img/clover_bot.jpg", alt: "Robot Clover" },
+  },
+  {
+    id: "smart-arm",
+    title: "Smart Arm",
+    category: "Engineering",
+    description:
+      "A servo-driven robotic arm that draws geometric designs on paper based on programmed coordinates. Every deviation in logic is immediately exposed by a misplaced line — training spatial thinking and meticulous precision in every decision.",
+    image: { url: "/img/pcar.jpg", alt: "Smart Arm" },
+  },
+  {
+    id: "pcar",
+    title: "PCar",
+    category: "AI Voice",
+    description:
+      "A voice-controlled autonomous car that responds entirely to spoken commands — no remote controller needed. Students must speak clearly and decisively: 'forward', 'turn left', 'stop' — transforming their voice into control and building awareness of how language drives machines.",
     image: { url: "/img/pcar.jpg", alt: "PCar" },
   },
   {
     id: "vex",
-    title: "Vex",
-    category: "Engineering",
+    title: "VEX Robotics",
+    category: "Competition",
     description:
-      "VEX robotics competition platform empowering students to design, build, and program competitive robots.",
-    image: { url: "/img/vex.jpg", alt: "Vex" },
+      "An international-standard robotics platform where students design mechanisms, assemble hardware, write autonomous code, and compete under strict time limits. Through breakdowns, sweat, and hard-won victories, they learn strategic thinking, teamwork, and the discipline of real engineering.",
+    image: { url: "/img/vex.jpg", alt: "VEX Robotics" },
   },
   {
     id: "vr",
-    title: "VR",
+    title: "VR Lab",
     category: "Immersive",
     description:
-      "Immersive virtual reality experiences for education, training, and interactive simulations.",
-    image: { url: "/img/vr.jpg", alt: "VR" },
-  },
-  {
-    id: "clover-bot",
-    title: "Clover Bot",
-    category: "AI",
-    description:
-      "Intelligent chatbot powered by advanced NLP. Automates customer support, FAQ handling, and conversational workflows.",
-    image: { url: "/img/clover_bot.jpg", alt: "Clover Bot" },
-  },
-  {
-    id: "ptalk",
-    title: "PTalk",
-    category: "Communication",
-    description:
-      "Unified communication platform connecting teams and communities. Real-time messaging, voice, and video in a single ecosystem.",
-    image: { url: "/img/ptalk.jpg", alt: "PTalk" },
+      "Fully immersive 3D environments that transform abstract lessons into vivid experiences — from walking through the historic Ba Dinh Square in 1945, to detailed frog dissection in Biology, to visualizing complex geometric transformations in Mathematics.",
+    image: { url: "/img/vr.jpg", alt: "VR Lab" },
   },
 ];
 
@@ -208,6 +208,7 @@ export default function ShowcaseSection({
             {videoUrl ? (
               <iframe
                 src={videoUrl}
+                title="CTS Lab Showcase Video"
                 className="w-full h-full border-0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen

@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import Link from "next/link";
+import Image from "next/image";
 import { Shield } from "lucide-react";
 
 interface Product {
@@ -22,77 +23,62 @@ interface ProductShowcaseProps {
 }
 
 const categoryColors: Record<string, string> = {
-  education: "#dc2626",
-  healthcare: "#ef4444",
-  productivity: "#b91c1c",
-  ai: "#dc2626",
-  robotics: "#ef4444",
-  vr: "#f87171",
-  iot: "#b91c1c",
-  research: "#991b1b",
-  commercial: "#dc2626",
+  "ai-voice": "#dc2626",
+  "creative-ai": "#ef4444",
+  "video-ai": "#b91c1c",
+  "learning-ai": "#dc2626",
+  education: "#ef4444",
+  communication: "#f87171",
 };
 
 const categoryLabels: Record<string, string> = {
+  "ai-voice": "AI Voice",
+  "creative-ai": "Creative AI",
+  "video-ai": "Video AI",
+  "learning-ai": "Learning AI",
   education: "Education",
-  healthcare: "Healthcare",
-  productivity: "Productivity",
-  ai: "AI",
-  robotics: "Robotics",
-  vr: "VR",
-  iot: "IoT",
-  research: "Research",
-  commercial: "Commercial",
+  communication: "Communication",
 };
 
 const ecosystemApps: Product[] = [
   {
     id: "1",
-    title: "Kid Mentor",
-    excerpt: "AI-powered learning companion for children. Personalized lessons, progress tracking, and safe content curation.",
-    category: "education",
+    title: "PTalk",
+    excerpt: "AI voice assistant for curriculum-aligned speaking practice — a safe space for every student to find their voice.",
+    category: "ai-voice",
     year: 2025,
-    image: { url: "/img/kidmentor.jpg", alt: "Kid Mentor" },
-    tags: [{ tag: "Education" }, { tag: "AI" }],
-    slug: "kid-mentor",
+    image: { url: "/img/ptalk.jpg", alt: "PTalk" },
+    tags: [{ tag: "AI" }, { tag: "Voice" }, { tag: "Education" }],
+    slug: "ptalk",
   },
   {
     id: "2",
-    title: "Elder Care",
-    excerpt: "Smart health monitoring and companion app for elderly family members. Medication reminders, activity tracking, and emergency alerts.",
-    category: "healthcare",
+    title: "VietCreative",
+    excerpt: "Vietnamese lessons, personal AI tutor, and smart drawing — an all-in-one creative studio on a tablet.",
+    category: "creative-ai",
     year: 2025,
-    image: { url: "/img/eldercare.jpg", alt: "Elder Care" },
-    tags: [{ tag: "Healthcare" }, { tag: "IoT" }],
-    slug: "elder-care",
-  },
-  {
-    id: "3",
-    title: "P-Assistant",
-    excerpt: "Your personal AI assistant for daily tasks, scheduling, and smart home integration. One account, infinite possibilities.",
-    category: "productivity",
-    year: 2025,
-    tags: [{ tag: "Productivity" }, { tag: "AI" }],
-    slug: "p-assistant",
-  },
-  {
-    id: "4",
-    title: "Viet Creative",
-    excerpt: "A comprehensive creative platform for Vietnamese content creators. Design, collaborate, and publish — all under one account.",
-    category: "ai",
-    year: 2025,
-    image: { url: "/img/vietCreative.jpg", alt: "Viet Creative" },
-    tags: [{ tag: "Creative" }, { tag: "Design" }],
+    image: { url: "/img/vietCreative.jpg", alt: "VietCreative" },
+    tags: [{ tag: "Creative" }, { tag: "AI Tutor" }, { tag: "Vietnamese" }],
     slug: "viet-creative",
   },
   {
-    id: "5",
+    id: "3",
+    title: "Vision Tale",
+    excerpt: "Write scripts, design characters, arrange scenes — then watch AI render your story into an animated video.",
+    category: "video-ai",
+    year: 2025,
+    image: { url: "/img/vietCreative.jpg", alt: "Vision Tale" },
+    tags: [{ tag: "Generative AI" }, { tag: "Video" }, { tag: "Storytelling" }],
+    slug: "vision-tale",
+  },
+  {
+    id: "4",
     title: "Unilearn",
-    excerpt: "Universal learning platform connecting students, educators, and institutions. Adaptive curriculum, progress analytics, and certification.",
-    category: "education",
+    excerpt: "Dual-module AI: step-by-step math problem-solving on one side, music theory and composition on the other.",
+    category: "learning-ai",
     year: 2025,
     image: { url: "/img/unilearn.jpg", alt: "Unilearn" },
-    tags: [{ tag: "Education" }, { tag: "Platform" }],
+    tags: [{ tag: "Math" }, { tag: "Music" }, { tag: "AI" }],
     slug: "unilearn",
   },
 ];
@@ -175,18 +161,22 @@ export default function ProductShowcase({ products }: ProductShowcaseProps) {
               {/* Image */}
               <div className="relative h-56 overflow-hidden">
                 {product.image?.url ? (
-                  <img
+                  <Image
                     src={product.image.url}
                     alt={product.image.alt || product.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     loading="lazy"
-                    className="w-full h-full object-cover will-change-transform transition-transform duration-300 group-hover:scale-[1.02]"
+                    className="object-cover will-change-transform transition-transform duration-300 group-hover:scale-[1.02]"
                   />
                 ) : (
-                  <img
+                  <Image
                     src="/img/Logo_PTIT_University.png"
                     alt={product.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     loading="lazy"
-                    className="w-full h-full object-cover will-change-transform transition-transform duration-300 group-hover:scale-[1.02]"
+                    className="object-cover will-change-transform transition-transform duration-300 group-hover:scale-[1.02]"
                   />
                 )}
                 {/* Overlay */}
@@ -214,7 +204,7 @@ export default function ProductShowcase({ products }: ProductShowcaseProps) {
                   {product.title}
                 </h3>
                 {product.excerpt && (
-                  <p className="text-sm text-zinc-500 leading-relaxed line-clamp-2">
+                  <p className="text-sm text-zinc-500 leading-relaxed">
                     {product.excerpt}
                   </p>
                 )}
