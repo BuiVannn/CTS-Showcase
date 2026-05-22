@@ -25,12 +25,17 @@ interface TeamProps {
 }
 
 const placeholderTeam: TeamMember[] = [
-  { id: "1", name: "Dr. Nguyen Van A", role: "Lab Director", bio: "Leading researcher in AI and machine learning with over 15 years of experience.", highlight: true },
-  { id: "2", name: "Tran Thi B", role: "Senior Researcher", bio: "Specialist in robotics and embedded systems." },
-  { id: "3", name: "Le Van C", role: "VR Developer", bio: "Expert in virtual reality and 3D visualization." },
-  { id: "4", name: "Pham Thi D", role: "Data Scientist", bio: "Data analytics specialist focused on educational data mining." },
-  { id: "5", name: "Hoang Van E", role: "IoT Engineer", bio: "Hardware and firmware engineer specializing in IoT." },
-  { id: "6", name: "Vo Thi F", role: "UX Designer", bio: "User experience designer for educational technology." },
+  { id: "1", name: "Mr.Pham Vu Minh Tu", role: "", image: { url: "/img/thayTu.png", alt: "Mr.Pham Vu Minh Tu" } },
+  { id: "2", name: "Mr.Vu Huu Tien", role: "", image: { url: "/img/thayTien.png", alt: "Mr.Vu Huu Tien" } },
+  { id: "3", name: "Mr.Nguyen Xuan Nam", role: "", image: { url: "/img/anhNam.jpg", alt: "Mr.Nguyen Xuan Nam" } },
+  { id: "4", name: "Mr.Nguyen Hoang Quoc Quyen", role: "" },
+  { id: "5", name: "Mr.Nguyen Thanh Trung", role: "", image: { url: "/img/anhTrung.jpg", alt: "Mr.Nguyen Thanh Trung" } },
+  { id: "6", name: "Mr.Nguyen Trung Nam", role: "", image: { url: "/img/namBu.jpg", alt: "Mr.Nguyen Trung Nam" } },
+  { id: "7", name: "Mr.Bui Mau Van", role: "", image: { url: "/img/vanBui.jpg", alt: "Mr.Bui Mau Van" } },
+  { id: "8", name: "Mr.Vu Hung Anh", role: "", image: { url: "/img/hungAnh.jpg", alt: "Mr.Vu Hung Anh" } },
+  { id: "9", name: "Mr.Pham Tuan Anh", role: "", image: { url: "/img/tuanAnh.jpg", alt: "Mr.Pham Tuan Anh" } },
+  { id: "10", name: "Mr.Luong Son Tung", role: "", image: { url: "/img/tung.jpg", alt: "Mr.Luong Son Tung" } },
+  { id: "11", name: "Mr.Pham Quoc Viet", role: "", image: { url: "/img/viet.jpg", alt: "Mr.Pham Quoc Viet" } },
 ];
 
 export default function Team({ members }: TeamProps) {
@@ -108,7 +113,7 @@ export default function Team({ members }: TeamProps) {
                   <img
                     src={member.image.url}
                     alt={member.image.alt || member.name}
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
                   />
                 ) : (
                   <div className="placeholder-image w-full h-full flex items-center justify-center">
@@ -156,9 +161,11 @@ export default function Team({ members }: TeamProps) {
               <h3 className="text-base font-semibold text-[#111111] font-[family-name:var(--font-space-grotesk)]">
                 {member.name}
               </h3>
-              <p className="text-xs tracking-widest uppercase text-[#dc2626] mt-1">
-                {member.role}
-              </p>
+              {member.role && (
+                <p className="text-xs tracking-widest uppercase text-[#dc2626] mt-1">
+                  {member.role}
+                </p>
+              )}
               {member.bio && (
                 <p className="text-sm text-zinc-500 mt-2 leading-relaxed">
                   {member.bio}
