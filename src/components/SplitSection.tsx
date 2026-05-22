@@ -78,7 +78,11 @@ export default function SplitSection({
               {leftDescription}
             </p>
             <div className="h-64 sm:h-80 bg-[#f3f4f6] border border-black/5 overflow-hidden relative group">
-              <div className="placeholder-image absolute inset-0" />
+              <img
+                src="/img/1account.png"
+                alt="One Account"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent" />
               <div className="absolute bottom-4 left-4">
                 <span className="text-xs tracking-widest uppercase text-zinc-400">
