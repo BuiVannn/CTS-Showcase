@@ -28,7 +28,7 @@ const placeholderTeam: TeamMember[] = [
   { id: "1", name: "Mr.Pham Vu Minh Tu", role: "", image: { url: "/img/thayTu.png", alt: "Mr.Pham Vu Minh Tu" } },
   { id: "2", name: "Mr.Vu Huu Tien", role: "", image: { url: "/img/thayTien.png", alt: "Mr.Vu Huu Tien" } },
   { id: "3", name: "Mr.Nguyen Xuan Nam", role: "", image: { url: "/img/anhNam.jpg", alt: "Mr.Nguyen Xuan Nam" } },
-  { id: "4", name: "Mr.Nguyen Hoang Quoc Quyen", role: "" },
+  { id: "4", name: "Mr.Nguyen Hoang Quoc Quyen", role: "", image: { url: "/img/anhQuyen.jpg", alt: "Mr.Nguyen Hoang Quoc Quyen" } },
   { id: "5", name: "Mr.Nguyen Thanh Trung", role: "", image: { url: "/img/anhTrung.jpg", alt: "Mr.Nguyen Thanh Trung" } },
   { id: "6", name: "Mr.Nguyen Trung Nam", role: "", image: { url: "/img/namBu.jpg", alt: "Mr.Nguyen Trung Nam" } },
   { id: "7", name: "Mr.Bui Mau Van", role: "", image: { url: "/img/vanBui.jpg", alt: "Mr.Bui Mau Van" } },
