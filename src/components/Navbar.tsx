@@ -98,7 +98,7 @@ export default function Navbar({ siteName = "Creative Technologies and Simulatio
             <img
               src="/img/cts-logo.jpg"
               alt="CTS Lab Logo"
-              className="w-8 h-8 object-contain rounded-sm"
+              className="w-14 h-14 object-contain rounded-sm"
             />
             <span className={`text-sm font-semibold tracking-widest uppercase font-[family-name:var(--font-space-grotesk)] ${scrolled ? "text-[#111111]" : "text-white"}`}>
               {siteName}
