@@ -19,7 +19,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "CTS Lab — Creative Technologies and Simulation Lab, PTIT",
+  title: "CTS Lab - Creative Technologies and Simulation Lab, PTIT",
   description:
     "CTS Lab at the Posts & Telecommunications Institute of Technology develops cutting-edge STEM products, educational tools, and research.",
   keywords: ["STEM", "PTIT", "CTS", "Creative Technologies", "Simulation", "Innovation", "Education", "Technology"],
