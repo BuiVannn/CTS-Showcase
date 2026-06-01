@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "PTIT Virtual Tour — CTS Lab",
+  title: "CTS Lab - PTIT Virtual Tour",
   description:
     "Explore PTIT campus in 360° virtual reality. Walk through buildings, labs, library, and more.",
 };
