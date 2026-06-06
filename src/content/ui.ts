@@ -18,12 +18,12 @@ export const ui = {
   },
   spotlight: {
     eyebrow: { en: "Interactive", vi: "Tương tác" } as Localized,
-    title: { en: "Hands-on by design", vi: "Thiết kế để chạm tay vào" } as Localized,
+    title: { en: "Meet PTalk", vi: "Gặp gỡ PTalk" } as Localized,
     lead: {
-      en: "Everything we build is meant to be touched, moved, and broken. Drag the card — the lab leans toward you.",
-      vi: "Mọi thứ chúng tôi tạo ra đều để chạm, di chuyển và thử thách. Kéo tấm thẻ — phòng lab nghiêng về phía bạn.",
+      en: "Everything we build is meant to be touched, moved, and explored. Here's PTalk, live in 3D — drag to spin it, scroll to zoom in.",
+      vi: "Mọi thứ chúng tôi tạo ra đều để chạm, di chuyển và khám phá. Đây là PTalk, sống động trong không gian 3D — kéo để xoay, cuộn để phóng to.",
     } as Localized,
-    hint: { en: "Move your cursor to tilt", vi: "Di chuột để nghiêng" } as Localized,
+    hint: { en: "Drag to rotate · scroll to zoom", vi: "Kéo để xoay · cuộn để phóng to" } as Localized,
   },
   ecosystem: {
     eyebrow: { en: "Ecosystem", vi: "Hệ sinh thái" } as Localized,

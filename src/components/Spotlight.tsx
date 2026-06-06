@@ -1,13 +1,22 @@
 "use client";
 
-import Image from "next/image";
-import { Sparkles, MousePointer2 } from "lucide-react";
+import dynamic from "next/dynamic";
+import { Sparkles, Rotate3d } from "lucide-react";
 import { useLocale } from "@/lib/locale";
 import { ui } from "@/content/ui";
 import SectionReveal from "./SectionReveal";
-import TiltCard from "./TiltCard";
 
-// Replaces the old 50MB 3D robot stage with a GPU-cheap pointer-tilt poster.
+// WebGL viewer is client-only and lazy-loaded so three.js stays out of the
+// initial bundle and never runs during SSR.
+const RobotViewer = dynamic(() => import("./RobotViewer"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-full items-center justify-center">
+      <span className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-[var(--border-strong)] border-t-[var(--coral)]" />
+    </div>
+  ),
+});
+
 export default function Spotlight() {
   const { t } = useLocale();
 
@@ -23,37 +32,31 @@ export default function Spotlight() {
               {t(ui.spotlight.lead)}
             </p>
             <div className="mt-7 inline-flex items-center gap-2 rounded-[var(--radius-pill)] bg-[var(--gradient-soft)] px-4 py-2 text-xs font-medium text-coral-ink">
-              <MousePointer2 size={14} />
+              <Rotate3d size={14} />
               {t(ui.spotlight.hint)}
             </div>
           </SectionReveal>
 
-          {/* Tilt poster */}
+          {/* 3D stage */}
           <SectionReveal delay={0.1}>
-            <TiltCard className="relative mx-auto max-w-md">
-              <div className="glass-strong overflow-hidden p-3">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[calc(var(--radius-lg)-0.5rem)]">
-                  <Image
-                    src="/img/clover_bot.jpg"
-                    alt="Robot Clover"
-                    fill
-                    sizes="(max-width: 1024px) 90vw, 40vw"
-                    className="object-cover"
-                    style={{ transform: "translateZ(40px)" }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-transparent" />
-                </div>
-              </div>
-
-              {/* Floating badge lifted in 3D space */}
+            <div className="glass-strong relative overflow-hidden p-3">
+              {/* soft radial glow ground */}
               <div
-                className="glass-strong absolute -right-4 -top-4 flex items-center gap-2 rounded-[var(--radius-pill)] px-4 py-2 text-xs font-semibold text-ink"
-                style={{ transform: "translateZ(70px)" }}
-              >
-                <Sparkles size={14} className="text-coral-ink" />
-                Robot Clover
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(60% 55% at 50% 60%, rgba(251,90,120,0.16), transparent 70%), radial-gradient(55% 50% at 50% 40%, rgba(142,141,245,0.16), transparent 70%)",
+                }}
+              />
+              <div className="relative aspect-square w-full sm:aspect-[4/3] lg:aspect-square">
+                <RobotViewer />
               </div>
-            </TiltCard>
+              <div className="glass-strong pointer-events-none absolute right-5 top-5 flex items-center gap-2 rounded-[var(--radius-pill)] px-4 py-2 text-xs font-semibold text-ink">
+                <Sparkles size={14} className="text-coral-ink" />
+                PTalk
+              </div>
+            </div>
           </SectionReveal>
         </div>
       </div>
