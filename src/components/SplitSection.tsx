@@ -1,76 +1,44 @@
 "use client";
 
-import { useRef } from "react";
-import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap";
+import Image from "next/image";
+import { KeyRound } from "lucide-react";
+import { useLocale } from "@/lib/locale";
+import { sso } from "@/content/sso";
+import SectionReveal from "./SectionReveal";
 
-interface SplitSectionProps {
-  leftTitle?: string;
-  leftDescription?: string;
-}
-
-export default function SplitSection({
-  leftTitle = "One Account",
-  leftDescription = "Access all our applications with a single account. Sign in once and seamlessly navigate across Kid Mentor, Elder Care, P-Assistant, and more.",
-}: SplitSectionProps) {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      if (!sectionRef.current) return;
-
-      const panels = sectionRef.current.querySelectorAll(".split-panel");
-      panels.forEach((panel, i) => {
-        gsap.fromTo(
-          panel,
-          { opacity: 0, x: i === 0 ? -40 : 40 },
-          {
-            opacity: 1,
-            x: 0,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: panel,
-              start: "top 80%",
-              once: true,
-            },
-          }
-        );
-      });
-    },
-    { scope: sectionRef }
-  );
+export default function SplitSection() {
+  const { t } = useLocale();
 
   return (
-    <section ref={sectionRef} className="section-spacing relative">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left — Text */}
-          <div className="split-panel py-16 lg:py-24">
-            <span className="text-label mb-4 block">Identity</span>
-            <h2 className="text-section font-[family-name:var(--font-display)] text-[var(--ink)] mb-6">
-              {leftTitle}
-            </h2>
-            <p className="text-[var(--text-muted)] leading-relaxed max-w-md mb-8">
-              {leftDescription}
-            </p>
-          </div>
+    <section className="section">
+      <div className="container-x">
+        <SectionReveal>
+          <div className="glass-strong grid grid-cols-1 items-center gap-8 overflow-hidden p-7 sm:p-10 lg:grid-cols-2 lg:gap-12 lg:p-14">
+            {/* Text */}
+            <div>
+              <span className="eyebrow">{t(sso.eyebrow)}</span>
+              <h2 className="text-section mt-4 text-ink">{t(sso.title)}</h2>
+              <p className="mt-5 max-w-md text-base leading-relaxed text-muted sm:text-lg">
+                {t(sso.description)}
+              </p>
+              <div className="mt-7 inline-flex items-center gap-2 rounded-[var(--radius-pill)] border border-[var(--border-strong)] bg-white/60 px-4 py-2 text-xs font-semibold text-coral-ink">
+                <KeyRound size={14} />
+                {t(sso.caption)}
+              </div>
+            </div>
 
-          {/* Right — Image */}
-          <div className="split-panel h-64 sm:h-80 bg-[var(--bg-soft)] border border-[var(--border)] rounded-[var(--radius-lg)] shadow-[var(--shadow-2)] overflow-hidden relative group">
-            <img
-              src="/img/1account.png"
-              alt="One Account"
-              className="absolute inset-0 w-full h-full object-contain p-8 transition-transform duration-500 group-hover:scale-[1.03]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface)]/80 to-transparent" />
-            <div className="absolute bottom-4 left-4">
-              <span className="text-xs tracking-widest uppercase text-[var(--text-dim)]">
-                Single Sign-On
-              </span>
+            {/* Image */}
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-lg)] bg-[var(--gradient-soft)]">
+              <Image
+                src={sso.image}
+                alt={t(sso.title)}
+                fill
+                sizes="(max-width: 1024px) 90vw, 45vw"
+                className="object-contain p-8"
+              />
             </div>
           </div>
-        </div>
+        </SectionReveal>
       </div>
     </section>
   );

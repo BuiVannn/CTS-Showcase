@@ -1,140 +1,42 @@
 "use client";
 
-import { useRef } from "react";
-import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap";
+import { useLocale } from "@/lib/locale";
+import { site } from "@/content/site";
+import SectionReveal from "./SectionReveal";
 
-interface AboutSectionProps {
-  mission?: string;
-  description?: string;
-}
-
-export default function AboutSection({
-  mission = "Pioneering the future of STEM education through innovative research, cutting-edge technology, and hands-on learning experiences.",
-  description,
-}: AboutSectionProps) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const quoteRef = useRef<HTMLDivElement>(null);
-  const descRef = useRef<HTMLParagraphElement>(null);
-
-  useGSAP(
-    () => {
-      if (!sectionRef.current) return;
-
-      // About container reveal
-      const container = sectionRef.current.querySelector(".about-container");
-      if (container) {
-        gsap.fromTo(
-          container,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
-            immediateRender: false,
-            scrollTrigger: {
-              trigger: container,
-              start: "top 80%",
-              once: true,
-            },
-          }
-        );
-      }
-
-      // Quote reveal
-      if (quoteRef.current) {
-        gsap.fromTo(
-          quoteRef.current,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
-            immediateRender: false,
-            scrollTrigger: {
-              trigger: quoteRef.current,
-              start: "top 80%",
-              once: true,
-            },
-          }
-        );
-      }
-
-      // Description reveal
-      if (descRef.current) {
-        gsap.fromTo(
-          descRef.current,
-          { opacity: 0, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power3.out",
-            immediateRender: false,
-            scrollTrigger: {
-              trigger: descRef.current,
-              start: "top 85%",
-              once: true,
-            },
-          }
-        );
-      }
-
-      // Red line reveal
-      const line = sectionRef.current.querySelector(".about-line");
-      if (line) {
-        gsap.fromTo(
-          line,
-          { scaleX: 0 },
-          {
-            scaleX: 1,
-            duration: 0.8,
-            ease: "power3.inOut",
-            scrollTrigger: {
-              trigger: line,
-              start: "top 85%",
-              once: true,
-            },
-          }
-        );
-      }
-    },
-    { scope: sectionRef }
-  );
+export default function AboutSection() {
+  const { t } = useLocale();
 
   return (
-    <section ref={sectionRef} id="about" className="section-spacing relative">
-      <div className="about-container mx-auto max-w-4xl px-6 lg:px-8 text-center">
-        {/* Red accent line */}
-        <div className="about-line accent-line-short mx-auto mb-12 origin-center" />
+    <section id="about" className="section">
+      <div className="container-x">
+        <SectionReveal className="glass-strong relative mx-auto max-w-4xl overflow-hidden px-7 py-16 text-center sm:px-14 lg:py-20">
+          {/* soft corner glow */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full opacity-50 blur-3xl"
+            style={{ background: "radial-gradient(circle, rgba(251,90,120,0.45), transparent 70%)" }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -bottom-16 -left-16 h-56 w-56 rounded-full opacity-50 blur-3xl"
+            style={{ background: "radial-gradient(circle, rgba(142,141,245,0.45), transparent 70%)" }}
+          />
 
-        {/* Mission quote */}
-        <div ref={quoteRef} className="opacity-0">
-          <p className="text-2xl sm:text-3xl lg:text-4xl font-[family-name:var(--font-display)] text-[var(--ink)] leading-relaxed tracking-tight">
-            &ldquo;{mission}&rdquo;
+          <p className="font-display relative text-2xl font-medium leading-snug tracking-tight text-ink sm:text-3xl lg:text-[2.6rem] lg:leading-[1.18]">
+            <span className="text-gradient">&ldquo;</span>
+            {t(site.mission)}
+            <span className="text-gradient">&rdquo;</span>
           </p>
-        </div>
 
-        {/* Description */}
-        {description && (
-          <p
-            ref={descRef}
-            className="mt-8 text-base text-[var(--text-muted)] max-w-2xl mx-auto leading-relaxed opacity-0"
-          >
-            {description}
-          </p>
-        )}
-
-        {/* Signature-style element */}
-        <div className="mt-12 flex items-center justify-center gap-4">
-          <div className="h-px w-12 bg-[var(--border-red)]" />
-          <span className="text-xs tracking-[0.3em] uppercase text-[var(--text-dim)]">
-            CTS Lab, PTIT
-          </span>
-          <div className="h-px w-12 bg-[var(--border-red)]" />
-        </div>
+          <div className="relative mt-10 flex items-center justify-center gap-4">
+            <span className="h-px w-12 bg-[var(--border-strong)]" />
+            <span className="text-xs font-semibold uppercase tracking-[0.3em] text-dim">
+              {site.signature}
+            </span>
+            <span className="h-px w-12 bg-[var(--border-strong)]" />
+          </div>
+        </SectionReveal>
       </div>
     </section>
   );

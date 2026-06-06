@@ -1,199 +1,153 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Menu, X, Download } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import { Menu, X, Play } from "lucide-react";
 import { getLenis } from "@/lib/lenis";
-import { gsap } from "@/lib/gsap";
-import { useGSAP } from "@gsap/react";
+import { useLocale } from "@/lib/locale";
+import { EASE } from "@/lib/motion";
+import { site } from "@/content/site";
+import { ui } from "@/content/ui";
 import DownloadDropdown from "./DownloadDropdown";
+import LanguageToggle from "./LanguageToggle";
+
 interface NavbarProps {
-  siteName?: string;
   showSectionLinks?: boolean;
 }
 
-export default function Navbar({ siteName = "Creative Technologies and Simulation Lab", showSectionLinks = true }: NavbarProps) {
+export default function Navbar({ showSectionLinks = true }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [mobileDownloadOpen, setMobileDownloadOpen] = useState(false);
-  const navRef = useRef<HTMLElement>(null);
-  const linksRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const reduce = useReducedMotion();
+  const { t } = useLocale();
 
   useEffect(() => {
-    // Use Lenis scroll event (throttled via RAF) instead of raw window scroll
     const lenis = getLenis();
     if (lenis) {
-      const onScroll = ({ scroll }: { scroll: number }) => {
-        setScrolled(scroll > 50);
-      };
+      const onScroll = ({ scroll }: { scroll: number }) => setScrolled(scroll > 40);
       lenis.on("scroll", onScroll);
       return () => lenis.off("scroll", onScroll);
     }
-    // Fallback if Lenis not ready yet
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const handle = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", handle, { passive: true });
+    return () => window.removeEventListener("scroll", handle);
   }, []);
-
-  useGSAP(
-    () => {
-      if (linksRef.current) {
-        const links = linksRef.current.querySelectorAll(".nav-link");
-        gsap.from(links, {
-          opacity: 0,
-          y: -10,
-          duration: 0.5,
-          stagger: 0.08,
-          delay: 0.5,
-          ease: "power3.out",
-        });
-
-
-      }
-    },
-    { scope: navRef }
-  );
-
-  const router = useRouter();
 
   const scrollTo = (id: string) => {
     setMobileOpen(false);
     const target = document.querySelector(id);
     if (!target) {
-      // Target section isn't on this route — navigate to the home page anchor.
       router.push(`/${id}`);
       return;
     }
-
     const lenis = getLenis();
-    if (lenis) {
-      lenis.scrollTo(id, { offset: -80 });
-    } else {
-      target.scrollIntoView({ behavior: "smooth" });
-    }
+    if (lenis) lenis.scrollTo(id, { offset: -90 });
+    else target.scrollIntoView({ behavior: "smooth" });
   };
 
-  const navLinks = [
-    { id: "#home", label: "Home" },
-    { id: "#showcase", label: "Showcase" },
-    { id: "#products", label: "Products" },
-    { id: "#team", label: "Team" },
-    { id: "#contact", label: "Contact" },
-  ];
-
   return (
-    <nav
-      ref={navRef}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "bg-[rgba(255,255,255,0.8)] backdrop-blur-xl border-b border-[var(--border)] shadow-sm"
-          : "bg-transparent"
-      }`}
+    <motion.nav
+      initial={reduce ? false : { y: -24, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: EASE }}
+      className="fixed inset-x-0 top-0 z-50"
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <img
+      <div className="container-x pt-3 lg:pt-4">
+        <div
+          className={`flex items-center justify-between gap-4 rounded-[var(--radius-pill)] border border-[var(--glass-border)] bg-[var(--glass-bg-strong)] px-3 py-2 pl-4 backdrop-blur-xl transition-shadow duration-500 ${
+            scrolled ? "shadow-[var(--shadow-md)]" : "shadow-[var(--shadow-sm)]"
+          }`}
+        >
+          {/* Brand */}
+          <Link href="/" className="group flex items-center gap-2.5">
+            <Image
               src="/img/cts-logo.jpg"
-              alt="CTS Lab Logo"
-              className="w-14 h-14 object-contain rounded-lg"
+              alt="CTS Lab"
+              width={36}
+              height={36}
+              className="h-9 w-9 rounded-[12px] object-contain"
             />
-            <span className="text-sm font-semibold tracking-widest uppercase font-[family-name:var(--font-display)] text-[var(--ink)] transition-colors duration-300 group-hover:text-[var(--red-dark)]">
-              {siteName}
+            <span className="font-display text-sm font-semibold tracking-tight text-ink transition-colors group-hover:text-coral-ink">
+              {site.siteNameShort}
             </span>
           </Link>
 
           {/* Desktop links */}
-          <div ref={linksRef} className="hidden lg:flex items-center gap-1">
-            {showSectionLinks &&
-              navLinks.map((link) => (
+          {showSectionLinks && (
+            <div className="hidden items-center gap-0.5 lg:flex">
+              {site.nav.map((link) => (
                 <button
                   key={link.id}
                   onClick={() => scrollTo(link.id)}
-                  className="nav-link px-4 py-2 text-xs font-medium tracking-widest uppercase transition-colors duration-300 text-[var(--text-muted)] hover:text-[var(--red-dark)]"
+                  className="rounded-[var(--radius-pill)] px-3.5 py-2 text-[0.78rem] font-medium text-muted transition-colors duration-300 hover:bg-white/60 hover:text-ink"
                 >
-                  {link.label}
+                  {t(link.label)}
                 </button>
               ))}
-
-            {/* Download CTA with dropdown */}
-            <div className="ml-2">
-              <DownloadDropdown />
             </div>
-          </div>
-
-          {/* Mobile menu button */}
-          <button
-            className="lg:hidden p-2 text-[var(--text-muted)] hover:text-[var(--ink)] transition-colors"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      <div
-        className={`lg:hidden overflow-hidden transition-all duration-500 ${
-          mobileOpen ? "max-h-[32rem] opacity-100" : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="bg-[rgba(255,255,255,0.95)] backdrop-blur-xl border-t border-[var(--border)] px-6 py-4 space-y-1">
-          {showSectionLinks &&
-            navLinks.map((link) => (
-              <button
-                key={link.id}
-                onClick={() => scrollTo(link.id)}
-                className="block w-full text-left px-4 py-3 text-sm font-medium tracking-widest uppercase text-[var(--text-muted)] hover:text-[var(--red-dark)] transition-colors"
-              >
-                {link.label}
-              </button>
-            ))}
-
-          {/* Download — expandable */}
-          <button
-            onClick={() => setMobileDownloadOpen(!mobileDownloadOpen)}
-            className="flex items-center justify-between w-full px-4 py-3 text-sm font-medium tracking-widest uppercase text-[var(--red)] hover:text-[var(--red-dark)] transition-colors"
-          >
-            <span className="flex items-center gap-2">
-              <Download size={14} />
-              Download
-            </span>
-            <X
-              size={14}
-              className={`transition-transform duration-300 ${mobileDownloadOpen ? "rotate-0" : "rotate-45"}`}
-            />
-          </button>
-          <div
-            className={`overflow-hidden transition-all duration-300 ${
-              mobileDownloadOpen ? "max-h-48 opacity-100" : "max-h-0 opacity-0"
-            }`}
-          >
-            <DownloadDropdown
-              variant="mobile"
-              onNavigate={() => setMobileOpen(false)}
-            />
-          </div>
-
-          {showSectionLinks && (
-            <button
-              onClick={() => scrollTo("#contact")}
-              className="block w-full text-left px-4 py-3 text-sm font-medium tracking-widest uppercase text-[var(--red)] hover:text-[var(--red-dark)] transition-colors"
-            >
-              Get in Touch
-            </button>
           )}
-          <Link
-            href="/vr-tour"
-            className="block w-full text-left px-4 py-3 text-sm font-medium tracking-widest uppercase text-[var(--red)] hover:text-[var(--red-dark)] transition-colors"
-          >
-            🎥 VR Tour
-          </Link>
+
+          {/* Right cluster */}
+          <div className="hidden items-center gap-2 lg:flex">
+            <LanguageToggle />
+            <DownloadDropdown />
+            <Link
+              href="/vr-tour"
+              className="btn-gradient !px-4 !py-2 !text-[0.78rem]"
+            >
+              <Play size={14} />
+              {t(ui.hero.vrCta)}
+            </Link>
+          </div>
+
+          {/* Mobile controls */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <LanguageToggle />
+            <button
+              className="rounded-[var(--radius-pill)] p-2 text-ink"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        <div
+          className={`overflow-hidden transition-all duration-500 lg:hidden ${
+            mobileOpen ? "mt-2 max-h-[34rem] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
+          <div className="glass-strong space-y-1 p-3">
+            {showSectionLinks &&
+              site.nav.map((link) => (
+                <button
+                  key={link.id}
+                  onClick={() => scrollTo(link.id)}
+                  className="block w-full rounded-[var(--radius-md)] px-4 py-3 text-left text-sm font-medium text-muted transition-colors hover:bg-white/60 hover:text-ink"
+                >
+                  {t(link.label)}
+                </button>
+              ))}
+            <div className="px-1 py-1">
+              <DownloadDropdown variant="mobile" onNavigate={() => setMobileOpen(false)} />
+            </div>
+            <Link
+              href="/vr-tour"
+              onClick={() => setMobileOpen(false)}
+              className="btn-gradient w-full justify-center"
+            >
+              <Play size={14} />
+              {t(ui.hero.vrCta)}
+            </Link>
+          </div>
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 }

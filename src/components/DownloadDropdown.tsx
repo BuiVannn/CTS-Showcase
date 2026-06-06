@@ -2,53 +2,23 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap";
-import { Mic, Paintbrush, Film, Music, MessageCircle, ChevronRight } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { Mic, Paintbrush, Film, Music, ChevronRight, Download } from "lucide-react";
+import { ecosystem } from "@/content/ecosystem";
+import { ui } from "@/content/ui";
+import { useLocale } from "@/lib/locale";
+import { EASE } from "@/lib/motion";
+import type { IconKey } from "@/content/types";
 
-interface DownloadApp {
-  id: string;
-  name: string;
-  description: string;
-  icon: React.ReactNode;
-  href: string;
-}
-
-const downloadApps: DownloadApp[] = [
-  {
-    id: "ptalk",
-    name: "PTalk",
-    description: "AI voice assistant for speaking practice & curriculum-aligned learning",
-    icon: <Mic size={18} />,
-    href: "/products#ptalk",
-  },
-  {
-    id: "viet-creative",
-    name: "VietCreative",
-    description: "Vietnamese lessons, AI tutor, and smart drawing — all in one tablet app",
-    icon: <Paintbrush size={18} />,
-    href: "/products#viet-creative",
-  },
-  {
-    id: "vision-tale",
-    name: "Vision Tale",
-    description: "AI filmmaking tool — write scripts, design characters, render videos",
-    icon: <Film size={18} />,
-    href: "/products#vision-tale",
-  },
-  {
-    id: "unilearn",
-    name: "Unilearn",
-    description: "Dual-module AI for math problem-solving and music composition",
-    icon: <Music size={18} />,
-    href: "/products#unilearn",
-  },
-];
+const ICONS: Record<IconKey, typeof Mic> = {
+  mic: Mic,
+  paintbrush: Paintbrush,
+  film: Film,
+  music: Music,
+};
 
 interface DownloadDropdownProps {
-  /** Render as mobile inline list instead of desktop dropdown */
   variant?: "desktop" | "mobile";
-  /** Called when a link is clicked (e.g. to close mobile menu) */
   onNavigate?: () => void;
 }
 
@@ -58,9 +28,9 @@ export default function DownloadDropdown({
 }: DownloadDropdownProps) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const { t } = useLocale();
 
-  // Close on outside click
   useEffect(() => {
     if (variant !== "desktop") return;
     const handleClick = (e: MouseEvent) => {
@@ -68,125 +38,103 @@ export default function DownloadDropdown({
         setOpen(false);
       }
     };
+    const handleKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKey);
+    };
   }, [variant]);
 
-  // Close on Escape
-  useEffect(() => {
-    if (!open) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
-    };
-    document.addEventListener("keydown", handleKey);
-    return () => document.removeEventListener("keydown", handleKey);
-  }, [open]);
-
-  // Animate menu items on open
-  useGSAP(
-    () => {
-      if (!menuRef.current || !open) return;
-      const items = menuRef.current.querySelectorAll(".download-item");
-      gsap.fromTo(
-        items,
-        { opacity: 0, y: -8 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.3,
-          stagger: 0.06,
-          ease: "power3.out",
-        }
-      );
-    },
-    { scope: menuRef, dependencies: [open] }
-  );
-
-  // ── Mobile variant: inline list ──
+  // ── Mobile: inline list ──
   if (variant === "mobile") {
     return (
-      <div className="space-y-1 pl-4">
-        {downloadApps.map((app) => (
-          <Link
-            key={app.id}
-            href={app.href}
-            onClick={onNavigate}
-            className="download-item flex items-center gap-3 px-4 py-2.5 text-sm text-[var(--text-muted)] hover:text-[var(--ink)] transition-colors"
-          >
-            <span className="text-[var(--red)]">{app.icon}</span>
-            <span>{app.name}</span>
-          </Link>
-        ))}
+      <div className="space-y-1">
+        {ecosystem.map((app) => {
+          const Icon = ICONS[app.icon];
+          return (
+            <Link
+              key={app.id}
+              href={`/products#${app.slug}`}
+              onClick={onNavigate}
+              className="flex items-center gap-3 rounded-[var(--radius-md)] px-4 py-2.5 text-sm text-muted transition-colors hover:bg-white/60 hover:text-ink"
+            >
+              <span className="text-coral-ink">
+                <Icon size={17} />
+              </span>
+              {app.name}
+            </Link>
+          );
+        })}
         <Link
           href="/products"
           onClick={onNavigate}
-          className="download-item flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-[var(--red)] hover:text-[var(--red-dark)] transition-colors"
+          className="flex items-center gap-1.5 rounded-[var(--radius-md)] px-4 py-2.5 text-sm font-semibold text-coral-ink transition-colors hover:text-coral"
         >
-          View All Products
+          {t(ui.nav.viewAll)}
           <ChevronRight size={14} />
         </Link>
       </div>
     );
   }
 
-  // ── Desktop variant: dropdown ──
+  // ── Desktop: dropdown ──
   return (
     <div ref={containerRef} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="nav-link px-4 py-2 text-xs font-medium tracking-widest uppercase text-[var(--red)] hover:text-[var(--red-dark)] transition-colors duration-300 flex items-center gap-1.5"
         aria-expanded={open}
         aria-haspopup="true"
+        className="flex items-center gap-1.5 rounded-[var(--radius-pill)] px-3.5 py-2 text-[0.78rem] font-medium text-muted transition-colors duration-300 hover:bg-white/60 hover:text-ink"
       >
-        Download
-        <ChevronRight
-          size={12}
-          className={`transition-transform duration-300 ${open ? "rotate-90" : ""}`}
-        />
+        <Download size={14} />
+        {t(ui.nav.download)}
       </button>
 
-      {/* Dropdown panel */}
-      {open && (
-        <div
-          ref={menuRef}
-          className="absolute right-0 top-full mt-2 w-72 bg-[var(--surface)] border border-[var(--border)] shadow-[var(--shadow-3)] rounded-[var(--radius-md)] overflow-hidden z-50"
-        >
-          <div className="p-2">
-            {downloadApps.map((app) => (
-              <Link
-                key={app.id}
-                href={app.href}
-                onClick={() => setOpen(false)}
-                className="download-item flex items-start gap-3 px-3 py-3 rounded-[var(--radius-sm)] hover:bg-[var(--red-softer)] transition-colors group"
-              >
-                <span className="flex-shrink-0 mt-0.5 w-8 h-8 flex items-center justify-center bg-[var(--red-soft)] text-[var(--red)] rounded-[var(--radius-sm)] group-hover:bg-[var(--red)] group-hover:text-white transition-colors">
-                  {app.icon}
-                </span>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-[var(--ink)] font-[family-name:var(--font-display)] group-hover:text-[var(--red)] transition-colors">
-                    {app.name}
-                  </p>
-                  <p className="text-xs text-[var(--text-muted)] leading-relaxed mt-0.5">
-                    {app.description}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          {/* Footer link */}
-          <div className="border-t border-[var(--border)] px-2 py-2">
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: -8, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={reduce ? undefined : { opacity: 0, y: -8, scale: 0.97 }}
+            transition={{ duration: 0.2, ease: EASE }}
+            className="glass-strong absolute right-0 top-full mt-3 w-80 overflow-hidden p-2"
+          >
+            {ecosystem.map((app) => {
+              const Icon = ICONS[app.icon];
+              return (
+                <Link
+                  key={app.id}
+                  href={`/products#${app.slug}`}
+                  onClick={() => setOpen(false)}
+                  className="group flex items-start gap-3 rounded-[var(--radius-md)] px-3 py-3 transition-colors hover:bg-white/70"
+                >
+                  <span className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[12px] bg-[var(--gradient-soft)] text-coral-ink transition-colors group-hover:text-coral">
+                    <Icon size={17} />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="font-display text-sm font-semibold text-ink">
+                      {app.name}
+                    </p>
+                    <p className="mt-0.5 text-xs leading-relaxed text-muted">
+                      {t(app.excerpt)}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
             <Link
               href="/products"
               onClick={() => setOpen(false)}
-              className="download-item flex items-center justify-between px-3 py-2 text-xs font-medium tracking-wider uppercase text-[var(--red)] hover:text-[var(--red-dark)] transition-colors"
+              className="mt-1 flex items-center justify-between rounded-[var(--radius-md)] border-t border-[var(--border)] px-3 py-2.5 text-xs font-semibold text-coral-ink transition-colors hover:text-coral"
             >
-              View All Products
+              {t(ui.nav.viewAll)}
               <ChevronRight size={14} />
             </Link>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

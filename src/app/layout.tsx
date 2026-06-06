@@ -1,45 +1,56 @@
 import type { Metadata } from "next";
-import { Be_Vietnam_Pro, Bricolage_Grotesque } from "next/font/google";
+import { Unbounded, Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
+import { LocaleProvider } from "@/lib/locale";
 import SmoothScroll from "@/components/SmoothScroll";
-import SuppressThreeWarnings from "@/components/SuppressThreeWarnings";
+import AuroraBackground from "@/components/AuroraBackground";
 
-const beVietnam = Be_Vietnam_Pro({
-  variable: "--font-be-vietnam",
+// Display — distinctive rounded-geometric, includes the Vietnamese subset.
+const display = Unbounded({
+  variable: "--font-display",
+  subsets: ["latin", "vietnamese"],
+  display: "swap",
+});
+
+// Body — clean, native Vietnamese coverage.
+const body = Be_Vietnam_Pro({
+  variable: "--font-body",
   subsets: ["latin", "vietnamese"],
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
-// Bricolage Grotesque is a variable font — no `weight` needed (and never
-// combine `weight` with `axes`). Powers all display headings via --font-display.
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-display",
-  subsets: ["latin"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
-  title: "CTS Lab - Creative Technologies and Simulation Lab, PTIT",
+  title: "CTS Lab — Creative Technologies and Simulation Lab, PTIT",
   description:
-    "CTS Lab at the Posts & Telecommunications Institute of Technology develops cutting-edge STEM products, educational tools, and research.",
-  keywords: ["STEM", "PTIT", "CTS", "Creative Technologies", "Simulation", "Innovation", "Education", "Technology"],
+    "CTS Lab at the Posts & Telecommunications Institute of Technology builds robots, immersive VR worlds, and AI learning tools that turn abstract lessons into hands-on experiences.",
+  keywords: [
+    "STEM",
+    "PTIT",
+    "CTS Lab",
+    "Creative Technologies",
+    "Simulation",
+    "Robotics",
+    "AI Education",
+    "VR",
+  ],
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
-      className={`${beVietnam.variable} ${bricolage.variable} antialiased`}
+      data-scroll-behavior="smooth"
+      className={`${display.variable} ${body.variable} antialiased`}
     >
-      <body className="min-h-screen bg-background text-foreground font-[family-name:var(--font-be-vietnam)] grain-overlay">
-        <SuppressThreeWarnings />
-        <SmoothScroll />
-        {children}
+      <body className="min-h-screen bg-bg text-ink grain">
+        <LocaleProvider>
+          <AuroraBackground />
+          <SmoothScroll />
+          {children}
+        </LocaleProvider>
       </body>
     </html>
   );

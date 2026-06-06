@@ -1,242 +1,83 @@
 "use client";
 
-import { useRef } from "react";
-import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap";
-import Link from "next/link";
 import Image from "next/image";
-import { Shield } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, Shield } from "lucide-react";
+import { useLocale } from "@/lib/locale";
+import { ecosystem } from "@/content/ecosystem";
+import { ui } from "@/content/ui";
+import SectionHeader from "./SectionHeader";
+import SectionReveal from "./SectionReveal";
 
-interface Product {
-  id: string;
-  title: string;
-  excerpt?: string;
-  category: string;
-  year: number;
-  image?: { url: string; alt?: string };
-  tags?: { tag: string }[];
-  slug?: string;
-}
-
-interface ProductShowcaseProps {
-  products?: Product[];
-}
-
-const categoryColors: Record<string, string> = {
-  "ai-voice": "#ed1c24",
-  "creative-ai": "#ef4444",
-  "video-ai": "#b91c1c",
-  "learning-ai": "#ed1c24",
-  education: "#ef4444",
-  communication: "#f87171",
-};
-
-const categoryLabels: Record<string, string> = {
-  "ai-voice": "AI Voice",
-  "creative-ai": "Creative AI",
-  "video-ai": "Video AI",
-  "learning-ai": "Learning AI",
-  education: "Education",
-  communication: "Communication",
-};
-
-const ecosystemApps: Product[] = [
-  {
-    id: "1",
-    title: "PTalk",
-    excerpt: "AI voice assistant for curriculum-aligned speaking practice — a safe space for every student to find their voice.",
-    category: "ai-voice",
-    year: 2025,
-    image: { url: "/img/ptalk.jpg", alt: "PTalk" },
-    tags: [{ tag: "AI" }, { tag: "Voice" }, { tag: "Education" }],
-    slug: "ptalk",
-  },
-  {
-    id: "2",
-    title: "VietCreative",
-    excerpt: "Vietnamese lessons, personal AI tutor, and smart drawing — an all-in-one creative studio on a tablet.",
-    category: "creative-ai",
-    year: 2025,
-    image: { url: "/img/vietCreative.jpg", alt: "VietCreative" },
-    tags: [{ tag: "Creative" }, { tag: "AI Tutor" }, { tag: "Vietnamese" }],
-    slug: "viet-creative",
-  },
-  {
-    id: "3",
-    title: "Vision Tale",
-    excerpt: "Write scripts, design characters, arrange scenes — then watch AI render your story into an animated video.",
-    category: "video-ai",
-    year: 2025,
-    image: { url: "/img/vietCreative.jpg", alt: "Vision Tale" },
-    tags: [{ tag: "Generative AI" }, { tag: "Video" }, { tag: "Storytelling" }],
-    slug: "vision-tale",
-  },
-  {
-    id: "4",
-    title: "Unilearn",
-    excerpt: "Dual-module AI: step-by-step math problem-solving on one side, music theory and composition on the other.",
-    category: "learning-ai",
-    year: 2025,
-    image: { url: "/img/unilearn.jpg", alt: "Unilearn" },
-    tags: [{ tag: "Math" }, { tag: "Music" }, { tag: "AI" }],
-    slug: "unilearn",
-  },
-];
-
-export default function ProductShowcase({ products }: ProductShowcaseProps) {
-  const data = products && products.length > 0 ? products : ecosystemApps;
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      if (!sectionRef.current) return;
-
-      const cards = sectionRef.current.querySelectorAll(".product-card");
-
-      gsap.fromTo(
-        cards,
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.12,
-          ease: "power3.out",
-          immediateRender: false,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 70%",
-            once: true,
-          },
-        }
-      );
-
-      // Section title
-      const title = sectionRef.current.querySelector(".section-title");
-      if (title) {
-        gsap.from(title, {
-          opacity: 0,
-          y: 30,
-          duration: 0.8,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: title,
-            start: "top 85%",
-            once: true,
-          },
-        });
-      }
-    },
-    { scope: sectionRef }
-  );
+export default function ProductShowcase() {
+  const { t } = useLocale();
 
   return (
-    <section
-      ref={sectionRef}
-      id="products"
-      className="section-spacing relative bg-[var(--bg-soft)]"
-    >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Section header */}
-        <div className="section-title mb-16">
-          <span className="text-label mb-4 block">Ecosystem</span>
-          <h2 className="text-section font-[family-name:var(--font-display)] text-[var(--ink)]">
-            App Highlights
-          </h2>
-          <div className="accent-line-short mt-4" />
-        </div>
+    <section id="products" className="section">
+      <div className="container-x">
+        <SectionHeader eyebrow={ui.ecosystem.eyebrow} title={ui.ecosystem.title} />
 
-        {/* Ecosystem badge */}
-        <div className="flex items-center gap-3 mb-10 px-4 py-3 bg-[var(--red-soft)] border border-[var(--border-red)] rounded-[var(--radius-sm)] max-w-fit">
-          <Shield size={16} className="text-[var(--red)] flex-shrink-0" />
-          <span className="text-sm text-[var(--ink)] font-medium">
-            All apps connected via{" "}
-            <span className="text-[var(--red-dark)] font-semibold">
-              Single Sign-On
+        {/* SSO badge */}
+        <SectionReveal className="mt-7" delay={0.05}>
+          <div className="inline-flex items-center gap-2.5 rounded-[var(--radius-pill)] border border-[var(--border-strong)] bg-white/60 px-4 py-2.5 backdrop-blur">
+            <Shield size={15} className="text-coral-ink" />
+            <span className="text-sm text-ink">
+              {t(ui.ecosystem.ssoPrefix)}
+              <span className="font-semibold text-coral-ink">
+                {t(ui.ecosystem.ssoStrong)}
+              </span>
             </span>
-          </span>
-        </div>
+          </div>
+        </SectionReveal>
 
-        {/* Product grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data.map((product) => (
-            <div
-              key={product.id}
-              className="product-card surface-card group cursor-pointer overflow-hidden"
-            >
-              {/* Image */}
-              <div className="relative h-56 overflow-hidden">
-                {product.image?.url ? (
+        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {ecosystem.map((app, i) => (
+            <SectionReveal key={app.id} delay={(i % 4) * 0.07}>
+              <article className="glass lift group flex h-full flex-col overflow-hidden">
+                <div className="relative h-44 overflow-hidden">
                   <Image
-                    src={product.image.url}
-                    alt={product.image.alt || product.title}
+                    src={app.image.src}
+                    alt={t(app.image.alt)}
                     fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    loading="lazy"
-                    className="object-cover will-change-transform transition-transform duration-300 group-hover:scale-[1.02]"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
                   />
-                ) : (
-                  <Image
-                    src="/img/Logo_PTIT_University.png"
-                    alt={product.title}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    loading="lazy"
-                    className="object-cover will-change-transform transition-transform duration-300 group-hover:scale-[1.02]"
-                  />
-                )}
-                {/* Overlay — fades image into the card surface */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface)] via-transparent to-transparent opacity-70" />
-                {/* Category badge */}
-                <div className="absolute top-3 left-3">
-                  <span
-                    className="px-2 py-1 text-[10px] font-bold tracking-widest uppercase text-white rounded-full shadow-[var(--shadow-1)]"
-                    style={{ backgroundColor: categoryColors[product.category] || "var(--red)" }}
-                  >
-                    {categoryLabels[product.category] || product.category}
+                  <div className="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent" />
+                  <span className="absolute left-3 top-3 rounded-[var(--radius-pill)] bg-[var(--gradient-accent)] px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-wider text-white">
+                    {t(app.categoryLabel)}
+                  </span>
+                  <span className="absolute right-3 top-3 rounded-[var(--radius-pill)] bg-white/85 px-2 py-0.5 text-[0.6rem] font-semibold text-ink backdrop-blur">
+                    {app.year}
                   </span>
                 </div>
-                {/* Year */}
-                <div className="absolute top-3 right-3">
-                  <span className="text-[10px] font-medium text-[var(--ink)] bg-[var(--surface)]/85 backdrop-blur-sm px-1.5 py-0.5 rounded-full font-[family-name:var(--font-display)]">
-                    {product.year}
-                  </span>
-                </div>
-              </div>
 
-              {/* Content */}
-              <div className="p-5">
-                <h3 className="text-lg font-semibold text-[var(--ink)] font-[family-name:var(--font-display)] mb-2 group-hover:text-[var(--red)] transition-colors duration-150">
-                  {product.title}
-                </h3>
-                {product.excerpt && (
-                  <p className="text-sm text-[var(--text-muted)] leading-relaxed">
-                    {product.excerpt}
+                <div className="flex flex-1 flex-col p-5">
+                  <h3 className="font-display text-lg font-semibold text-ink">
+                    {app.name}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">
+                    {t(app.excerpt)}
                   </p>
-                )}
-                {/* Tags */}
-                {product.tags && product.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {product.tags.map((t, i) => (
-                      <span
-                        key={i}
-                        className="text-[10px] tracking-wider uppercase text-[var(--text-dim)] border border-[var(--border)] px-2 py-0.5 rounded-full"
-                      >
-                        {t.tag}
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {t(app.tags).map((tag) => (
+                      <span key={tag} className="chip">
+                        {tag}
                       </span>
                     ))}
                   </div>
-                )}
-                {/* Learn More link */}
-                <Link
-                  href={`/products${product.slug ? `#${product.slug}` : ""}`}
-                  className="inline-flex items-center gap-1.5 mt-4 text-xs font-medium tracking-wider uppercase text-[var(--red-dark)] hover:text-[var(--red)] transition-colors"
-                >
-                  Learn More
-                  <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-                </Link>
-              </div>
-            </div>
+                  <Link
+                    href={`/products#${app.slug}`}
+                    className="mt-5 inline-flex items-center gap-1 text-xs font-semibold text-coral-ink transition-colors hover:text-coral"
+                  >
+                    {t(ui.ecosystem.learnMore)}
+                    <ArrowUpRight
+                      size={14}
+                      className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
+                  </Link>
+                </div>
+              </article>
+            </SectionReveal>
           ))}
         </div>
       </div>

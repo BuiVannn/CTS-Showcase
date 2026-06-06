@@ -1,85 +1,31 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { useGSAP } from "@gsap/react";
-import { gsap } from "@/lib/gsap";
-import { Send, CheckCircle, AlertCircle } from "lucide-react";
+import { useState } from "react";
+import { Send, CheckCircle2, AlertCircle, Mail, Phone, MapPin } from "lucide-react";
+import { useLocale } from "@/lib/locale";
+import { site } from "@/content/site";
+import { ui } from "@/content/ui";
+import SectionHeader from "./SectionHeader";
+import SectionReveal from "./SectionReveal";
 
-interface ContactProps {
-  email?: string;
-  phone?: string;
-  address?: string;
-}
+type Status = "idle" | "sending" | "success" | "error";
 
-export default function Contact({
-  email = "contact@cts.ptit.edu.vn",
-  phone = "+84 xxx xxx xxx",
-  address = "Posts & Telecommunications Institute of Technology, Hanoi, Vietnam",
-}: ContactProps) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
-
-  useGSAP(
-    () => {
-      if (!sectionRef.current) return;
-
-      const title = sectionRef.current.querySelector(".section-title");
-      if (title) {
-        gsap.from(title, {
-          opacity: 0,
-          y: 30,
-          duration: 0.8,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: title,
-            start: "top 85%",
-            once: true,
-          },
-        });
-      }
-
-      const cols = sectionRef.current.querySelectorAll(".contact-col");
-
-      gsap.fromTo(
-        cols,
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: "power3.out",
-          immediateRender: false,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 70%",
-            once: true,
-          },
-        }
-      );
-    },
-    { scope: sectionRef }
-  );
+export default function Contact() {
+  const { t } = useLocale();
+  const [status, setStatus] = useState<Status>("idle");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("sending");
-
     const form = e.currentTarget;
-    const formData = new FormData(form);
-    const data = {
-      name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      message: formData.get("message") as string,
-    };
+    const data = Object.fromEntries(new FormData(form));
 
     try {
-      const res = await fetch("/api/contact-submissions", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-
       if (res.ok) {
         setStatus("success");
         form.reset();
@@ -91,120 +37,105 @@ export default function Contact({
     }
   };
 
+  const details = [
+    { label: ui.contact.emailLabel, value: site.contact.email, href: `mailto:${site.contact.email}`, Icon: Mail },
+    { label: ui.contact.phoneLabel, value: site.contact.phone, href: undefined, Icon: Phone },
+    { label: ui.contact.addressLabel, value: t(site.contact.address), href: undefined, Icon: MapPin },
+  ];
+
+  const fieldClass =
+    "w-full rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-white/70 px-4 py-3 text-sm text-ink placeholder:text-dim transition-colors focus:border-[var(--violet)] focus:outline-none";
+
   return (
-    <section ref={sectionRef} id="contact" className="section-spacing relative">
-      {/* Red accent line */}
-      <div className="accent-line mb-16" />
+    <section id="contact" className="section">
+      <div className="container-x">
+        <SectionHeader eyebrow={ui.contact.eyebrow} title={ui.contact.title} />
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Section header */}
-        <div className="section-title mb-16">
-          <span className="text-label mb-4 block">Reach Out</span>
-          <h2 className="text-section font-[family-name:var(--font-display)] text-[var(--ink)]">
-            Contact
-          </h2>
-          <div className="accent-line-short mt-4" />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          {/* Info column */}
-          <div className="contact-col">
-            <h3 className="text-xl font-semibold text-[var(--ink)] font-[family-name:var(--font-display)] mb-6">
-              Get in touch
+        <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-2">
+          {/* Info */}
+          <SectionReveal>
+            <h3 className="font-display text-xl font-semibold text-ink">
+              {t(ui.contact.heading)}
             </h3>
-            <p className="text-[var(--text-muted)] leading-relaxed mb-8">
-              Interested in our research, products, or collaboration opportunities? We&apos;d love to hear from you.
+            <p className="mt-4 max-w-md leading-relaxed text-muted">
+              {t(ui.contact.blurb)}
             </p>
-
-            <div className="space-y-4">
-              <div>
-                <span className="text-xs tracking-widest uppercase text-[var(--text-muted)] mb-1 block">Email</span>
-                <a href={`mailto:${email}`} className="text-sm text-[var(--ink)] hover:text-[var(--red-dark)] transition-colors">
-                  {email}
-                </a>
-              </div>
-              <div>
-                <span className="text-xs tracking-widest uppercase text-[var(--text-muted)] mb-1 block">Phone</span>
-                <span className="text-sm text-[var(--text-muted)]">{phone}</span>
-              </div>
-              <div>
-                <span className="text-xs tracking-widest uppercase text-[var(--text-muted)] mb-1 block">Address</span>
-                <span className="text-sm text-[var(--text-muted)]">{address}</span>
-              </div>
+            <div className="mt-8 space-y-3">
+              {details.map(({ label, value, href, Icon }) => (
+                <div
+                  key={value}
+                  className="glass flex items-start gap-3.5 px-5 py-4"
+                >
+                  <span className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[12px] bg-[var(--gradient-soft)] text-coral-ink">
+                    <Icon size={16} />
+                  </span>
+                  <div>
+                    <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-dim">
+                      {t(label)}
+                    </span>
+                    {href ? (
+                      <a
+                        href={href}
+                        className="text-sm text-ink transition-colors hover:text-coral-ink"
+                      >
+                        {value}
+                      </a>
+                    ) : (
+                      <span className="text-sm text-ink">{value}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
+          </SectionReveal>
 
-          {/* Form column */}
-          <div className="contact-col">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="contact-field">
-                <label htmlFor="name" className="text-xs tracking-widest uppercase text-[var(--text-muted)] mb-2 block">
-                  Name
+          {/* Form */}
+          <SectionReveal delay={0.1}>
+            <form onSubmit={handleSubmit} className="glass-strong space-y-4 p-6 sm:p-8">
+              <div>
+                <label htmlFor="name" className="mb-1.5 block text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-muted">
+                  {t(ui.contact.nameLabel)}
                 </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  className="w-full bg-transparent border-b-2 border-[var(--border-strong)] py-3 text-sm text-[var(--ink)] placeholder:text-[var(--text-dim)] focus:border-[var(--red)] focus:outline-none transition-colors"
-                  placeholder="Your name"
-                />
+                <input id="name" name="name" type="text" required placeholder={t(ui.contact.namePlaceholder)} className={fieldClass} />
               </div>
-              <div className="contact-field">
-                <label htmlFor="email" className="text-xs tracking-widest uppercase text-[var(--text-muted)] mb-2 block">
-                  Email
+              <div>
+                <label htmlFor="email" className="mb-1.5 block text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-muted">
+                  {t(ui.contact.emailLabel)}
                 </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  className="w-full bg-transparent border-b-2 border-[var(--border-strong)] py-3 text-sm text-[var(--ink)] placeholder:text-[var(--text-dim)] focus:border-[var(--red)] focus:outline-none transition-colors"
-                  placeholder="your@email.com"
-                />
+                <input id="email" name="email" type="email" required placeholder={t(ui.contact.emailPlaceholder)} className={fieldClass} />
               </div>
-              <div className="contact-field">
-                <label htmlFor="message" className="text-xs tracking-widest uppercase text-[var(--text-muted)] mb-2 block">
-                  Message
+              <div>
+                <label htmlFor="message" className="mb-1.5 block text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-muted">
+                  {t(ui.contact.messageLabel)}
                 </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  required
-                  rows={4}
-                  className="w-full bg-transparent border-b-2 border-[var(--border-strong)] py-3 text-sm text-[var(--ink)] placeholder:text-[var(--text-dim)] focus:border-[var(--red)] focus:outline-none transition-colors resize-none"
-                  placeholder="Tell us about your inquiry..."
-                />
+                <textarea id="message" name="message" required rows={4} placeholder={t(ui.contact.messagePlaceholder)} className={`${fieldClass} resize-none`} />
               </div>
 
-              <button
-                type="submit"
-                disabled={status === "sending"}
-                className="contact-submit-btn flex items-center gap-3 px-8 py-3 border border-[var(--red)] text-[var(--red-dark)] text-xs font-medium tracking-widest uppercase disabled:opacity-50 btn-outline"
-              >
+              <button type="submit" disabled={status === "sending"} className="btn-gradient w-full justify-center disabled:opacity-60">
                 {status === "sending" ? (
-                  "Sending..."
+                  t(ui.contact.sending)
                 ) : (
                   <>
-                    Send Message <Send size={14} />
+                    {t(ui.contact.send)}
+                    <Send size={15} />
                   </>
                 )}
               </button>
 
               {status === "success" && (
-                <div className="flex items-center gap-2 text-sm text-green-500">
-                  <CheckCircle size={16} />
-                  Message sent successfully!
-                </div>
+                <p className="flex items-center gap-2 text-sm text-emerald-600">
+                  <CheckCircle2 size={16} />
+                  {t(ui.contact.success)}
+                </p>
               )}
               {status === "error" && (
-                <div className="flex items-center gap-2 text-sm text-[var(--red)]">
+                <p className="flex items-center gap-2 text-sm text-coral-ink">
                   <AlertCircle size={16} />
-                  Failed to send. Please try again.
-                </div>
+                  {t(ui.contact.error)}
+                </p>
               )}
             </form>
-          </div>
+          </SectionReveal>
         </div>
       </div>
     </section>

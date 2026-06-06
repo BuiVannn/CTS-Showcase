@@ -2,23 +2,28 @@
 
 import { useEffect } from "react";
 import { createLenis, destroyLenis } from "@/lib/lenis";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
 
+/** Lenis smooth-scroll driver (RAF loop, no GSAP). */
 export default function SmoothScroll() {
   useEffect(() => {
+    // Respect reduced motion — skip the smoothing layer entirely.
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
     const lenis = createLenis();
-
-    // Keep ScrollTrigger in sync with Lenis scroll events
-    lenis.on("scroll", ScrollTrigger.update);
-
-    // Drive Lenis from GSAP's ticker for frame-perfect sync
-    gsap.ticker.add((time: number) => {
-      lenis.raf(time * 1000);
-    });
-    // Restore lag smoothing so dropped frames don't accumulate
-    gsap.ticker.lagSmoothing(500, 16);
+    let raf = 0;
+    const loop = (time: number) => {
+      lenis.raf(time);
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
 
     return () => {
+      cancelAnimationFrame(raf);
       destroyLenis();
     };
   }, []);
