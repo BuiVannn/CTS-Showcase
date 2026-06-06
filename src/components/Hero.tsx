@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useGSAP } from "@gsap/react";
 import { ChevronDown, ArrowRight, Play } from "lucide-react";
 import { gsap } from "@/lib/gsap";
+import { prefersReducedMotion } from "@/lib/experimentalAnimations";
 
 interface HeroProps {
   headline?: string;
@@ -29,6 +30,15 @@ export default function Hero({
   useGSAP(
     () => {
       if (!sectionRef.current) return;
+
+      // Respect reduced motion: reveal everything statically, no timelines.
+      if (prefersReducedMotion()) {
+        gsap.set([badgeRef.current, subtitleRef.current, scrollRef.current], {
+          opacity: 1,
+          y: 0,
+        });
+        return;
+      }
 
       const tl = gsap.timeline({ delay: 0.3 });
 
@@ -81,16 +91,12 @@ export default function Hero({
         );
       }
 
-      // CTA buttons with experimental entrance
+      // CTA buttons with springy entrance
       if (ctaRef.current) {
         const buttons = ctaRef.current.querySelectorAll(".hero-cta-btn");
         tl.fromTo(
           buttons,
-          {
-            opacity: 0,
-            y: 30,
-            scale: 0.9,
-          },
+          { opacity: 0, y: 30, scale: 0.9 },
           {
             opacity: 1,
             y: 0,
@@ -121,7 +127,7 @@ export default function Hero({
         });
       }
 
-      // Parallax — hero content fades on scroll
+      // Parallax — hero content drifts up on scroll
       gsap.to(".hero-content-wrapper", {
         opacity: 0,
         y: -80,
@@ -133,9 +139,9 @@ export default function Hero({
         },
       });
 
-      // Background glows parallax
-      gsap.to(".hero-glow", {
-        y: -120,
+      // Decorative atmosphere parallax
+      gsap.to(".hero-decor", {
+        y: -90,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
@@ -147,34 +153,57 @@ export default function Hero({
     { scope: sectionRef }
   );
 
+  // Renders the headline char-by-char; colors the final word PTIT red.
   const renderHeadline = (text: string) => {
-    return text.split("").map((char, i) => (
-      <span
-        key={i}
-        className="char inline-block"
-        style={{ transformOrigin: "center bottom" }}
-      >
-        {char === " " ? "\u00A0" : char}
-      </span>
-    ));
+    const words = text.split(" ");
+    return words.map((word, wi) => {
+      const isLast = wi === words.length - 1;
+      return (
+        <span key={wi} className="inline-block whitespace-nowrap">
+          {word.split("").map((char, ci) => (
+            <span
+              key={ci}
+              className="char inline-block"
+              style={{
+                transformOrigin: "center bottom",
+                color: isLast ? "var(--red)" : undefined,
+              }}
+            >
+              {char}
+            </span>
+          ))}
+          {!isLast && <span className="char inline-block">&nbsp;</span>}
+        </span>
+      );
+    });
   };
 
   return (
     <section
       ref={sectionRef}
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#111111] to-[#1a0000]"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Red glow effects */}
-      <div className="absolute inset-0 -z-10">
-        <div className="hero-glow absolute top-1/4 right-1/4 h-[500px] w-[500px] rounded-full bg-[#dc2626]/20 blur-[120px]" />
-        <div className="hero-glow absolute bottom-1/4 left-1/4 h-[400px] w-[400px] rounded-full bg-[#dc2626]/12 blur-[100px]" />
+      {/* Bright decorative atmosphere — soft red wash + PTIT orbit motif */}
+      <div className="hero-decor pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="absolute -top-40 left-1/2 h-[680px] w-[900px] max-w-[140vw] -translate-x-1/2 rounded-full"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, var(--red-soft), transparent 70%)",
+          }}
+        />
+        <div
+          className="orbit-ring left-1/2 top-1/2 h-[125vmin] w-[125vmin] -translate-x-1/2 -translate-y-1/2"
+          style={{ opacity: 0.55 }}
+        />
+        <div
+          className="orbit-ring left-1/2 top-1/2 h-[88vmin] w-[88vmin] -translate-x-1/2 -translate-y-1/2"
+          style={{ opacity: 0.4 }}
+        />
       </div>
 
-      {/* Gradient overlay at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#111111] to-transparent z-10" />
-
-      <div className="hero-content-wrapper relative z-20 mx-auto max-w-7xl px-6 lg:px-8 w-full text-center">
+      <div className="hero-content-wrapper relative z-10 mx-auto max-w-7xl px-6 lg:px-8 w-full text-center">
         {/* Red accent line */}
         <div
           ref={lineRef}
@@ -189,7 +218,7 @@ export default function Hero({
         {/* Headline */}
         <h1
           ref={headlineRef}
-          className="text-hero font-[family-name:var(--font-space-grotesk)] text-white mb-6"
+          className="text-hero font-[family-name:var(--font-display)] text-[var(--ink)] mb-6"
           style={{ perspective: "1000px" }}
         >
           {renderHeadline(headline)}
@@ -198,7 +227,7 @@ export default function Hero({
         {/* Subtitle */}
         <p
           ref={subtitleRef}
-          className="text-lg sm:text-xl text-zinc-400 max-w-xl mx-auto mb-12 tracking-wide opacity-0"
+          className="text-lg sm:text-xl text-[var(--text-muted)] max-w-xl mx-auto mb-12 tracking-wide opacity-0"
         >
           {subtitle}
         </p>
@@ -210,16 +239,20 @@ export default function Hero({
         >
           <button
             onClick={() => {
-              const lenis = (window as any).__lenis;
+              const lenis = (
+                window as unknown as { __lenis?: { scrollTo: (t: string) => void } }
+              ).__lenis;
               if (lenis) {
                 lenis.scrollTo("#showcase");
               } else {
-                document.querySelector("#showcase")?.scrollIntoView({ behavior: "smooth" });
+                document
+                  .querySelector("#showcase")
+                  ?.scrollIntoView({ behavior: "smooth" });
               }
             }}
-            className="hero-cta-btn group relative px-8 py-4 border border-[#dc2626] text-[#dc2626] font-medium tracking-wider uppercase text-sm rounded-sm overflow-hidden btn-outline"
+            className="hero-cta-btn group btn-primary px-8 py-4 font-medium tracking-wider uppercase text-sm"
           >
-            <span className="relative z-10 flex items-center gap-2">
+            <span className="flex items-center gap-2">
               Explore Ecosystem
               <ArrowRight
                 size={16}
@@ -232,7 +265,7 @@ export default function Hero({
             onClick={() => {
               router.push("/vr-tour");
             }}
-            className="hero-cta-btn group relative px-8 py-4 border border-[#dc2626] text-[#dc2626] font-medium tracking-wider uppercase text-sm rounded-sm overflow-hidden btn-outline"
+            className="hero-cta-btn group relative px-8 py-4 border border-[var(--red)] text-[var(--red-dark)] font-medium tracking-wider uppercase text-sm overflow-hidden btn-outline"
           >
             <span className="relative z-10 flex items-center gap-2">
               <Play size={16} />
@@ -243,10 +276,10 @@ export default function Hero({
 
         {/* Scroll indicator */}
         <div ref={scrollRef} className="flex flex-col items-center gap-2 opacity-0">
-          <span className="text-[10px] font-medium tracking-[0.3em] uppercase text-zinc-400">
+          <span className="text-[10px] font-medium tracking-[0.3em] uppercase text-[var(--text-dim)]">
             Scroll
           </span>
-          <ChevronDown size={20} className="text-zinc-400" />
+          <ChevronDown size={20} className="text-[var(--text-dim)]" />
         </div>
       </div>
     </section>

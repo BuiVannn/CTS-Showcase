@@ -63,36 +63,44 @@ export default function RobotSection() {
   );
 
   return (
-    <section ref={sectionRef} className="section-spacing relative bg-[#0a0a0a]">
+    <section ref={sectionRef} className="section-spacing relative">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Section header */}
         <div className="section-title mb-12 text-center">
           <span className="text-label mb-4 block">Interactive</span>
-          <h2 className="text-section font-[family-name:var(--font-space-grotesk)] text-white">
-            3D SHOWCASE
+          <h2 className="text-section font-[family-name:var(--font-display)] text-[var(--ink)]">
+            3D Showcase
           </h2>
           <div className="accent-line-short mx-auto mt-4" />
-          <p className="text-zinc-400 mt-4 max-w-lg mx-auto text-sm">
+          <p className="text-[var(--text-muted)] mt-4 max-w-lg mx-auto text-sm">
             Drag to rotate • Use buttons to zoom
           </p>
         </div>
 
-        {/* Robot 3D viewer */}
-        <div className="robot-viewer relative mx-auto max-w-5xl aspect-[16/10] rounded-lg overflow-hidden border border-[#dc2626]/20 bg-[#111111]">
+        {/* Robot 3D viewer — bright soft-gray stage so the model keeps contrast */}
+        <div className="robot-viewer relative mx-auto max-w-5xl aspect-[16/10] rounded-[var(--radius-lg)] overflow-hidden border border-[var(--border)] bg-[radial-gradient(ellipse_at_50%_35%,#ffffff_0%,#eef0f3_70%,#e4e7eb_100%)] shadow-[var(--shadow-2)]">
+          {/* soft red accent glow behind the model */}
+          <div
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[60%] w-[55%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, var(--red-soft), transparent 70%)",
+            }}
+          />
           <RobotViewer ref={robotRef} />
 
           {/* Zoom controls */}
           <div className="absolute bottom-4 right-4 flex gap-2 z-10">
             <button
               onClick={() => robotRef.current?.zoomIn()}
-              className="w-10 h-10 flex items-center justify-center rounded-md bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-[#dc2626]/80 hover:border-[#dc2626] transition-all duration-200"
+              className="w-10 h-10 flex items-center justify-center rounded-[var(--radius-sm)] bg-[var(--surface)]/80 backdrop-blur-sm border border-[var(--border)] text-[var(--ink)] hover:bg-[var(--red)] hover:text-white hover:border-[var(--red)] transition-all duration-200"
               aria-label="Zoom in"
             >
               <ZoomIn size={18} />
             </button>
             <button
               onClick={() => robotRef.current?.zoomOut()}
-              className="w-10 h-10 flex items-center justify-center rounded-md bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-[#dc2626]/80 hover:border-[#dc2626] transition-all duration-200"
+              className="w-10 h-10 flex items-center justify-center rounded-[var(--radius-sm)] bg-[var(--surface)]/80 backdrop-blur-sm border border-[var(--border)] text-[var(--ink)] hover:bg-[var(--red)] hover:text-white hover:border-[var(--red)] transition-all duration-200"
               aria-label="Zoom out"
             >
               <ZoomOut size={18} />

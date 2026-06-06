@@ -58,7 +58,7 @@ const downloadApps: DownloadApp[] = [
       "Instant spoken feedback with guided follow-up questions",
     ],
     icon: <Mic size={28} />,
-    color: "#dc2626",
+    color: "#ed1c24",
     downloadHref: "#",
   },
   {
@@ -103,7 +103,7 @@ const downloadApps: DownloadApp[] = [
       "Balanced left-brain logic and right-brain creativity development",
     ],
     icon: <Music size={28} />,
-    color: "#dc2626",
+    color: "#ed1c24",
     downloadHref: "#",
   },
 ];
@@ -122,10 +122,10 @@ export default function ProductsPage() {
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
               <div className="accent-line-short mb-8" />
               <span className="text-label mb-4 block">Our Apps</span>
-              <h1 className="text-section font-[family-name:var(--font-space-grotesk)] text-[#111111] mb-6">
-                PRODUCTS
+              <h1 className="text-section font-[family-name:var(--font-display)] text-[var(--ink)] mb-6">
+                Products
               </h1>
-              <p className="text-lg text-zinc-500 max-w-2xl leading-relaxed">
+              <p className="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">
                 Explore our unified ecosystem of applications. Sign in once with
                 your CTS account and access every app seamlessly.
               </p>
@@ -135,19 +135,19 @@ export default function ProductsPage() {
           {/* ── Ecosystem Banner ── */}
           <section className="pb-16 lg:pb-24">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
-              <div className="ecosystem-banner relative overflow-hidden rounded-sm bg-gradient-to-r from-[#111111] to-zinc-800 px-8 py-10 lg:px-16 lg:py-14">
-                {/* Subtle red glow */}
-                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-[#dc2626]/20 blur-[80px]" />
+              <div className="ecosystem-banner relative overflow-hidden rounded-[var(--radius-lg)] bg-gradient-to-r from-[var(--red)] to-[var(--red-dark)] px-8 py-10 lg:px-16 lg:py-14 shadow-[var(--shadow-red)]">
+                {/* Soft light glow */}
+                <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/15 blur-[80px]" />
 
                 <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-12">
-                  <div className="flex-shrink-0 w-14 h-14 flex items-center justify-center bg-[#dc2626]/20 rounded-sm">
-                    <Shield size={28} className="text-[#dc2626]" />
+                  <div className="flex-shrink-0 w-14 h-14 flex items-center justify-center bg-white/15 rounded-[var(--radius-md)]">
+                    <Shield size={28} className="text-white" />
                   </div>
                   <div>
-                    <h2 className="text-xl lg:text-2xl font-semibold text-white font-[family-name:var(--font-space-grotesk)] mb-2">
+                    <h2 className="text-xl lg:text-2xl font-semibold text-white font-[family-name:var(--font-display)] mb-2">
                       One Account · Single Sign-On · Unified Ecosystem
                     </h2>
-                    <p className="text-sm text-zinc-400 leading-relaxed max-w-xl">
+                    <p className="text-sm text-white/85 leading-relaxed max-w-xl">
                       Every CTS Lab application shares a single authentication
                       system. Create your account once and enjoy seamless access
                       across all our products.
@@ -162,7 +162,7 @@ export default function ProductsPage() {
           <section className="pb-16 lg:pb-24">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
               <div className="products-section-title mb-12">
-                <h2 className="text-2xl lg:text-3xl font-semibold text-[#111111] font-[family-name:var(--font-space-grotesk)]">
+                <h2 className="text-2xl lg:text-3xl font-semibold text-[var(--ink)] font-[family-name:var(--font-display)]">
                   Download Our Apps
                 </h2>
                 <div className="accent-line-short mt-3" />
@@ -173,20 +173,20 @@ export default function ProductsPage() {
                   <div
                     key={app.id}
                     id={app.slug}
-                    className="download-card editorial-card overflow-hidden scroll-mt-24"
+                    className="download-card surface-card overflow-hidden scroll-mt-24"
                   >
                     {/* Icon header */}
                     <div className="px-6 pt-6 pb-4">
                       <div
-                        className="w-14 h-14 flex items-center justify-center rounded-sm mb-5"
-                        style={{ backgroundColor: `${app.color}10` }}
+                        className="w-14 h-14 flex items-center justify-center rounded-[var(--radius-md)] mb-5"
+                        style={{ backgroundColor: `${app.color}14` }}
                       >
                         <span style={{ color: app.color }}>{app.icon}</span>
                       </div>
-                      <h3 className="text-xl font-semibold text-[#111111] font-[family-name:var(--font-space-grotesk)] mb-2">
+                      <h3 className="text-xl font-semibold text-[var(--ink)] font-[family-name:var(--font-display)] mb-2">
                         {app.name}
                       </h3>
-                      <p className="text-sm text-zinc-500 leading-relaxed">
+                      <p className="text-sm text-[var(--text-muted)] leading-relaxed">
                         {app.description}
                       </p>
                     </div>
@@ -197,7 +197,7 @@ export default function ProductsPage() {
                         {app.features.map((feat, i) => (
                           <li
                             key={i}
-                            className="flex items-start gap-2.5 text-sm text-zinc-600"
+                            className="flex items-start gap-2.5 text-sm text-[var(--text-muted)]"
                           >
                             <Check
                               size={14}
@@ -214,7 +214,7 @@ export default function ProductsPage() {
                     <div className="px-6 pb-6 pt-2">
                       <a
                         href={app.downloadHref}
-                        className="inline-flex items-center gap-2 px-6 py-3 border text-sm font-medium tracking-wider uppercase rounded-sm transition-all duration-300 w-full justify-center"
+                        className="inline-flex items-center gap-2 px-6 py-3 border text-sm font-medium tracking-wider uppercase rounded-[var(--radius-sm)] transition-all duration-300 w-full justify-center hover:bg-[var(--red-softer)] hover:-translate-y-0.5"
                         style={{
                           borderColor: app.color,
                           color: app.color,
@@ -234,12 +234,12 @@ export default function ProductsPage() {
           <section className="products-cta pb-24 lg:pb-32">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
               <div className="text-center">
-                <p className="text-sm text-zinc-500 mb-4">
+                <p className="text-sm text-[var(--text-muted)] mb-4">
                   Interested in our research and other projects?
                 </p>
                 <Link
                   href="/"
-                  className="inline-flex items-center gap-2 text-[#dc2626] text-sm font-medium tracking-wider uppercase hover:text-[#ef4444] transition-colors"
+                  className="inline-flex items-center gap-2 text-[var(--red-dark)] text-sm font-medium tracking-wider uppercase hover:text-[var(--red)] transition-colors"
                 >
                   Explore our full ecosystem
                   <ChevronRight size={14} />

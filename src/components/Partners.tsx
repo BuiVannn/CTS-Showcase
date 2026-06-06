@@ -27,7 +27,7 @@ const placeholderPartners: Partner[] = [
 ];
 
 export default function Partners({
-  heading = "PARTNERS & COLLABORATIONS",
+  heading = "Partners & Collaborations",
   partners,
 }: PartnersProps) {
   const data = partners && partners.length > 0 ? partners : placeholderPartners;
@@ -76,7 +76,7 @@ export default function Partners({
   );
 
   return (
-    <section ref={sectionRef} className="section-spacing relative">
+    <section ref={sectionRef} className="section-spacing relative bg-[var(--bg-soft)]">
       {/* Red accent line */}
       <div className="accent-line mb-16" />
 
@@ -84,7 +84,7 @@ export default function Partners({
         {/* Section header */}
         <div className="section-title mb-12 text-center">
           <span className="text-label mb-4 block">Collaboration</span>
-          <h2 className="text-section font-[family-name:var(--font-space-grotesk)] text-zinc-800">
+          <h2 className="text-section font-[family-name:var(--font-display)] text-[var(--ink)]">
             {heading}
           </h2>
         </div>
@@ -97,7 +97,7 @@ export default function Partners({
               href={partner.url || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className="partner-item group flex flex-col items-center justify-center p-6 border border-black/5 bg-white hover:border-[#dc2626]/50 hover:shadow-[0_0_20px_rgba(220,38,38,0.1)] transition-all duration-500"
+              className="partner-item group flex flex-col items-center justify-center p-6 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-1)] hover:border-[var(--border-red)] hover:shadow-[var(--shadow-red)] hover:-translate-y-1 transition-all duration-500"
             >
               {partner.logo?.url ? (
                 <img
@@ -106,13 +106,13 @@ export default function Partners({
                   className="h-10 w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-500"
                 />
               ) : (
-                <span className="text-sm font-semibold text-zinc-500 group-hover:text-zinc-800 font-[family-name:var(--font-space-grotesk)] transition-colors duration-500 text-center">
+                <span className="text-sm font-semibold text-[var(--text-muted)] group-hover:text-[var(--ink)] font-[family-name:var(--font-display)] transition-colors duration-500 text-center">
                   {partner.name}
                 </span>
               )}
               <ExternalLink
                 size={10}
-                className="mt-2 text-zinc-700 group-hover:text-[#dc2626] transition-colors duration-500"
+                className="mt-2 text-[var(--text-dim)] group-hover:text-[var(--red)] transition-colors duration-500"
               />
             </a>
           ))}

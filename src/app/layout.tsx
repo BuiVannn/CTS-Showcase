@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Be_Vietnam_Pro, Space_Grotesk } from "next/font/google";
+import { Be_Vietnam_Pro, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import SuppressThreeWarnings from "@/components/SuppressThreeWarnings";
@@ -11,10 +11,11 @@ const beVietnam = Be_Vietnam_Pro({
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+// Bricolage Grotesque is a variable font — no `weight` needed (and never
+// combine `weight` with `axes`). Powers all display headings via --font-display.
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -33,9 +34,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${beVietnam.variable} ${spaceGrotesk.variable} antialiased`}
+      className={`${beVietnam.variable} ${bricolage.variable} antialiased`}
     >
-      <body className="min-h-screen bg-white text-[#111111] font-[family-name:var(--font-be-vietnam)] grain-overlay">
+      <body className="min-h-screen bg-background text-foreground font-[family-name:var(--font-be-vietnam)] grain-overlay">
         <SuppressThreeWarnings />
         <SmoothScroll />
         {children}

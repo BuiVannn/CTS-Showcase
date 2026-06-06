@@ -23,10 +23,10 @@ interface ProductShowcaseProps {
 }
 
 const categoryColors: Record<string, string> = {
-  "ai-voice": "#dc2626",
+  "ai-voice": "#ed1c24",
   "creative-ai": "#ef4444",
   "video-ai": "#b91c1c",
-  "learning-ai": "#dc2626",
+  "learning-ai": "#ed1c24",
   education: "#ef4444",
   communication: "#f87171",
 };
@@ -131,23 +131,29 @@ export default function ProductShowcase({ products }: ProductShowcaseProps) {
   );
 
   return (
-    <section ref={sectionRef} id="products" className="section-spacing relative">
+    <section
+      ref={sectionRef}
+      id="products"
+      className="section-spacing relative bg-[var(--bg-soft)]"
+    >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Section header */}
         <div className="section-title mb-16">
           <span className="text-label mb-4 block">Ecosystem</span>
-          <h2 className="text-section font-[family-name:var(--font-space-grotesk)] text-[#111111]">
-            APP HIGHLIGHTS
+          <h2 className="text-section font-[family-name:var(--font-display)] text-[var(--ink)]">
+            App Highlights
           </h2>
           <div className="accent-line-short mt-4" />
         </div>
 
         {/* Ecosystem badge */}
-        <div className="flex items-center gap-3 mb-10 px-4 py-3 bg-[#dc2626]/5 border border-[#dc2626]/10 rounded-sm max-w-fit">
-          <Shield size={16} className="text-[#dc2626] flex-shrink-0" />
-          <span className="text-sm text-[#111111] font-medium">
+        <div className="flex items-center gap-3 mb-10 px-4 py-3 bg-[var(--red-soft)] border border-[var(--border-red)] rounded-[var(--radius-sm)] max-w-fit">
+          <Shield size={16} className="text-[var(--red)] flex-shrink-0" />
+          <span className="text-sm text-[var(--ink)] font-medium">
             All apps connected via{" "}
-            <span className="text-[#dc2626] font-semibold">Single Sign-On</span>
+            <span className="text-[var(--red-dark)] font-semibold">
+              Single Sign-On
+            </span>
           </span>
         </div>
 
@@ -156,7 +162,7 @@ export default function ProductShowcase({ products }: ProductShowcaseProps) {
           {data.map((product) => (
             <div
               key={product.id}
-              className="product-card editorial-card group cursor-pointer overflow-hidden"
+              className="product-card surface-card group cursor-pointer overflow-hidden"
             >
               {/* Image */}
               <div className="relative h-56 overflow-hidden">
@@ -179,20 +185,20 @@ export default function ProductShowcase({ products }: ProductShowcaseProps) {
                     className="object-cover will-change-transform transition-transform duration-300 group-hover:scale-[1.02]"
                   />
                 )}
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-60" />
+                {/* Overlay — fades image into the card surface */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface)] via-transparent to-transparent opacity-70" />
                 {/* Category badge */}
                 <div className="absolute top-3 left-3">
                   <span
-                    className="px-2 py-1 text-[10px] font-bold tracking-widest uppercase text-white"
-                    style={{ backgroundColor: categoryColors[product.category] || "#dc2626" }}
+                    className="px-2 py-1 text-[10px] font-bold tracking-widest uppercase text-white rounded-full shadow-[var(--shadow-1)]"
+                    style={{ backgroundColor: categoryColors[product.category] || "var(--red)" }}
                   >
                     {categoryLabels[product.category] || product.category}
                   </span>
                 </div>
                 {/* Year */}
                 <div className="absolute top-3 right-3">
-                  <span className="text-xs text-zinc-400 font-[family-name:var(--font-space-grotesk)]">
+                  <span className="text-[10px] font-medium text-[var(--ink)] bg-[var(--surface)]/85 backdrop-blur-sm px-1.5 py-0.5 rounded-full font-[family-name:var(--font-display)]">
                     {product.year}
                   </span>
                 </div>
@@ -200,11 +206,11 @@ export default function ProductShowcase({ products }: ProductShowcaseProps) {
 
               {/* Content */}
               <div className="p-5">
-                <h3 className="text-lg font-semibold text-[#111111] font-[family-name:var(--font-space-grotesk)] mb-2 group-hover:text-[#dc2626] transition-colors duration-150">
+                <h3 className="text-lg font-semibold text-[var(--ink)] font-[family-name:var(--font-display)] mb-2 group-hover:text-[var(--red)] transition-colors duration-150">
                   {product.title}
                 </h3>
                 {product.excerpt && (
-                  <p className="text-sm text-zinc-500 leading-relaxed">
+                  <p className="text-sm text-[var(--text-muted)] leading-relaxed">
                     {product.excerpt}
                   </p>
                 )}
@@ -214,7 +220,7 @@ export default function ProductShowcase({ products }: ProductShowcaseProps) {
                     {product.tags.map((t, i) => (
                       <span
                         key={i}
-                        className="text-[10px] tracking-wider uppercase text-zinc-400 border border-black/5 px-2 py-0.5"
+                        className="text-[10px] tracking-wider uppercase text-[var(--text-dim)] border border-[var(--border)] px-2 py-0.5 rounded-full"
                       >
                         {t.tag}
                       </span>
@@ -224,7 +230,7 @@ export default function ProductShowcase({ products }: ProductShowcaseProps) {
                 {/* Learn More link */}
                 <Link
                   href={`/products${product.slug ? `#${product.slug}` : ""}`}
-                  className="inline-flex items-center gap-1.5 mt-4 text-xs font-medium tracking-wider uppercase text-[#dc2626] hover:text-[#ef4444] transition-colors"
+                  className="inline-flex items-center gap-1.5 mt-4 text-xs font-medium tracking-wider uppercase text-[var(--red-dark)] hover:text-[var(--red)] transition-colors"
                 >
                   Learn More
                   <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>

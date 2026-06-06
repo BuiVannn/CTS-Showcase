@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useRef, forwardRef, useImperativeHandle } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -43,7 +43,7 @@ function LoadingFallback() {
   return (
     <mesh ref={meshRef}>
       <sphereGeometry args={[1, 16, 16]} />
-      <meshBasicMaterial color="#dc2626" transparent opacity={0.3} />
+      <meshBasicMaterial color="#ed1c24" transparent opacity={0.3} />
     </mesh>
   );
 }
@@ -104,11 +104,11 @@ const RobotModel = forwardRef<RobotModelHandle>(function RobotModel(_props, ref)
       gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
       style={{ background: "transparent" }}
     >
-      {/* Lighting */}
-      <ambientLight intensity={1} />
+      {/* Lighting — a touch less ambient for more form against the bright stage */}
+      <ambientLight intensity={0.8} />
       <directionalLight position={[5, 5, 5]} intensity={2} />
-      <directionalLight position={[-5, 3, -5]} intensity={2} />
-      {/* <pointLight position={[-3, 2, 4]} intensity={1} color="#dc2626" />
+      <directionalLight position={[-5, 3, -5]} intensity={1.6} />
+      {/* <pointLight position={[-3, 2, 4]} intensity={1} color="#ed1c24" />
       <pointLight position={[3, -1, 3]} intensity={1} color="#ef4444" /> */}
 
       <Suspense fallback={<LoadingFallback />}>

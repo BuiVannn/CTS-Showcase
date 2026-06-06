@@ -95,7 +95,7 @@ export function createCursorGlowEffect(
     intensity?: number;
   } = {}
 ) {
-  const { color = "rgba(220, 38, 38, 0.3)", size = 100, intensity = 0.5 } = options;
+  const { color = "rgba(237, 28, 36, 0.3)", size = 100, intensity = 0.5 } = options;
 
   const glowElement = document.createElement("div");
   glowElement.style.cssText = `
@@ -263,7 +263,7 @@ export function createMorphingBorderAnimation(
     color?: string;
   } = {}
 ) {
-  const { duration = 1, delay = 0, color = "#dc2626" } = options;
+  const { duration = 1, delay = 0, color = "#ed1c24" } = options;
 
   // Create border overlay
   const borderOverlay = document.createElement("div");
@@ -485,7 +485,7 @@ export function createFrameHoverEffect(
     scale?: number;
   } = {}
 ) {
-  const { glowColor = "rgba(220, 38, 38, 0.2)", shadowIntensity = 0.1, scale = 1.02 } = options;
+  const { glowColor = "rgba(237, 28, 36, 0.2)", shadowIntensity = 0.1, scale = 1.02 } = options;
 
   const handleMouseEnter = () => {
     gsap.to(element, {

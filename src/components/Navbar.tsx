@@ -87,7 +87,7 @@ export default function Navbar({ siteName = "Creative Technologies and Simulatio
       ref={navRef}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-white/95 backdrop-blur-xl border-b border-black/5"
+          ? "bg-[rgba(255,255,255,0.8)] backdrop-blur-xl border-b border-[var(--border)] shadow-sm"
           : "bg-transparent"
       }`}
     >
@@ -98,9 +98,9 @@ export default function Navbar({ siteName = "Creative Technologies and Simulatio
             <img
               src="/img/cts-logo.jpg"
               alt="CTS Lab Logo"
-              className="w-14 h-14 object-contain rounded-sm"
+              className="w-14 h-14 object-contain rounded-lg"
             />
-            <span className={`text-sm font-semibold tracking-widest uppercase font-[family-name:var(--font-space-grotesk)] ${scrolled ? "text-[#111111]" : "text-white"}`}>
+            <span className="text-sm font-semibold tracking-widest uppercase font-[family-name:var(--font-display)] text-[var(--ink)] transition-colors duration-300 group-hover:text-[var(--red-dark)]">
               {siteName}
             </span>
           </Link>
@@ -112,7 +112,7 @@ export default function Navbar({ siteName = "Creative Technologies and Simulatio
                 <button
                   key={link.id}
                   onClick={() => scrollTo(link.id)}
-                  className={`nav-link px-4 py-2 text-xs font-medium tracking-widest uppercase transition-colors duration-300 ${scrolled ? "text-zinc-500 hover:text-[#dc2626]" : "text-white/70 hover:text-white"}`}
+                  className="nav-link px-4 py-2 text-xs font-medium tracking-widest uppercase transition-colors duration-300 text-[var(--text-muted)] hover:text-[var(--red-dark)]"
                 >
                   {link.label}
                 </button>
@@ -126,7 +126,7 @@ export default function Navbar({ siteName = "Creative Technologies and Simulatio
 
           {/* Mobile menu button */}
           <button
-            className="lg:hidden p-2 text-zinc-500 hover:text-[#111111] transition-colors"
+            className="lg:hidden p-2 text-[var(--text-muted)] hover:text-[var(--ink)] transition-colors"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
@@ -141,13 +141,13 @@ export default function Navbar({ siteName = "Creative Technologies and Simulatio
           mobileOpen ? "max-h-[32rem] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="bg-white/98 backdrop-blur-xl border-t border-black/5 px-6 py-4 space-y-1">
+        <div className="bg-[rgba(255,255,255,0.95)] backdrop-blur-xl border-t border-[var(--border)] px-6 py-4 space-y-1">
           {showSectionLinks &&
             navLinks.map((link) => (
               <button
                 key={link.id}
                 onClick={() => scrollTo(link.id)}
-                className="block w-full text-left px-4 py-3 text-sm font-medium tracking-widest uppercase text-zinc-500 hover:text-[#dc2626] transition-colors"
+                className="block w-full text-left px-4 py-3 text-sm font-medium tracking-widest uppercase text-[var(--text-muted)] hover:text-[var(--red-dark)] transition-colors"
               >
                 {link.label}
               </button>
@@ -156,7 +156,7 @@ export default function Navbar({ siteName = "Creative Technologies and Simulatio
           {/* Download — expandable */}
           <button
             onClick={() => setMobileDownloadOpen(!mobileDownloadOpen)}
-            className="flex items-center justify-between w-full px-4 py-3 text-sm font-medium tracking-widest uppercase text-[#dc2626] hover:text-[#ef4444] transition-colors"
+            className="flex items-center justify-between w-full px-4 py-3 text-sm font-medium tracking-widest uppercase text-[var(--red)] hover:text-[var(--red-dark)] transition-colors"
           >
             <span className="flex items-center gap-2">
               <Download size={14} />
@@ -181,14 +181,14 @@ export default function Navbar({ siteName = "Creative Technologies and Simulatio
           {showSectionLinks && (
             <button
               onClick={() => scrollTo("#contact")}
-              className="block w-full text-left px-4 py-3 text-sm font-medium tracking-widest uppercase text-[#dc2626] hover:text-[#ef4444] transition-colors"
+              className="block w-full text-left px-4 py-3 text-sm font-medium tracking-widest uppercase text-[var(--red)] hover:text-[var(--red-dark)] transition-colors"
             >
               Get in Touch
             </button>
           )}
           <Link
             href="/vr-tour"
-            className="block w-full text-left px-4 py-3 text-sm font-medium tracking-widest uppercase text-[#dc2626] hover:text-[#ef4444] transition-colors"
+            className="block w-full text-left px-4 py-3 text-sm font-medium tracking-widest uppercase text-[var(--red)] hover:text-[var(--red-dark)] transition-colors"
           >
             🎥 VR Tour
           </Link>

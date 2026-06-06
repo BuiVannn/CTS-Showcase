@@ -111,16 +111,16 @@ export default function DownloadDropdown({
             key={app.id}
             href={app.href}
             onClick={onNavigate}
-            className="download-item flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-500 hover:text-[#111111] transition-colors"
+            className="download-item flex items-center gap-3 px-4 py-2.5 text-sm text-[var(--text-muted)] hover:text-[var(--ink)] transition-colors"
           >
-            <span className="text-[#dc2626]">{app.icon}</span>
+            <span className="text-[var(--red)]">{app.icon}</span>
             <span>{app.name}</span>
           </Link>
         ))}
         <Link
           href="/products"
           onClick={onNavigate}
-          className="download-item flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-[#dc2626] hover:text-[#ef4444] transition-colors"
+          className="download-item flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-[var(--red)] hover:text-[var(--red-dark)] transition-colors"
         >
           View All Products
           <ChevronRight size={14} />
@@ -134,7 +134,7 @@ export default function DownloadDropdown({
     <div ref={containerRef} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="nav-link px-4 py-2 text-xs font-medium tracking-widest uppercase text-[#dc2626] hover:text-[#ef4444] transition-colors duration-300 flex items-center gap-1.5"
+        className="nav-link px-4 py-2 text-xs font-medium tracking-widest uppercase text-[var(--red)] hover:text-[var(--red-dark)] transition-colors duration-300 flex items-center gap-1.5"
         aria-expanded={open}
         aria-haspopup="true"
       >
@@ -149,7 +149,7 @@ export default function DownloadDropdown({
       {open && (
         <div
           ref={menuRef}
-          className="absolute right-0 top-full mt-2 w-72 bg-white border border-black/5 shadow-lg shadow-black/5 rounded-sm overflow-hidden z-50"
+          className="absolute right-0 top-full mt-2 w-72 bg-[var(--surface)] border border-[var(--border)] shadow-[var(--shadow-3)] rounded-[var(--radius-md)] overflow-hidden z-50"
         >
           <div className="p-2">
             {downloadApps.map((app) => (
@@ -157,16 +157,16 @@ export default function DownloadDropdown({
                 key={app.id}
                 href={app.href}
                 onClick={() => setOpen(false)}
-                className="download-item flex items-start gap-3 px-3 py-3 rounded-sm hover:bg-[#f9fafb] transition-colors group"
+                className="download-item flex items-start gap-3 px-3 py-3 rounded-[var(--radius-sm)] hover:bg-[var(--red-softer)] transition-colors group"
               >
-                <span className="flex-shrink-0 mt-0.5 w-8 h-8 flex items-center justify-center bg-[#dc2626]/5 text-[#dc2626] rounded-sm group-hover:bg-[#dc2626]/10 transition-colors">
+                <span className="flex-shrink-0 mt-0.5 w-8 h-8 flex items-center justify-center bg-[var(--red-soft)] text-[var(--red)] rounded-[var(--radius-sm)] group-hover:bg-[var(--red)] group-hover:text-white transition-colors">
                   {app.icon}
                 </span>
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-[#111111] font-[family-name:var(--font-space-grotesk)] group-hover:text-[#dc2626] transition-colors">
+                  <p className="text-sm font-semibold text-[var(--ink)] font-[family-name:var(--font-display)] group-hover:text-[var(--red)] transition-colors">
                     {app.name}
                   </p>
-                  <p className="text-xs text-zinc-500 leading-relaxed mt-0.5">
+                  <p className="text-xs text-[var(--text-muted)] leading-relaxed mt-0.5">
                     {app.description}
                   </p>
                 </div>
@@ -175,11 +175,11 @@ export default function DownloadDropdown({
           </div>
 
           {/* Footer link */}
-          <div className="border-t border-black/5 px-2 py-2">
+          <div className="border-t border-[var(--border)] px-2 py-2">
             <Link
               href="/products"
               onClick={() => setOpen(false)}
-              className="download-item flex items-center justify-between px-3 py-2 text-xs font-medium tracking-wider uppercase text-[#dc2626] hover:text-[#ef4444] transition-colors"
+              className="download-item flex items-center justify-between px-3 py-2 text-xs font-medium tracking-wider uppercase text-[var(--red)] hover:text-[var(--red-dark)] transition-colors"
             >
               View All Products
               <ChevronRight size={14} />

@@ -137,13 +137,17 @@ export default function ShowcaseSection({
   );
 
   return (
-    <section ref={sectionRef} id="showcase" className="section-spacing relative">
+    <section
+      ref={sectionRef}
+      id="showcase"
+      className="section-spacing relative bg-[var(--bg-soft)]"
+    >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Section header */}
         <div className="section-title mb-16">
           <span className="text-label mb-4 block">Featured</span>
-          <h2 className="text-section font-[family-name:var(--font-space-grotesk)] text-[#111111]">
-            SHOWCASE
+          <h2 className="text-section font-[family-name:var(--font-display)] text-[var(--ink)]">
+            Showcase
           </h2>
           <div className="accent-line-short mt-4" />
         </div>
@@ -153,7 +157,7 @@ export default function ShowcaseSection({
           {apps.map((app, index) => (
             <div
               key={app.id}
-              className={`showcase-card editorial-card group cursor-pointer overflow-hidden${
+              className={`showcase-card surface-card group cursor-pointer overflow-hidden${
                 apps.length % 2 !== 0 && index === apps.length - 1
                   ? " lg:col-start-1 lg:col-end-3 lg:mx-auto lg:max-w-[calc(50%-0.75rem)]"
                   : ""
@@ -171,19 +175,19 @@ export default function ShowcaseSection({
                     className="object-cover will-change-transform transition-transform duration-300 group-hover:scale-[1.02]"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-zinc-100 to-zinc-200 flex items-center justify-center">
-                    <span className="text-4xl font-bold text-zinc-300 font-[family-name:var(--font-space-grotesk)] tracking-widest uppercase">
+                  <div className="placeholder-image w-full h-full flex items-center justify-center">
+                    <span className="text-4xl font-bold text-[var(--text-dim)] font-[family-name:var(--font-display)] tracking-widest uppercase">
                       {app.title}
                     </span>
                   </div>
                 )}
 
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent" />
+                {/* Overlay gradient — fades image into the card surface */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface)] via-[var(--surface)]/15 to-transparent" />
 
                 {/* Category badge */}
                 <div className="absolute top-4 left-4">
-                  <span className="px-2.5 py-1 text-[10px] font-bold tracking-widest uppercase text-white bg-[#dc2626]">
+                  <span className="px-2.5 py-1 text-[10px] font-bold tracking-widest uppercase text-white bg-[var(--red)] rounded-full shadow-[var(--shadow-1)]">
                     {app.category}
                   </span>
                 </div>
@@ -191,10 +195,10 @@ export default function ShowcaseSection({
 
               {/* Content */}
               <div className="p-6">
-                <h3 className="text-xl sm:text-2xl font-semibold text-[#111111] font-[family-name:var(--font-space-grotesk)] mb-2 group-hover:text-[#dc2626] transition-colors duration-150">
+                <h3 className="text-xl sm:text-2xl font-semibold text-[var(--ink)] font-[family-name:var(--font-display)] mb-2 group-hover:text-[var(--red)] transition-colors duration-150">
                   {app.title}
                 </h3>
-                <p className="text-sm text-zinc-500 leading-relaxed">
+                <p className="text-sm text-[var(--text-muted)] leading-relaxed">
                   {app.description}
                 </p>
               </div>
@@ -203,7 +207,7 @@ export default function ShowcaseSection({
         </div>
 
         {/* Video showcase */}
-        <div className="showcase-video editorial-card overflow-hidden">
+        <div className="showcase-video surface-card overflow-hidden">
           <div className="relative aspect-video bg-gradient-to-br from-zinc-900 to-zinc-800 group cursor-pointer">
             {videoUrl ? (
               <iframe
@@ -227,7 +231,7 @@ export default function ShowcaseSection({
                       className="text-white ml-1"
                     />
                   </div>
-                  <span className="text-xs tracking-[0.3em] uppercase text-white/70 font-[family-name:var(--font-space-grotesk)]">
+                  <span className="text-xs tracking-[0.3em] uppercase text-white/70 font-[family-name:var(--font-display)]">
                     Watch Demo
                   </span>
                 </div>

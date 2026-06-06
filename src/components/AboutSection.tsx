@@ -112,7 +112,7 @@ export default function AboutSection({
 
         {/* Mission quote */}
         <div ref={quoteRef} className="opacity-0">
-          <p className="text-2xl sm:text-3xl lg:text-4xl font-[family-name:var(--font-space-grotesk)] text-[#111111] leading-relaxed tracking-tight">
+          <p className="text-2xl sm:text-3xl lg:text-4xl font-[family-name:var(--font-display)] text-[var(--ink)] leading-relaxed tracking-tight">
             &ldquo;{mission}&rdquo;
           </p>
         </div>
@@ -121,7 +121,7 @@ export default function AboutSection({
         {description && (
           <p
             ref={descRef}
-            className="mt-8 text-base text-zinc-500 max-w-2xl mx-auto leading-relaxed opacity-0"
+            className="mt-8 text-base text-[var(--text-muted)] max-w-2xl mx-auto leading-relaxed opacity-0"
           >
             {description}
           </p>
@@ -129,11 +129,11 @@ export default function AboutSection({
 
         {/* Signature-style element */}
         <div className="mt-12 flex items-center justify-center gap-4">
-          <div className="h-px w-12 bg-[#dc2626]/40" />
-          <span className="text-xs tracking-[0.3em] uppercase text-zinc-400">
+          <div className="h-px w-12 bg-[var(--border-red)]" />
+          <span className="text-xs tracking-[0.3em] uppercase text-[var(--text-dim)]">
             CTS Lab, PTIT
           </span>
-          <div className="h-px w-12 bg-[#dc2626]/40" />
+          <div className="h-px w-12 bg-[var(--border-red)]" />
         </div>
       </div>
     </section>

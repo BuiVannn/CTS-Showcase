@@ -100,8 +100,8 @@ export default function Contact({
         {/* Section header */}
         <div className="section-title mb-16">
           <span className="text-label mb-4 block">Reach Out</span>
-          <h2 className="text-section font-[family-name:var(--font-space-grotesk)] text-[#111111]">
-            CONTACT
+          <h2 className="text-section font-[family-name:var(--font-display)] text-[var(--ink)]">
+            Contact
           </h2>
           <div className="accent-line-short mt-4" />
         </div>
@@ -109,27 +109,27 @@ export default function Contact({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Info column */}
           <div className="contact-col">
-            <h3 className="text-xl font-semibold text-[#111111] font-[family-name:var(--font-space-grotesk)] mb-6">
+            <h3 className="text-xl font-semibold text-[var(--ink)] font-[family-name:var(--font-display)] mb-6">
               Get in touch
             </h3>
-            <p className="text-zinc-500 leading-relaxed mb-8">
+            <p className="text-[var(--text-muted)] leading-relaxed mb-8">
               Interested in our research, products, or collaboration opportunities? We&apos;d love to hear from you.
             </p>
 
             <div className="space-y-4">
               <div>
-                <span className="text-xs tracking-widest uppercase text-zinc-400 mb-1 block">Email</span>
-                <a href={`mailto:${email}`} className="text-sm text-[#111111] hover:text-[#dc2626] transition-colors">
+                <span className="text-xs tracking-widest uppercase text-[var(--text-muted)] mb-1 block">Email</span>
+                <a href={`mailto:${email}`} className="text-sm text-[var(--ink)] hover:text-[var(--red-dark)] transition-colors">
                   {email}
                 </a>
               </div>
               <div>
-                <span className="text-xs tracking-widest uppercase text-zinc-400 mb-1 block">Phone</span>
-                <span className="text-sm text-zinc-500">{phone}</span>
+                <span className="text-xs tracking-widest uppercase text-[var(--text-muted)] mb-1 block">Phone</span>
+                <span className="text-sm text-[var(--text-muted)]">{phone}</span>
               </div>
               <div>
-                <span className="text-xs tracking-widest uppercase text-zinc-400 mb-1 block">Address</span>
-                <span className="text-sm text-zinc-500">{address}</span>
+                <span className="text-xs tracking-widest uppercase text-[var(--text-muted)] mb-1 block">Address</span>
+                <span className="text-sm text-[var(--text-muted)]">{address}</span>
               </div>
             </div>
           </div>
@@ -138,7 +138,7 @@ export default function Contact({
           <div className="contact-col">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="contact-field">
-                <label htmlFor="name" className="text-xs tracking-widest uppercase text-zinc-400 mb-2 block">
+                <label htmlFor="name" className="text-xs tracking-widest uppercase text-[var(--text-muted)] mb-2 block">
                   Name
                 </label>
                 <input
@@ -146,12 +146,12 @@ export default function Contact({
                   id="name"
                   name="name"
                   required
-                  className="w-full bg-transparent border-b-2 border-[#dc2626]/20 py-3 text-sm text-[#111111] placeholder-zinc-400 focus:border-[#dc2626] focus:outline-none transition-colors"
+                  className="w-full bg-transparent border-b-2 border-[var(--border-strong)] py-3 text-sm text-[var(--ink)] placeholder:text-[var(--text-dim)] focus:border-[var(--red)] focus:outline-none transition-colors"
                   placeholder="Your name"
                 />
               </div>
               <div className="contact-field">
-                <label htmlFor="email" className="text-xs tracking-widest uppercase text-zinc-400 mb-2 block">
+                <label htmlFor="email" className="text-xs tracking-widest uppercase text-[var(--text-muted)] mb-2 block">
                   Email
                 </label>
                 <input
@@ -159,12 +159,12 @@ export default function Contact({
                   id="email"
                   name="email"
                   required
-                  className="w-full bg-transparent border-b-2 border-[#dc2626]/20 py-3 text-sm text-[#111111] placeholder-zinc-400 focus:border-[#dc2626] focus:outline-none transition-colors"
+                  className="w-full bg-transparent border-b-2 border-[var(--border-strong)] py-3 text-sm text-[var(--ink)] placeholder:text-[var(--text-dim)] focus:border-[var(--red)] focus:outline-none transition-colors"
                   placeholder="your@email.com"
                 />
               </div>
               <div className="contact-field">
-                <label htmlFor="message" className="text-xs tracking-widest uppercase text-zinc-400 mb-2 block">
+                <label htmlFor="message" className="text-xs tracking-widest uppercase text-[var(--text-muted)] mb-2 block">
                   Message
                 </label>
                 <textarea
@@ -172,7 +172,7 @@ export default function Contact({
                   name="message"
                   required
                   rows={4}
-                  className="w-full bg-transparent border-b-2 border-[#dc2626]/20 py-3 text-sm text-[#111111] placeholder-zinc-400 focus:border-[#dc2626] focus:outline-none transition-colors resize-none"
+                  className="w-full bg-transparent border-b-2 border-[var(--border-strong)] py-3 text-sm text-[var(--ink)] placeholder:text-[var(--text-dim)] focus:border-[var(--red)] focus:outline-none transition-colors resize-none"
                   placeholder="Tell us about your inquiry..."
                 />
               </div>
@@ -180,7 +180,7 @@ export default function Contact({
               <button
                 type="submit"
                 disabled={status === "sending"}
-                className="contact-submit-btn flex items-center gap-3 px-8 py-3 border border-[#dc2626] text-[#dc2626] text-xs font-medium tracking-widest uppercase hover:bg-[#dc2626] hover:text-white disabled:opacity-50 transition-colors duration-300 btn-outline"
+                className="contact-submit-btn flex items-center gap-3 px-8 py-3 border border-[var(--red)] text-[var(--red-dark)] text-xs font-medium tracking-widest uppercase disabled:opacity-50 btn-outline"
               >
                 {status === "sending" ? (
                   "Sending..."
@@ -198,7 +198,7 @@ export default function Contact({
                 </div>
               )}
               {status === "error" && (
-                <div className="flex items-center gap-2 text-sm text-red-500">
+                <div className="flex items-center gap-2 text-sm text-[var(--red)]">
                   <AlertCircle size={16} />
                   Failed to send. Please try again.
                 </div>
