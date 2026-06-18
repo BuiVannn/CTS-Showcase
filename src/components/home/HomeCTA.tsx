@@ -21,6 +21,7 @@ export default function HomeCTA() {
               aria-hidden
               className="pointer-events-none absolute inset-0 -z-10"
               style={{ background: "radial-gradient(120% 90% at 50% 0%, var(--blue-soft), transparent 60%)" }}
+              initial={{ opacity: 0.7 }}
               animate={reduce ? undefined : { opacity: [0.55, 0.85, 0.55], scale: [1, 1.04, 1] }}
               transition={reduce ? undefined : { duration: 6, repeat: Infinity, ease: "easeInOut" }}
             />
