@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Unbounded, Be_Vietnam_Pro, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { LocaleProvider } from "@/lib/locale";
+import { ThemeProvider } from "@/lib/theme-context";
 import SmoothScroll from "@/components/SmoothScroll";
 
 // Display — distinctive rounded-geometric, includes the Vietnamese subset.
@@ -50,13 +51,21 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
+      data-theme="light"
       className={`${display.variable} ${body.variable} ${mono.variable} antialiased`}
     >
       <body className="min-h-screen bg-bg text-ink">
-        <LocaleProvider>
-          <SmoothScroll />
-          {children}
-        </LocaleProvider>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var k='cts-theme',s=localStorage.getItem(k);var t=(s==='dark')?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`,
+          }}
+        />
+        <ThemeProvider>
+          <LocaleProvider>
+            <SmoothScroll />
+            {children}
+          </LocaleProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
