@@ -1,3 +1,5 @@
+import CountUp from "@/components/ui/CountUp";
+
 export interface Stat {
   value: string;
   unit?: string;
@@ -10,7 +12,7 @@ export default function StatBand({ items }: { items: Stat[] }) {
       {items.map((s, i) => (
         <div key={i} className="bg-bg p-5">
           <div className="font-mono text-2xl font-bold text-ink">
-            {s.value}
+            <CountUp value={s.value} />
             {s.unit && <span className="text-blue">{s.unit}</span>}
           </div>
           <div className="mt-1 text-xs text-dim">{s.label}</div>

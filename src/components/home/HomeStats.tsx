@@ -7,6 +7,7 @@ import { ui } from "@/content/ui";
 import { sso } from "@/content/sso";
 import Container from "@/components/ui/Container";
 import StatBand from "@/components/ui/StatBand";
+import Reveal from "@/components/ui/Reveal";
 
 export default function HomeStats() {
   const { t } = useLocale();
@@ -19,12 +20,16 @@ export default function HomeStats() {
   return (
     <section className="section pt-0">
       <Container>
-        <StatBand items={stats} />
-        <div className="mt-6 rounded-[var(--radius-lg)] border border-border bg-surface p-7 sm:p-10">
-          <span className="eyebrow">{t(sso.caption)}</span>
-          <h2 className="text-section mt-3 text-ink">{t(sso.title)}</h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-2">{t(sso.description)}</p>
-        </div>
+        <Reveal>
+          <StatBand items={stats} />
+        </Reveal>
+        <Reveal delay={0.1}>
+          <div className="mt-6 rounded-[var(--radius-lg)] border border-border bg-surface p-7 sm:p-10">
+            <span className="eyebrow">{t(sso.caption)}</span>
+            <h2 className="text-section mt-3 text-ink">{t(sso.title)}</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-2">{t(sso.description)}</p>
+          </div>
+        </Reveal>
       </Container>
     </section>
   );
