@@ -3,13 +3,13 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import StubPage from "@/components/StubPage";
 
-export const metadata: Metadata = { title: "Sản phẩm — CTS Lab" };
+export const metadata: Metadata = { title: "Đội ngũ — CTS Lab" };
 
-export default function ProductsPage() {
+export default function TeamPage() {
   return (
     <>
       <Navbar />
-      <main><StubPage titleVi="Sản phẩm" titleEn="Products" /></main>
+      <main><StubPage titleVi="Đội ngũ" titleEn="Team" /></main>
       <Footer />
     </>
   );
