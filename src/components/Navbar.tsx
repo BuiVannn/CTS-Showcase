@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -31,6 +32,8 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handle);
   }, []);
 
+  const reduce = useReducedMotion();
+
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
   return (
@@ -50,17 +53,26 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <nav className="hidden items-center gap-1 lg:flex">
-          {site.nav.map((link) => (
-            <Link
-              key={link.id}
-              href={link.id}
-              className={`rounded-[var(--radius-pill)] px-3.5 py-2 text-[0.82rem] font-medium transition-colors ${
-                isActive(link.id) ? "text-blue" : "text-ink-2 hover:text-ink"
-              }`}
-            >
-              {t(link.label)}
-            </Link>
-          ))}
+          {site.nav.map((link) => {
+            const active = isActive(link.id);
+            return (
+              <Link
+                key={link.id}
+                href={link.id}
+                className={`relative rounded-[var(--radius-pill)] px-3.5 py-2 text-[0.82rem] font-medium transition-colors ${
+                  active ? "text-blue" : "text-ink-2 hover:text-ink"
+                }`}
+              >
+                {t(link.label)}
+                {active && (
+                  <motion.span
+                    layoutId={reduce ? undefined : "nav-underline"}
+                    className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-blue"
+                  />
+                )}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Right cluster */}
