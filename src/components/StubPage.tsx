@@ -6,6 +6,7 @@ import Container from "@/components/ui/Container";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import EmptyState from "@/components/ui/EmptyState";
 import Button from "@/components/ui/Button";
+import Reveal from "@/components/ui/Reveal";
 
 export default function StubPage({ titleVi, titleEn }: { titleVi: string; titleEn: string }) {
   const { t, locale } = useLocale();
@@ -15,12 +16,14 @@ export default function StubPage({ titleVi, titleEn }: { titleVi: string; titleE
       <Container>
         <Breadcrumb items={[{ label: "CTS Lab", href: "/" }, { label: title }]} />
         <h1 className="text-section mt-6 text-ink">{title}</h1>
-        <div className="mt-10">
-          <EmptyState title={t(ui.home.comingSoon)}>
-            <p className="text-sm text-ink-2">{t(ui.home.underConstruction)}</p>
-            <Button href="/" variant="ghost" size="sm">← {locale === "vi" ? "Về trang chủ" : "Back home"}</Button>
-          </EmptyState>
-        </div>
+        <Reveal>
+          <div className="mt-10">
+            <EmptyState title={t(ui.home.comingSoon)}>
+              <p className="text-sm text-ink-2">{t(ui.home.underConstruction)}</p>
+              <Button href="/" variant="ghost" size="sm">← {locale === "vi" ? "Về trang chủ" : "Back home"}</Button>
+            </EmptyState>
+          </div>
+        </Reveal>
       </Container>
     </section>
   );
