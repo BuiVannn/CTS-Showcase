@@ -18,26 +18,24 @@ const variants: Record<Variant, string> = {
   ghost: "bg-transparent text-ink border border-border hover:bg-surface",
 };
 
-type CommonProps = { variant?: Variant; size?: Size; children: ReactNode; className?: string };
+type CommonProps = { variant?: Variant; size?: Size; className?: string; children: ReactNode };
+type ButtonAsButton = CommonProps & { href?: never } & ComponentPropsWithoutRef<"button">;
+type ButtonAsLink = CommonProps & { href: string } & Omit<ComponentPropsWithoutRef<"a">, "href">;
+export type ButtonProps = ButtonAsButton | ButtonAsLink;
 
-export default function Button({
-  variant = "blue",
-  size = "md",
-  className = "",
-  children,
-  href,
-  ...rest
-}: CommonProps & { href?: string } & ComponentPropsWithoutRef<"button">) {
+export default function Button(props: ButtonProps) {
+  const { variant = "blue", size = "md", className = "", children, ...rest } = props;
   const cls = `${base} ${sizes[size]} ${variants[variant]} ${className}`;
-  if (href) {
+  if ("href" in rest && rest.href) {
+    const { href, ...anchorRest } = rest as { href: string } & Omit<ComponentPropsWithoutRef<"a">, "href">;
     return (
-      <Link href={href} className={cls}>
+      <Link href={href} className={cls} {...anchorRest}>
         {children}
       </Link>
     );
   }
   return (
-    <button className={cls} {...rest}>
+    <button className={cls} {...(rest as ComponentPropsWithoutRef<"button">)}>
       {children}
     </button>
   );
