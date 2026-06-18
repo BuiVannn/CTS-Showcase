@@ -8,16 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function VRTourPage() {
-  return (
-    <div className="fixed inset-0 z-50 bg-bg">
-      <VRTourShell />
-      <iframe
-        src="/vr-tour/tour.html"
-        title="PTIT Virtual Tour"
-        className="absolute inset-0 z-10 h-full w-full border-0"
-        allow="fullscreen; autoplay; xr-spatial-tracking; gyroscope; accelerometer"
-        allowFullScreen
-      />
-    </div>
-  );
+  return <VRTourShell />;
 }
