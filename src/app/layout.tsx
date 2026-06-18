@@ -5,6 +5,7 @@ import { LocaleProvider } from "@/lib/locale";
 import { ThemeProvider } from "@/lib/theme-context";
 import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ui/ScrollProgress";
+import PageTransition from "@/components/ui/PageTransition";
 
 // Display — distinctive rounded-geometric, includes the Vietnamese subset.
 const display = Unbounded({
@@ -67,7 +68,7 @@ export default function RootLayout({
           <LocaleProvider>
             <ScrollProgress />
             <SmoothScroll />
-            {children}
+            <PageTransition>{children}</PageTransition>
           </LocaleProvider>
         </ThemeProvider>
       </body>
