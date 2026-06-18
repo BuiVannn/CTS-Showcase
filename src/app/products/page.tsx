@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function ProductsPage() {
   return (
     <>
-      <Navbar showSectionLinks={false} />
+      <Navbar />
       <ProductsView />
       <Footer />
     </>
