@@ -24,6 +24,20 @@ export const ui = {
       vi: "Mọi thứ chúng tôi tạo ra đều để chạm, di chuyển và khám phá. Đây là PTalk, sống động trong không gian 3D — kéo để xoay, cuộn để phóng to.",
     } as Localized,
     hint: { en: "Drag to rotate · scroll to zoom", vi: "Kéo để xoay · cuộn để phóng to" } as Localized,
+    steps: [
+      {
+        title: { en: "Voice-native", vi: "Trò chuyện giọng nói" } as Localized,
+        desc: { en: "Natural spoken dialogue", vi: "Đối thoại tự nhiên bằng giọng nói" } as Localized,
+      },
+      {
+        title: { en: "Realtime", vi: "Thời gian thực" } as Localized,
+        desc: { en: "Instant, low-latency responses", vi: "Phản hồi tức thì, độ trễ thấp" } as Localized,
+      },
+      {
+        title: { en: "Built for learning", vi: "Học tập" } as Localized,
+        desc: { en: "A companion for STEM classrooms", vi: "Trợ lý đồng hành cho lớp học STEM" } as Localized,
+      },
+    ],
   },
   ecosystem: {
     eyebrow: { en: "Ecosystem", vi: "Hệ sinh thái" } as Localized,
