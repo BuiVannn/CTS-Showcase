@@ -29,6 +29,12 @@ This spec covers two intertwined pieces of work:
 - **Animation character:** **tasteful & elegant**, not cinematic. Smooth scroll reveals, the 3D
   model, light parallax, count-up stats, refined hover / CTA micro-interactions. Stays academic;
   never busy.
+- **Scrollytelling (added):** a curated, tasteful subset of scroll-driven storytelling —
+  multi-layer **hero parallax**, a thin site-wide **scroll-progress bar**, and **one pinned
+  "scrollytelling moment" on the PTalk 3D section** (sticky stage + feature captions revealed on
+  scroll + scroll-driven model rotation). Explicitly **rejected**: scroll-hijacking horizontal
+  galleries, pervasive pinning, animated gradient-mesh backgrounds. Scroll-linked motion must stay
+  in service of real content, never effect-for-effect's-sake.
 - **3D placement:** a **dedicated "Gặp gỡ PTalk" section immediately after the hero**, restyled to
   Academic Tech (border + soft brand glow instead of frosted glass).
 - **Hero card:** the flat red placeholder card (red box + two white circles) is **replaced** with
@@ -39,8 +45,12 @@ This spec covers two intertwined pieces of work:
 
 - The 3D PTalk model renders in a dedicated home section, is draggable (rotate), zoomable (scroll),
   auto-rotates gently, and is lazy-loaded (three.js stays out of the initial bundle; no SSR crash).
-- A shared motion library (`Reveal`, `Stagger`/`StaggerItem`, `CountUp`, `Magnetic` + expanded
-  `lib/motion.ts`) exists and is the single source of reveal/stagger behaviour.
+- A shared motion library (`Reveal`, `Stagger`/`StaggerItem`, `CountUp`, `Magnetic`,
+  `ScrollProgress` + expanded `lib/motion.ts`) exists and is the single source of reveal/stagger
+  behaviour.
+- Scrollytelling works and degrades gracefully: multi-layer hero parallax, a site-wide scroll-progress
+  bar, and the **pinned PTalk moment** (sticky stage + scroll-advanced captions + scroll-driven model
+  rotation) on desktop — with a clean non-pinned fallback on mobile and under reduced motion.
 - Every home section and every sub-page uses that library — consistent easing, timing, and hover
   language across the whole site. No section is visibly static anymore (except where motion would
   be inappropriate, e.g. the VR iframe).
@@ -53,10 +63,11 @@ This spec covers two intertwined pieces of work:
 
 - No change to the Academic Tech palette, typography, or the light/dark token system.
 - No new routes or content restructuring. (Copy for the 3D section already exists in `ui.spotlight`.)
-- No GSAP / ScrollTrigger or other scroll libraries — Motion (`motion/react`) + Lenis already cover
-  the "tasteful" target.
-- No scroll-scrubbed / pinned timelines or animated gradient-mesh backgrounds (that was the
-  "cinematic" option, explicitly not chosen).
+- No GSAP / ScrollTrigger or other scroll libraries — Motion (`motion/react`) `useScroll` /
+  `useTransform` / `useSpring` + Lenis already cover the curated scrollytelling target.
+- No animated gradient-mesh backgrounds, no scroll-hijacking horizontal galleries, and no
+  *pervasive* pinning. Scroll-scrubbed motion is limited to **one** curated moment (the PTalk 3D
+  section) plus light hero parallax and the progress bar — not a site-wide cinematic timeline.
 - No changes to the VR tour's underlying iframe experience (only its loading state may be polished).
 - No new 3D assets — reuse the existing `public/model/robot.glb` + `public/draco/` decoder.
 
@@ -67,7 +78,13 @@ This spec covers two intertwined pieces of work:
 - `public/model/robot.glb` (≈2.18 MB) and `public/draco/` decoder **already present** in this repo.
 - Deps already installed: `three`, `@react-three/fiber`, `@react-three/drei`, `motion`, `lenis`.
 - `src/content/ui.ts` already contains `ui.spotlight` = `{ eyebrow: "Tương tác/Interactive",
-  title: "Gặp gỡ PTalk/Meet PTalk", lead: …, hint: "Kéo để xoay · cuộn để phóng to/…" }`. **Reuse as-is.**
+  title: "Gặp gỡ PTalk/Meet PTalk", lead: …, hint: "Kéo để xoay · cuộn để phóng to/…" }`. Reuse;
+  **extend** it with a `steps` array (3 bilingual feature captions for the pinned scrollytelling
+  moment, §5.2) — proposed:
+  `[{title:"Trò chuyện giọng nói/Voice-native", desc:"Đối thoại tự nhiên bằng giọng nói/Natural spoken dialogue"},
+    {title:"Thời gian thực/Realtime", desc:"Phản hồi tức thì, độ trễ thấp/Instant, low-latency responses"},
+    {title:"Học tập/Built for learning", desc:"Trợ lý đồng hành cho lớp học STEM/A companion for STEM classrooms"}]`.
+  (Final wording confirmed with the user before/at implementation.)
 - Design tokens in `globals.css`: `--blue #2563eb`, `--red #e11b22`, `--blue-soft`, `--red-soft`,
   `--border`, `--card`, `--surface`, `--ink`, `--ink-2`, `--dim`, `--shadow-*`, radii. Dark-mode
   brand values: `--blue #5b8def`, `--red #f2555b`.
@@ -127,6 +144,15 @@ A scroll-reveal wrapper. Props:
   reduced-motion / touch → passthrough (renders children, no transform).
 - Applied to the single most-important CTA per screen (hero primary, HomeCTA primary).
 
+### 4.6 `src/components/ui/ScrollProgress.tsx`
+
+- A thin (2–3px) fixed bar at the very top of the viewport tracking page scroll progress.
+- `useScroll()` → `scaleX` bound to `scrollYProgress` (transform-origin left), spring-smoothed.
+- Brand gradient fill (`--blue` → `--red`), `z` above content, `pointer-events-none`,
+  `aria-hidden`. Reduced-motion → still tracks position (it's an indicator, not decoration) but
+  without spring overshoot.
+- Mounted **once in the root layout** (`src/app/layout.tsx`) so it is consistent on every route.
+
 **Isolation note:** each component answers "what does it do / how to use / what it depends on"
 cleanly and is independently testable. `CountUp`'s number-parsing is pure and unit-tested.
 
@@ -143,29 +169,51 @@ Ported from the reference, **restyled**:
 - Lighting: keep soft studio setup but recolor the two rim `pointLight`s to **brand** tints —
   red `#f2555b` and blue `#5b8def` (read well in both themes) instead of the old coral/violet.
 - `<Bounds fit clip margin={1}><Center><primitive object={scene} /></Center></Bounds>` to frame once.
-- `OrbitControls`: `makeDefault`, `enablePan={false}`, `autoRotate={!reduce}`, `autoRotateSpeed≈1.1`,
-  `enableDamping`, `dampingFactor≈0.08`, `zoomSpeed≈0.8`. (Drag = rotate, wheel = zoom.)
+- `OrbitControls`: `makeDefault`, `enablePan={false}`, `autoRotate={!reduce && !scrollDriven}`,
+  `autoRotateSpeed≈1.1`, `enableDamping`, `dampingFactor≈0.08`, `zoomSpeed≈0.8`.
+  (Drag = rotate, wheel = zoom. User interaction always overrides scroll-driven rotation.)
+- **Scroll-driven rotation (for §5.2 pinned moment):** optional prop
+  `progress?: MotionValue<number>` (0→1). When provided, an inner `useFrame` reads it and eases the
+  model's `rotation.y` across a target arc (≈ -0.5 → +0.5 rad) — so scrolling "turns the robot to
+  face you." `progress` absent (or reduced-motion) → fall back to `autoRotate`. While the user is
+  actively dragging (`OrbitControls` "start"/"end" events), pause scroll application so input wins.
 - `useGLTF(MODEL, DRACO)` with `useGLTF.preload`. `MODEL = "/model/robot.glb"`, `DRACO = "/draco/"`.
 - `Loader` (drei `Html` + `useProgress`): spinner border `var(--border)` + `var(--red)` top, `%` in
   `text-dim`. **Swap removed tokens** `--border-strong`→`--border`, `--coral`→`--red`, `text-muted`→`text-dim`.
 
-### 5.2 `src/components/home/SpotlightSection.tsx`
+### 5.2 `src/components/home/SpotlightSection.tsx` — pinned scrollytelling moment
 
-The "Gặp gỡ PTalk" section. Layout mirrors the screenshot, restyled to Academic Tech:
+The "Gặp gỡ PTalk" section. On desktop it is the home page's one **pinned scrollytelling moment**:
+the 3D stage stays put while feature captions scroll past and the model turns with scroll. Restyled
+to Academic Tech (border + soft brand glow, not frosted glass).
 
-- `<section className="section">`, `Container`, two-column grid
-  (`lg:grid-cols-2`, `items-center`, `gap-12`).
-- **Left (copy)** wrapped in `Reveal`: `eyebrow` = `t(ui.spotlight.eyebrow)`; `h2.text-section` =
-  `t(ui.spotlight.title)`; `p.text-ink-2` = `t(ui.spotlight.lead)`; a hint pill with `Rotate3d` icon =
-  `t(ui.spotlight.hint)` styled `bg` `var(--red-soft)`, text `text-red`, `rounded-[var(--radius-pill)]`.
-- **Right (3D stage)** wrapped in `Reveal delay={0.1}`:
-  - Outer frame: `rounded-[var(--radius-lg)] border border-border bg-card p-3 shadow-[var(--shadow-lg)]`.
-  - Behind the canvas, a soft **dual radial glow** ground: red + blue (`--red`/`--blue` at low alpha),
-    plus the faint grid motif used in the hero (consistency).
-  - Canvas area: `relative aspect-square w-full` (responsive: `sm:aspect-[4/3] lg:aspect-square`).
-  - `RobotViewer` loaded via `next/dynamic(() => import("./RobotViewer"), { ssr:false, loading:<spinner/> })`.
-  - A small "PTalk" chip top-right: `Sparkles` icon + label, `border bg-card/90` (matches the screenshot
-    badge), not the old `.glass-strong`.
+**Structure (desktop / pointer-fine, motion allowed):**
+- Outer `<section ref={sectionRef}>` is **tall** (≈ `h-[280vh]`) to give the pin scroll room.
+- `useScroll({ target: sectionRef, offset: ["start start", "end end"] })` → `scrollYProgress`.
+- A **sticky inner wrapper** (`sticky top-0 h-screen flex items-center`) holds a two-column grid:
+  - **Left (copy + steps):** `eyebrow` = `t(ui.spotlight.eyebrow)`; `h2.text-section` =
+    `t(ui.spotlight.title)`; `p.text-ink-2` = `t(ui.spotlight.lead)`. Below, the **step captions**
+    from `ui.spotlight.steps`: each step's active state is derived from `scrollYProgress` (segment
+    the 0→1 range by step count). The active step is fully opaque with a brand accent bar; inactive
+    steps are dimmed (`text-dim`, low opacity). Transitions are opacity/translate only.
+  - **Right (3D stage):** the framed canvas.
+    - Outer frame: `rounded-[var(--radius-lg)] border border-border bg-card p-3 shadow-[var(--shadow-lg)]`.
+    - Behind the canvas, a soft **dual radial glow** ground (red + blue, low alpha) + the faint grid
+      motif from the hero (consistency).
+    - Canvas area: `relative aspect-square w-full`.
+    - `RobotViewer` loaded via `next/dynamic(() => import("./RobotViewer"), { ssr:false, loading:<spinner/> })`,
+      passed `progress={scrollYProgress}` so the model rotates with scroll (§5.1).
+    - "PTalk" chip top-right: `Sparkles` + label, `border bg-card/90` (not `.glass-strong`).
+  - A hint pill with `Rotate3d` icon = `t(ui.spotlight.hint)` (`bg var(--red-soft)`, `text-red`,
+    `rounded-[var(--radius-pill)]`).
+
+**Fallback (mobile `< lg`, OR `prefers-reduced-motion`):** no pin, no scroll-scrub. Render a normal
+short `section` with the same two columns via `Reveal` (copy) + `Reveal delay={0.1}` (stage), and the
+steps as a simple stacked list (all visible). `RobotViewer` gets no `progress` (auto-rotate, or static
+under reduced motion). This is the §5.2 behaviour the original design described — kept intact as the
+graceful baseline. The choice is made with a `lg` media query + `useReducedMotion()` (render the
+non-pinned variant when either applies) so mobile never inherits a janky sticky/scrub.
+
 - Mounted in `src/app/page.tsx` **between `HomeHero` and `HomeStats`**.
 
 ### 5.3 Performance / safety
@@ -184,8 +232,12 @@ EcosystemBento → Partners → HomeCTA`.
 
 - **HomeHero** — migrate `rise()` to shared `Reveal`/`Stagger`. **Replace** the flat red placeholder
   card: use `MediaFrame` with `public/img/vr.jpg`, a centered play-button overlay, a subtle sheen
-  sweep on hover, and the existing `★ Featured` chip + caption. Add light **mouse-parallax** to the
-  two ambient background glows (reduced-motion → static). Wrap the hero primary CTA in `Magnetic`.
+  sweep on hover, and the existing `★ Featured` chip + caption. Wrap the hero primary CTA in `Magnetic`.
+  **Multi-layer scroll parallax:** `useScroll` on the hero → `useTransform` drives the background grid,
+  the two brand glows, the headline, and the VR card at **different `y` speeds** (back layers move
+  more, foreground less) with a slight opacity fade as the hero exits — creating depth on scroll.
+  Plus light **mouse-parallax** on the glows. All parallax is `transform`/`opacity` only and is
+  **disabled under `prefers-reduced-motion`** (static layers).
 - **HomeStats** — `StatBand` numbers animate via `CountUp` on view; reveal the SSO card.
 - **ShowcaseSection** — keep reveal (migrate to `Stagger`); add gentle media zoom-on-hover in `MediaFrame`/`Card`.
 - **EcosystemBento** — currently static → wrap cards in `Stagger`/`StaggerItem`; keep `Card` hover lift.
@@ -228,11 +280,15 @@ visual coherence across routes.
 
 - **Unit (vitest):** `CountUp` number parsing (`"164"`→164, `"05"`→preserves pad, `"PTIT"`→passthrough);
   `Reveal`/`Stagger` reduced-motion fallback (renders children, no motion props) — light DOM assertions.
+  Pure step-segmentation helper for `SpotlightSection` (map progress 0→1 to active step index) unit-tested.
 - **Build/lint:** `npm run build` (verifies dynamic import + three.js chunking + SSR safety),
   `npm run lint`, `npm run test` all green.
 - **Manual:** drag-rotate + scroll-zoom the model; toggle light/dark (rim lights + glows read well in
-  both); toggle EN/VI (spotlight copy switches); set `prefers-reduced-motion` and confirm everything is
-  static and the model doesn't auto-rotate; mobile — vertical page scroll works over the canvas.
+  both); toggle EN/VI (spotlight copy + step captions switch); scroll-progress bar fills 0→100%;
+  hero layers parallax at different speeds; **PTalk pin** holds while captions advance and the model
+  turns with scroll, then releases cleanly; set `prefers-reduced-motion` → everything static, no
+  auto-rotate, **no pin** (stacked fallback); mobile (`< lg`) → non-pinned fallback, and vertical page
+  scroll works over the canvas (no scroll trap).
 
 ---
 
@@ -243,12 +299,15 @@ visual coherence across routes.
 - `src/components/ui/Stagger.tsx` (exports `Stagger` + `StaggerItem`)
 - `src/components/ui/CountUp.tsx`
 - `src/components/ui/Magnetic.tsx`
+- `src/components/ui/ScrollProgress.tsx`
 - `src/components/home/RobotViewer.tsx`
 - `src/components/home/SpotlightSection.tsx`
-- tests: `src/components/ui/CountUp.test.ts` (+ reveal reduced-motion test)
+- tests: `src/components/ui/CountUp.test.ts` (+ reveal reduced-motion test + spotlight step-segmentation test)
 
 **Modified**
 - `src/lib/motion.ts` (expand variants)
+- `src/content/ui.ts` (add `ui.spotlight.steps` — 3 bilingual feature captions)
+- `src/app/layout.tsx` (mount `ScrollProgress`)
 - `src/app/page.tsx` (insert `SpotlightSection`)
 - `src/components/home/HomeHero.tsx`, `HomeStats.tsx`, `ShowcaseSection.tsx`,
   `EcosystemBento.tsx`, `Partners.tsx`, `HomeCTA.tsx`
@@ -258,14 +317,19 @@ visual coherence across routes.
   `src/components/team/TeamGrid.tsx`, `src/components/StubPage.tsx`,
   `src/components/VRTourShell.tsx` (loading state)
 
-**Unchanged (reuse):** `public/model/robot.glb`, `public/draco/*`, `src/content/ui.ts` (`ui.spotlight`).
+**Unchanged (reuse):** `public/model/robot.glb`, `public/draco/*`, `src/content/site.ts`.
 
 ---
 
 ## 11. Rollout / sequencing (for the implementation plan)
 
-1. Motion foundation (`lib/motion.ts`, `Reveal`, `Stagger`, `CountUp`, `Magnetic`) + tests.
-2. 3D: `RobotViewer` + `SpotlightSection`, wire into `page.tsx`. Verify drag/zoom/lazy-load.
-3. Home enrichment (hero card swap, stats count-up, ecosystem/partners/CTA reveals).
-4. Site-wide application (products, detail, team, games, navbar indicator, VR loading).
-5. Full verification pass (build/lint/test + manual matrix in §9).
+1. Motion foundation (`lib/motion.ts`, `Reveal`, `Stagger`, `CountUp`, `Magnetic`, `ScrollProgress`)
+   + tests; mount `ScrollProgress` in the layout.
+2. 3D base: `RobotViewer` (with optional `progress` rotation prop) + the **non-pinned fallback**
+   `SpotlightSection`, wired into `page.tsx`. Verify drag/zoom/lazy-load first.
+3. Scrollytelling: upgrade `SpotlightSection` to the pinned/scroll-scrub variant (sticky stage,
+   `ui.spotlight.steps` captions, scroll-driven rotation) with the mobile/reduced-motion fallback;
+   add hero multi-layer parallax. Verify pin + fallbacks.
+4. Home enrichment (hero card swap, stats count-up, ecosystem/partners/CTA reveals).
+5. Site-wide application (products, detail, team, games, navbar indicator, VR loading).
+6. Full verification pass (build/lint/test + manual matrix in §9).
