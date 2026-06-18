@@ -52,6 +52,7 @@ export default function RootLayout({
       lang="en"
       data-scroll-behavior="smooth"
       data-theme="light"
+      suppressHydrationWarning
       className={`${display.variable} ${body.variable} ${mono.variable} antialiased`}
     >
       <body className="min-h-screen bg-bg text-ink">

@@ -4,8 +4,8 @@ import { useLocale } from "@/lib/locale";
 import type { Locale } from "@/content/types";
 
 const OPTIONS: { code: Locale; label: string }[] = [
-  { code: "en", label: "EN" },
   { code: "vi", label: "VI" },
+  { code: "en", label: "EN" },
 ];
 
 export default function LanguageToggle({ className = "" }: { className?: string }) {
@@ -13,7 +13,7 @@ export default function LanguageToggle({ className = "" }: { className?: string 
 
   return (
     <div
-      className={`relative inline-flex items-center rounded-[var(--radius-pill)] border border-[var(--border-strong)] bg-[var(--glass-bg-strong)] p-0.5 backdrop-blur-md ${className}`}
+      className={`inline-flex items-center rounded-[var(--radius-pill)] border border-border bg-surface p-0.5 ${className}`}
       role="group"
       aria-label="Language"
     >
@@ -22,15 +22,13 @@ export default function LanguageToggle({ className = "" }: { className?: string 
         return (
           <button
             key={opt.code}
+            type="button"
             onClick={() => setLocale(opt.code)}
             aria-pressed={active}
-            className={`relative z-10 rounded-[var(--radius-pill)] px-2.5 py-1 text-[0.7rem] font-semibold tracking-wide transition-colors duration-300 ${
-              active ? "text-white" : "text-muted hover:text-ink"
+            className={`rounded-[var(--radius-pill)] px-2.5 py-1 text-[0.7rem] font-semibold tracking-wide transition-colors duration-200 ${
+              active ? "bg-blue text-white" : "text-ink-2 hover:text-ink"
             }`}
           >
-            {active && (
-              <span className="absolute inset-0 -z-10 rounded-[var(--radius-pill)] bg-[var(--gradient-accent)] shadow-[var(--shadow-sm)]" />
-            )}
             {opt.label}
           </button>
         );
