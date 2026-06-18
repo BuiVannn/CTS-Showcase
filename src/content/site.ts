@@ -38,11 +38,10 @@ export const site: SiteConfig = {
     email: "contact@cts.ptit.edu.vn",
   },
   nav: [
-    { id: "#home", label: { en: "Home", vi: "Trang chủ" } },
-    { id: "#showcase", label: { en: "Showcase", vi: "Nổi bật" } },
-    { id: "#products", label: { en: "Apps", vi: "Ứng dụng" } },
-    { id: "#team", label: { en: "Team", vi: "Đội ngũ" } },
-    { id: "#contact", label: { en: "Contact", vi: "Liên hệ" } },
+    { id: "/", label: { en: "Home", vi: "Trang chủ" } },
+    { id: "/products", label: { en: "Products", vi: "Sản phẩm" } },
+    { id: "/games", label: { en: "Games", vi: "Games" } },
+    { id: "/team", label: { en: "Team", vi: "Đội ngũ" } },
   ],
   footerDescription: {
     en: "STEM Innovation Lab at the Posts & Telecommunications Institute of Technology.",

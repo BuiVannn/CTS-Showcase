@@ -93,4 +93,22 @@ export const ui = {
     loading: { en: "Loading the 360° campus experience…", vi: "Đang tải trải nghiệm khuôn viên 360°…" } as Localized,
     back: { en: "Back", vi: "Quay lại" } as Localized,
   },
+  home: {
+    heroWord1: { en: "Learn.", vi: "Học." } as Localized,
+    heroWord2: { en: "Create.", vi: "Sáng tạo." } as Localized,
+    heroWordAccent: { en: "Play.", vi: "Chơi." } as Localized, // rendered in brand red
+    gamehubName: { en: "CTS Gamehub", vi: "CTS Gamehub" } as Localized,
+    gamehubBlurb: {
+      en: "Browse and play the lab's games — rolling out soon.",
+      vi: "Duyệt và chơi game của lab — sắp ra mắt.",
+    } as Localized,
+    statApps: { en: "AI products", vi: "Sản phẩm AI" } as Localized,
+    statScenes: { en: "360° VR scenes", vi: "Cảnh VR 360°" } as Localized,
+    statPartner: { en: "Academic partner", vi: "Đối tác học thuật" } as Localized,
+    comingSoon: { en: "Coming soon", vi: "Sắp ra mắt" } as Localized,
+    underConstruction: {
+      en: "This section is being rebuilt — check back soon.",
+      vi: "Mục này đang được hoàn thiện — quay lại sau nhé.",
+    } as Localized,
+  },
 };
