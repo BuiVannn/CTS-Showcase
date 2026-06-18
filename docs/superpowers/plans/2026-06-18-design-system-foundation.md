@@ -582,7 +582,7 @@ type Variant = "blue" | "red" | "ghost";
 type Size = "sm" | "md";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-[var(--radius-pill)] font-semibold transition-colors transition-transform duration-200 active:scale-[0.98] focus-visible:outline-2";
+  "inline-flex items-center justify-center gap-2 rounded-[var(--radius-pill)] font-semibold transition duration-200 active:scale-[0.98]";
 
 const sizes: Record<Size, string> = {
   sm: "px-4 py-2 text-[0.8rem]",
@@ -655,6 +655,11 @@ import type { ReactNode } from "react";
 
 type Variant = "standard" | "feature";
 
+const variants: Record<Variant, string> = {
+  standard: "bg-card",
+  feature: "bg-gradient-to-br from-card to-surface",
+};
+
 export default function Card({
   variant = "standard",
   className = "",
@@ -664,10 +669,9 @@ export default function Card({
   className?: string;
   children: ReactNode;
 }) {
-  const bg = variant === "feature" ? "bg-card" : "bg-card";
   return (
     <div
-      className={`relative rounded-[var(--radius-lg)] border border-border ${bg} p-5 shadow-[var(--shadow-sm)] transition-transform transition-colors duration-300 hover:-translate-y-1 hover:border-blue ${className}`}
+      className={`relative rounded-[var(--radius-lg)] border border-border ${variants[variant]} p-5 shadow-[var(--shadow-sm)] transition duration-300 hover:-translate-y-1 hover:border-blue ${className}`}
     >
       {children}
     </div>
@@ -876,7 +880,7 @@ export default function StyleguidePage() {
           <Button variant="blue" size="sm">Nhỏ</Button>
         </div>
 
-        <SectionHeader eyebrow="Surfaces" title="Thẻ &amp; nhãn" />
+        <SectionHeader eyebrow="Surfaces" title="Thẻ & nhãn" />
         <div className="mb-12 grid gap-4 md:grid-cols-3">
           <Card>
             <Badge tone="blue">AI</Badge>
