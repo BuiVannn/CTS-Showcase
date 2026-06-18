@@ -1,8 +1,11 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HomeHero from "@/components/home/HomeHero";
-import EcosystemBento from "@/components/home/EcosystemBento";
 import HomeStats from "@/components/home/HomeStats";
+import ShowcaseSection from "@/components/home/ShowcaseSection";
+import EcosystemBento from "@/components/home/EcosystemBento";
+import Partners from "@/components/home/Partners";
+import HomeCTA from "@/components/home/HomeCTA";
 
 export default function Home() {
   return (
@@ -11,7 +14,10 @@ export default function Home() {
       <main className="relative">
         <HomeHero />
         <HomeStats />
+        <ShowcaseSection />
         <EcosystemBento />
+        <Partners />
+        <HomeCTA />
       </main>
       <Footer />
     </>

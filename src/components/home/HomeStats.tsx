@@ -2,6 +2,7 @@
 
 import { useLocale } from "@/lib/locale";
 import { getProducts } from "@/content/products";
+import { team } from "@/content/team";
 import { ui } from "@/content/ui";
 import { sso } from "@/content/sso";
 import Container from "@/components/ui/Container";
@@ -12,6 +13,7 @@ export default function HomeStats() {
   const stats = [
     { value: String(getProducts().length).padStart(2, "0"), label: t(ui.home.statApps) },
     { value: "164", label: t(ui.home.statScenes) },
+    { value: String(team.length), label: t(ui.home.statTeam) },
     { value: "PTIT", label: t(ui.home.statPartner) },
   ];
   return (

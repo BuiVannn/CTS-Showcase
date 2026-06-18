@@ -94,9 +94,18 @@ export const ui = {
     back: { en: "Back", vi: "Quay lại" } as Localized,
   },
   home: {
-    heroWord1: { en: "Learn.", vi: "Học." } as Localized,
-    heroWord2: { en: "Create.", vi: "Sáng tạo." } as Localized,
-    heroWordAccent: { en: "Play.", vi: "Chơi." } as Localized, // rendered in brand red
+    heroEyebrow: { en: "Learn · Create · Play ecosystem", vi: "Hệ sinh thái Học · Sáng tạo · Chơi" } as Localized,
+    heroLead: { en: "Where", vi: "Nơi công nghệ" } as Localized,
+    heroKw1: { en: "AI,", vi: "AI," } as Localized, // brand red
+    heroKw2: { en: "STEM & VR", vi: "STEM & VR" } as Localized, // brand red
+    heroTail: { en: "converge under one roof.", vi: "hội tụ trong một mái nhà." } as Localized,
+    featured: { en: "Featured", vi: "Nổi bật" } as Localized,
+    vrCardLabel: { en: "164 scenes · 360°", vi: "164 cảnh · 360°" } as Localized,
+    vrCardTitle: { en: "Tour the PTIT campus", vi: "Tham quan campus PTIT" } as Localized,
+    vrCardBlurb: {
+      en: "Walk through lecture halls, labs and the library in VR — right in your browser.",
+      vi: "Đi xuyên giảng đường, phòng lab và thư viện bằng VR ngay trên trình duyệt.",
+    } as Localized,
     gamehubName: { en: "CTS Gamehub", vi: "CTS Gamehub" } as Localized,
     gamehubBlurb: {
       en: "Browse and play the lab's games — rolling out soon.",
@@ -104,7 +113,10 @@ export const ui = {
     } as Localized,
     statApps: { en: "AI products", vi: "Sản phẩm AI" } as Localized,
     statScenes: { en: "360° VR scenes", vi: "Cảnh VR 360°" } as Localized,
+    statTeam: { en: "Team members", vi: "Thành viên" } as Localized,
     statPartner: { en: "Academic partner", vi: "Đối tác học thuật" } as Localized,
+    ctaEyebrow: { en: "Collaborate", vi: "Hợp tác" } as Localized,
+    ctaButton: { en: "Email us", vi: "Gửi email cho chúng tôi" } as Localized,
     comingSoon: { en: "Coming soon", vi: "Sắp ra mắt" } as Localized,
     underConstruction: {
       en: "This section is being rebuilt — check back soon.",
