@@ -16,19 +16,30 @@ export default function Partners() {
           <span className="eyebrow">{t(ui.partners.eyebrow)}</span>
           <h2 className="text-section mt-2 text-ink">{t(ui.partners.title)}</h2>
         </Reveal>
-        <Stagger className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-5">
-          {partners.map((p) => (
-            <StaggerItem key={p.name}>
-              <a
-                href={p.url}
-                target={p.url.startsWith("http") ? "_blank" : undefined}
-                rel={p.url.startsWith("http") ? "noopener noreferrer" : undefined}
-                className="text-display text-base font-semibold text-dim transition-colors hover:text-ink sm:text-lg"
-              >
-                {p.name}
-              </a>
-            </StaggerItem>
-          ))}
+        <Stagger className="mt-8 flex flex-wrap gap-3">
+          {partners.map((p) => {
+            const external = p.url.startsWith("http");
+            return (
+              <StaggerItem key={p.name}>
+                <a
+                  href={p.url}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                  className="group inline-flex items-center gap-3 rounded-[var(--radius-pill)] border border-border bg-card px-4 py-2.5 shadow-[var(--shadow-sm)] transition duration-300 hover:-translate-y-0.5 hover:border-blue"
+                >
+                  <span
+                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px] text-xs font-bold text-blue"
+                    style={{ background: "var(--blue-soft)" }}
+                  >
+                    {p.name.charAt(0)}
+                  </span>
+                  <span className="text-display text-sm font-semibold text-ink-2 transition-colors group-hover:text-ink sm:text-base">
+                    {p.name}
+                  </span>
+                </a>
+              </StaggerItem>
+            );
+          })}
         </Stagger>
       </Container>
     </section>
