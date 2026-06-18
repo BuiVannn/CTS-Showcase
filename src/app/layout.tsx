@@ -55,6 +55,7 @@ export default function RootLayout({
       className={`${display.variable} ${body.variable} ${mono.variable} antialiased`}
     >
       <body className="min-h-screen bg-bg text-ink">
+        {/* No-flash theme: the 'cts-theme' key + 'light' default must match THEME_STORAGE_KEY/resolveTheme in src/lib/theme.ts */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var k='cts-theme',s=localStorage.getItem(k);var t=(s==='dark')?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`,
