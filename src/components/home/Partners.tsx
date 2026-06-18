@@ -25,17 +25,9 @@ export default function Partners() {
                   href={p.url}
                   target={external ? "_blank" : undefined}
                   rel={external ? "noopener noreferrer" : undefined}
-                  className="group inline-flex items-center gap-3 rounded-[var(--radius-pill)] border border-border bg-card px-4 py-2.5 shadow-[var(--shadow-sm)] transition duration-300 hover:-translate-y-0.5 hover:border-blue"
+                  className="text-display inline-flex items-center rounded-[var(--radius-pill)] border border-border bg-card px-5 py-2.5 text-sm font-semibold text-ink-2 shadow-[var(--shadow-sm)] transition duration-300 hover:-translate-y-0.5 hover:border-blue hover:text-ink sm:text-base"
                 >
-                  <span
-                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px] text-xs font-bold text-blue"
-                    style={{ background: "var(--blue-soft)" }}
-                  >
-                    {p.name.charAt(0)}
-                  </span>
-                  <span className="text-display text-sm font-semibold text-ink-2 transition-colors group-hover:text-ink sm:text-base">
-                    {p.name}
-                  </span>
+                  {p.name}
                 </a>
               </StaggerItem>
             );
