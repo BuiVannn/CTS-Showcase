@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale } from "@/lib/locale";
-import { ecosystem } from "@/content/ecosystem";
+import { getProducts } from "@/content/products";
 import { ui } from "@/content/ui";
 import { sso } from "@/content/sso";
 import Container from "@/components/ui/Container";
@@ -10,7 +10,7 @@ import StatBand from "@/components/ui/StatBand";
 export default function HomeStats() {
   const { t } = useLocale();
   const stats = [
-    { value: String(ecosystem.length).padStart(2, "0"), label: t(ui.home.statApps) },
+    { value: String(getProducts().length).padStart(2, "0"), label: t(ui.home.statApps) },
     { value: "164", label: t(ui.home.statScenes) },
     { value: "PTIT", label: t(ui.home.statPartner) },
   ];

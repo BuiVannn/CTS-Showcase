@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Gamepad2 } from "lucide-react";
 import { useLocale } from "@/lib/locale";
-import { ecosystem } from "@/content/ecosystem";
+import { getProducts } from "@/content/products";
 import { ui } from "@/content/ui";
 import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
@@ -13,6 +13,7 @@ import Tag from "@/components/ui/Tag";
 
 export default function EcosystemBento() {
   const { t } = useLocale();
+  const products = getProducts();
   return (
     <section className="section">
       <Container>
@@ -39,7 +40,7 @@ export default function EcosystemBento() {
           </Link>
 
           {/* Ecosystem apps */}
-          {ecosystem.map((app) => (
+          {products.map((app) => (
             <Link key={app.id} href="/products">
               <Card className="h-full">
                 <h3 className="text-display text-base text-ink">{app.name}</h3>
