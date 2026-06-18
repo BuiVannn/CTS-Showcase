@@ -15,7 +15,7 @@ export default function HomeHero() {
         <span className="eyebrow">{t(site.hero.eyebrow)}</span>
         <h1 className="text-hero mt-5 text-ink">
           {t(ui.home.heroWord1)} {t(ui.home.heroWord2)}{" "}
-          <span className="text-red">{t(ui.home.heroWordAccent)}</span>
+          <span className="text-ink">{t(ui.home.heroWordAccent)}</span>
         </h1>
         <p className="mt-6 max-w-2xl text-base leading-relaxed text-ink-2 sm:text-lg">
           {t(site.hero.subtitle)}

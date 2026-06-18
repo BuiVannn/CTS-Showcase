@@ -10,7 +10,7 @@ import StatBand from "@/components/ui/StatBand";
 export default function HomeStats() {
   const { t } = useLocale();
   const stats = [
-    { value: String(ecosystem.length).padStart(2, "0"), unit: "+", label: t(ui.home.statApps) },
+    { value: String(ecosystem.length).padStart(2, "0"), label: t(ui.home.statApps) },
     { value: "164", label: t(ui.home.statScenes) },
     { value: "PTIT", label: t(ui.home.statPartner) },
   ];

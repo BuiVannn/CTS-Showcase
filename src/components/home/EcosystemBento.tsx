@@ -29,8 +29,7 @@ export default function EcosystemBento() {
                 <Badge tone="red">{t(ui.home.comingSoon)}</Badge>
               </span>
               <div
-                className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-[10px] text-red"
-                style={{ background: "var(--red-soft)" }}
+                className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-[10px] text-ink-2 bg-surface"
               >
                 <Gamepad2 size={18} />
               </div>

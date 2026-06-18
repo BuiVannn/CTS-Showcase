@@ -67,7 +67,7 @@ export default function Navbar() {
         <div className="hidden items-center gap-2 lg:flex">
           <LanguageToggle />
           <ThemeToggle />
-          <Button href="/vr-tour" variant="red" size="sm">
+          <Button href="/vr-tour" variant="ghost" size="sm">
             <Play size={14} /> {t(ui.hero.vrCta)}
           </Button>
         </div>
@@ -101,7 +101,7 @@ export default function Navbar() {
               {t(link.label)}
             </Link>
           ))}
-          <Button href="/vr-tour" variant="red" className="mt-2 w-full" onClick={() => setMobileOpen(false)}>
+          <Button href="/vr-tour" variant="ghost" className="mt-2 w-full" onClick={() => setMobileOpen(false)}>
             <Play size={14} /> {t(ui.hero.vrCta)}
           </Button>
         </div>
