@@ -51,11 +51,17 @@ This spec covers two intertwined pieces of work:
 - Scrollytelling works and degrades gracefully: multi-layer hero parallax, a site-wide scroll-progress
   bar, and the **pinned PTalk moment** (sticky stage + scroll-advanced captions + scroll-driven model
   rotation) on desktop — with a clean non-pinned fallback on mobile and under reduced motion.
+- The PTalk model carries a tasteful **AR/VR motion-graphics layer** — grounded contact shadow +
+  reflections, drifting sparkles, a slow holographic ring, an AR HUD frame, scroll-tied callouts that
+  point at the robot, a one-shot materialize scan-in, and subtle bloom — all guarded off on mobile /
+  under reduced motion as appropriate, and never "gamer-RGB."
 - Every home section and every sub-page uses that library — consistent easing, timing, and hover
   language across the whole site. No section is visibly static anymore (except where motion would
   be inappropriate, e.g. the VR iframe).
 - All motion is disabled / reduced under `prefers-reduced-motion`. Both light and dark themes intact.
-- No new heavyweight dependencies (no GSAP). `npm run build`, `npm run lint`, `npm run test` pass.
+- No scroll/animation library added (no GSAP); the only new dependency is `@react-three/postprocessing`
+  (small, three-native), used solely for the subtle, guarded Bloom pass and loaded only inside the
+  client-only 3D chunk. `npm run build`, `npm run lint`, `npm run test` pass.
 
 ---
 
@@ -68,6 +74,8 @@ This spec covers two intertwined pieces of work:
 - No animated gradient-mesh backgrounds, no scroll-hijacking horizontal galleries, and no
   *pervasive* pinning. Scroll-scrubbed motion is limited to **one** curated moment (the PTalk 3D
   section) plus light hero parallax and the progress bar — not a site-wide cinematic timeline.
+- No broad postprocessing stack — only a single subtle `Bloom` pass (no SSAO / DOF / god-rays /
+  outline / etc.), and no external HDR environment downloads (use drei presets / `Lightformer`s).
 - No changes to the VR tour's underlying iframe experience (only its loading state may be polished).
 - No new 3D assets — reuse the existing `public/model/robot.glb` + `public/draco/` decoder.
 
@@ -77,6 +85,8 @@ This spec covers two intertwined pieces of work:
 
 - `public/model/robot.glb` (≈2.18 MB) and `public/draco/` decoder **already present** in this repo.
 - Deps already installed: `three`, `@react-three/fiber`, `@react-three/drei`, `motion`, `lenis`.
+- **New dependency:** `@react-three/postprocessing` (for the subtle Bloom pass, §5.3 D) — three-native,
+  imported only inside the client-only 3D chunk so it never touches the initial bundle.
 - `src/content/ui.ts` already contains `ui.spotlight` = `{ eyebrow: "Tương tác/Interactive",
   title: "Gặp gỡ PTalk/Meet PTalk", lead: …, hint: "Kéo để xoay · cuộn để phóng to/…" }`. Reuse;
   **extend** it with a `steps` array (3 bilingual feature captions for the pinned scrollytelling
@@ -216,12 +226,58 @@ non-pinned variant when either applies) so mobile never inherits a janky sticky/
 
 - Mounted in `src/app/page.tsx` **between `HomeHero` and `HomeStats`**.
 
-### 5.3 Performance / safety
+### 5.3 AR/VR motion-graphics layer
 
-- three.js never enters the initial bundle (dynamic `ssr:false`); the section renders a lightweight
-  spinner until the chunk + model load.
+Adds an immersive, "augmented" feel around the model. Split into **in-scene** (inside the WebGL
+`Canvas`, in `RobotViewer`) and **overlay** (DOM layered over the canvas, in `SpotlightSection`).
+All brand-tinted (red `#f2555b` / blue `#5b8def`), restrained, and guarded (see §5.4).
+
+**A. Realism (in-scene):**
+- `<ContactShadows>` (drei) under the model — soft grounded shadow (opacity ≈0.35, blur ≈2.5) so the
+  robot stands rather than floats; tracks the model base.
+- `<Environment>` (drei) — a light preset or a couple of `<Lightformer>`s for subtle PBR reflections
+  on the model's surfaces. `environmentIntensity` kept low so the brand rim lights still define the
+  look. No external HDR download if a preset/lightformer suffices.
+
+**B. AR motifs (in-scene + overlay):**
+- **Sparkles** (drei `<Sparkles>`): a sparse field (~30–40, scaled down on mobile) of slow,
+  brand-tinted motes drifting around the robot — "dust in light." Low `speed`; frozen under reduced motion.
+- **Holographic ring(s):** 1–2 thin emissive torus rings on a tilted axis slowly orbiting the model
+  (`useFrame` rotation). Low opacity, brand color — an "AR scan" motif. Static under reduced motion.
+- **HUD corner frame (overlay, DOM in `SpotlightSection`):** thin animated corner brackets + a small
+  "● LIVE" indicator and tiny coordinate ticks — an AR viewfinder. CSS only; pulse stops under reduced motion.
+
+**C. Narrative AR callouts (overlay, tied to the pinned scroll steps):**
+- Anchored to approximate local points on the robot (head / chest / base) via drei `<Html>` children
+  inside the Canvas, so anchors track the model as it rotates with scroll. (Exact offsets tuned
+  visually against `robot.glb`.)
+- As each `ui.spotlight.steps` entry becomes active (from `scrollYProgress`, §5.2), its callout shows:
+  a short connector line "draws" from the anchor to a small label card; the previous one fades out.
+  This is the core "guide attention + tell story" mechanic, bound to the existing pin. One callout
+  visible at a time.
+- Reduced motion → callouts fade (no line-draw). Mobile / non-pinned fallback → callouts **omitted**
+  (the stacked step list carries the content) to avoid 3D→screen projection jitter on small screens.
+
+**D. Advanced (chosen):**
+- **Materialize scan-in:** on first model-load-complete, a one-shot holographic reveal — an emissive
+  horizontal band sweeps vertically up the model (~1.2s via `useFrame` time) plus a quick fade/scale-in.
+  Plays once. Reduced motion → model simply appears.
+- **Holographic bloom:** `@react-three/postprocessing` `<EffectComposer><Bloom/></EffectComposer>`
+  tuned so **only emissive elements** bloom (rings, scan band, sparkles) — high `luminanceThreshold`,
+  low `intensity` — never a blown-out robot. **Disabled on mobile and under reduced motion** (perf).
+  If profiling shows cost, fall back to emissive-material glow without the composer (no dep); default
+  keeps the composer since bloom was explicitly requested.
+
+### 5.4 Performance / safety
+
+- three.js + postprocessing never enter the initial bundle (dynamic `ssr:false`); the section renders
+  a lightweight spinner until the chunk + model load.
 - Draco decoder served locally (no CDN). Model preloaded on the client only.
-- Auto-rotate disabled under reduced motion. `touchAction: pan-y` preserves page scroll on mobile.
+- `dpr={[1,2]}` cap; Sparkles count and Bloom **reduced/disabled on mobile**. Under
+  `prefers-reduced-motion`: rings & sparkles frozen, scan-in & bloom off, auto-rotate off.
+- `touchAction: pan-y` preserves vertical page scroll over the canvas on mobile.
+- Target 60fps desktop / no jank on mid-range mobile; if the composer is too costly, drop to the
+  shader-glow fallback (§5.3 D).
 
 ---
 
@@ -289,6 +345,12 @@ visual coherence across routes.
   turns with scroll, then releases cleanly; set `prefers-reduced-motion` → everything static, no
   auto-rotate, **no pin** (stacked fallback); mobile (`< lg`) → non-pinned fallback, and vertical page
   scroll works over the canvas (no scroll trap).
+- **AR/VR layer:** contact shadow grounds the model (no float); sparkles + holographic ring drift
+  slowly; HUD corner frame + "● LIVE" pulse; each scroll step's callout points at the right robot part
+  with the connector line drawing in, the previous one fading; materialize scan-in plays exactly once
+  on load; bloom lights only emissive bits (not the whole robot). Mobile → sparkles reduced, bloom off,
+  callouts omitted. Reduced-motion → rings/sparkles frozen, no scan-in, no bloom. Profile FPS on a
+  mid-range device; if the composer janks, confirm the shader-glow fallback path.
 
 ---
 
@@ -300,11 +362,13 @@ visual coherence across routes.
 - `src/components/ui/CountUp.tsx`
 - `src/components/ui/Magnetic.tsx`
 - `src/components/ui/ScrollProgress.tsx`
-- `src/components/home/RobotViewer.tsx`
-- `src/components/home/SpotlightSection.tsx`
+- `src/components/home/RobotViewer.tsx` (model + full in-scene AR layer: shadow, environment,
+  sparkles, holographic ring, materialize scan-in, bloom composer, `<Html>` callout anchors)
+- `src/components/home/SpotlightSection.tsx` (pin + overlay HUD frame + scroll-tied callout content)
 - tests: `src/components/ui/CountUp.test.ts` (+ reveal reduced-motion test + spotlight step-segmentation test)
 
 **Modified**
+- `package.json` / `package-lock.json` (add `@react-three/postprocessing`)
 - `src/lib/motion.ts` (expand variants)
 - `src/content/ui.ts` (add `ui.spotlight.steps` — 3 bilingual feature captions)
 - `src/app/layout.tsx` (mount `ScrollProgress`)
@@ -330,6 +394,9 @@ visual coherence across routes.
 3. Scrollytelling: upgrade `SpotlightSection` to the pinned/scroll-scrub variant (sticky stage,
    `ui.spotlight.steps` captions, scroll-driven rotation) with the mobile/reduced-motion fallback;
    add hero multi-layer parallax. Verify pin + fallbacks.
-4. Home enrichment (hero card swap, stats count-up, ecosystem/partners/CTA reveals).
-5. Site-wide application (products, detail, team, games, navbar indicator, VR loading).
-6. Full verification pass (build/lint/test + manual matrix in §9).
+4. AR/VR motion-graphics layer: in-scene (contact shadow, environment, sparkles, holographic ring,
+   materialize scan-in, Bloom via `@react-three/postprocessing`) + overlay (HUD frame, scroll-tied
+   callouts anchored to robot parts). Verify all guards (mobile / reduced-motion) and FPS.
+5. Home enrichment (hero card swap, stats count-up, ecosystem/partners/CTA reveals).
+6. Site-wide application (products, detail, team, games, navbar indicator, VR loading).
+7. Full verification pass (build/lint/test + manual matrix in §9).
