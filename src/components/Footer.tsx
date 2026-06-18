@@ -35,73 +35,50 @@ export default function Footer() {
   return (
     <footer className="section pb-12">
       <div className="container-x">
-        <div className="glass-strong px-7 py-12 sm:px-12">
+        <div className="rounded-[var(--radius-lg)] border border-border bg-card p-7 shadow-[var(--shadow-sm)] sm:p-12">
           <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
             {/* Brand */}
             <div>
               <div className="flex items-center gap-3">
-                <Image src="/img/cts-logo.jpg" alt="CTS Lab" width={36} height={36} className="h-9 w-9 rounded-[12px] object-contain" />
-                <span className="font-display text-sm font-semibold text-ink">
-                  {site.siteNameShort}
-                </span>
+                <Image src="/img/cts-logo.jpg" alt="CTS Lab" width={36} height={36} className="h-9 w-9 rounded-[10px] object-contain" />
+                <span className="text-display text-sm font-semibold text-ink">{site.siteNameShort}</span>
               </div>
-              <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
-                {t(site.footerDescription)}
-              </p>
+              <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink-2">{t(site.footerDescription)}</p>
             </div>
 
             {/* Contact */}
             <div>
-              <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-dim">
-                {t(ui.footer.contact)}
-              </h3>
-              <div className="mt-4 space-y-3 text-sm text-muted">
-                <a href={`mailto:${site.contact.email}`} className="flex items-center gap-3 transition-colors hover:text-coral-ink">
+              <h3 className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-dim">{t(ui.footer.contact)}</h3>
+              <div className="mt-4 space-y-3 text-sm text-ink-2">
+                <a href={`mailto:${site.contact.email}`} className="flex items-center gap-3 transition-colors hover:text-blue">
                   <Mail size={14} /> {site.contact.email}
                 </a>
-                <p className="flex items-center gap-3">
-                  <Phone size={14} /> {site.contact.phone}
-                </p>
-                <p className="flex items-start gap-3">
-                  <MapPin size={14} className="mt-0.5 flex-shrink-0" /> {t(site.contact.address)}
-                </p>
+                <p className="flex items-center gap-3"><Phone size={14} /> {site.contact.phone}</p>
+                <p className="flex items-start gap-3"><MapPin size={14} className="mt-0.5 flex-shrink-0" /> {t(site.contact.address)}</p>
               </div>
             </div>
 
             {/* Social */}
             <div>
-              <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-dim">
-                {t(ui.footer.follow)}
-              </h3>
+              <h3 className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-dim">{t(ui.footer.follow)}</h3>
               <div className="mt-4 flex gap-2.5">
                 {socials.map(({ href, label, Icon }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title={label}
-                    className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-white/60 text-muted transition-all duration-300 hover:-translate-y-0.5 hover:border-transparent hover:bg-[var(--gradient-accent)] hover:text-white hover:shadow-[var(--shadow-coral)]"
-                  >
+                  <a key={label} href={href} target="_blank" rel="noopener noreferrer" title={label}
+                    className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] border border-border bg-surface text-ink-2 transition-colors hover:border-blue hover:text-blue">
                     <Icon />
                   </a>
                 ))}
-                <a
-                  href={`mailto:${site.social.email}`}
-                  title="Email"
-                  className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-white/60 text-muted transition-all duration-300 hover:-translate-y-0.5 hover:border-transparent hover:bg-[var(--gradient-accent)] hover:text-white hover:shadow-[var(--shadow-coral)]"
-                >
+                <a href={`mailto:${site.social.email}`} title="Email"
+                  className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] border border-border bg-surface text-ink-2 transition-colors hover:border-blue hover:text-blue">
                   <Mail size={16} />
                 </a>
               </div>
             </div>
           </div>
 
-          <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-[var(--border)] pt-7 sm:flex-row">
-            <p className="text-xs text-dim">
-              © {year} {site.siteNameShort}, PTIT. {t(ui.footer.rights)}
-            </p>
-            <p className="text-xs text-muted">{t(site.footerTagline)}</p>
+          <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-border pt-7 sm:flex-row">
+            <p className="text-xs text-dim">© {year} {site.siteNameShort}, PTIT. {t(ui.footer.rights)}</p>
+            <p className="text-xs text-ink-2">{t(site.footerTagline)}</p>
           </div>
         </div>
       </div>
