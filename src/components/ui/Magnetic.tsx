@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, type ReactNode, type PointerEvent } from "react";
-import { motion, useMotionValue, useSpring, useReducedMotion } from "motion/react";
+import { motion, useMotionValue, useSpring } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/useReducedMotionSafe";
 
 export default function Magnetic({
   children,
@@ -12,7 +13,7 @@ export default function Magnetic({
   strength?: number;
   className?: string;
 }) {
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);

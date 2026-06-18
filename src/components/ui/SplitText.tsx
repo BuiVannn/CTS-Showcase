@@ -1,7 +1,8 @@
 "use client";
 
 import { Fragment } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/useReducedMotionSafe";
 import { splitWords } from "@/lib/text";
 import { staggerContainer } from "@/lib/motion";
 import { EASE } from "@/lib/motion";
@@ -25,7 +26,7 @@ export default function SplitText({
   className?: string;
   delayChildren?: number;
 }) {
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
   const label = segments.map((s) => s.text).join(" ");
 
   if (reduce) {

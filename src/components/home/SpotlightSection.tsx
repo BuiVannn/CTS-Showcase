@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { Sparkles, Rotate3d } from "lucide-react";
 import { motion, useScroll, useMotionValueEvent, useReducedMotion } from "motion/react";
+import { EASE } from "@/lib/motion";
 import { useLocale } from "@/lib/locale";
 import { ui } from "@/content/ui";
 import { activeStepFromProgress } from "@/lib/scrollSteps";
@@ -152,7 +153,7 @@ export default function SpotlightSection() {
                     <motion.li
                       key={i}
                       animate={{ opacity: on ? 1 : 0.35, x: on ? 0 : -4 }}
-                      transition={{ duration: 0.4, ease: [0.2, 0.7, 0.2, 1] }}
+                      transition={{ duration: 0.4, ease: EASE }}
                       className="flex items-start gap-3"
                     >
                       <span className={`mt-1 h-6 w-0.5 rounded-full ${on ? "bg-red" : "bg-border"}`} />

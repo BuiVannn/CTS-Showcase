@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useInView, useReducedMotion, animate } from "motion/react";
+import { useInView, animate } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/useReducedMotionSafe";
 import { EASE } from "@/lib/motion";
 import { parseCountValue, formatCount } from "@/lib/format";
 
@@ -15,12 +16,13 @@ export default function CountUp({
   className?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-  const reduce = useReducedMotion();
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const reduce = useReducedMotionSafe();
   const parts = parseCountValue(value);
 
-  const [display, setDisplay] = useState(() =>
-    parts.target === null || reduce ? value : formatCount(0, parts.pad, parts.suffix)
+  // animated counter value; only used when !reduce and parts.target !== null
+  const [animDisplay, setAnimDisplay] = useState(() =>
+    parts.target === null ? value : formatCount(0, parts.pad, parts.suffix)
   );
 
   useEffect(() => {
@@ -28,10 +30,15 @@ export default function CountUp({
     const controls = animate(0, parts.target, {
       duration: durationMs / 1000,
       ease: EASE,
-      onUpdate: (v) => setDisplay(formatCount(v, parts.pad, parts.suffix)),
+      onUpdate: (v) => setAnimDisplay(formatCount(v, parts.pad, parts.suffix)),
     });
     return () => controls.stop();
   }, [inView, reduce, parts.target, parts.pad, parts.suffix, durationMs]);
+
+  // Under reduced motion (or non-numeric value) skip the animation and show
+  // the final value directly without routing through setState-in-effect.
+  const display =
+    parts.target === null || reduce ? value : animDisplay;
 
   return (
     <span ref={ref} className={className}>

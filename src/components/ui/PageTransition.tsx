@@ -2,12 +2,13 @@
 
 import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/useReducedMotionSafe";
 import { EASE } from "@/lib/motion";
 
 export default function PageTransition({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
   if (reduce) return <>{children}</>;
   return (
     <motion.div
