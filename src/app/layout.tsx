@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { Unbounded, Be_Vietnam_Pro } from "next/font/google";
+import { Unbounded, Be_Vietnam_Pro, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { LocaleProvider } from "@/lib/locale";
 import SmoothScroll from "@/components/SmoothScroll";
-import AuroraBackground from "@/components/AuroraBackground";
 
 // Display — distinctive rounded-geometric, includes the Vietnamese subset.
 const display = Unbounded({
@@ -17,6 +16,14 @@ const body = Be_Vietnam_Pro({
   variable: "--font-body",
   subsets: ["latin", "vietnamese"],
   weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+// Mono — numbers, tags, code-like meta.
+const mono = JetBrains_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["500", "700"],
   display: "swap",
 });
 
@@ -43,11 +50,10 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${display.variable} ${body.variable} antialiased`}
+      className={`${display.variable} ${body.variable} ${mono.variable} antialiased`}
     >
-      <body className="min-h-screen bg-bg text-ink grain">
+      <body className="min-h-screen bg-bg text-ink">
         <LocaleProvider>
-          <AuroraBackground />
           <SmoothScroll />
           {children}
         </LocaleProvider>
