@@ -46,8 +46,12 @@ This spec covers two intertwined pieces of work:
 - The 3D PTalk model renders in a dedicated home section, is draggable (rotate), zoomable (scroll),
   auto-rotates gently, and is lazy-loaded (three.js stays out of the initial bundle; no SSR crash).
 - A shared motion library (`Reveal`, `Stagger`/`StaggerItem`, `CountUp`, `Magnetic`,
-  `ScrollProgress` + expanded `lib/motion.ts`) exists and is the single source of reveal/stagger
-  behaviour.
+  `ScrollProgress`, `SplitText`, `PageTransition`, `HoverPreview` + expanded `lib/motion.ts`) exists
+  and is the single source of reveal/stagger/transition behaviour.
+- The curated "world-class-site" effects are in and on-register: **split-text** hero headline,
+  **hover-to-preview** Showcase/Products tiles, subtle **route crossfade**, and the re-added **demo
+  video** — with deferred items (Products filter, carousel/rail) and dropped items (shader-hover,
+  custom cursor, preloader) explicitly left out (§3.1).
 - Scrollytelling works and degrades gracefully: multi-layer hero parallax, a site-wide scroll-progress
   bar, and the **pinned PTalk moment** (sticky stage + scroll-advanced captions + scroll-driven model
   rotation) on desktop — with a clean non-pinned fallback on mobile and under reduced motion.
@@ -103,6 +107,26 @@ This spec covers two intertwined pieces of work:
 - The reference `YirLodt-Showcase/src/components/RobotViewer.tsx` and `Spotlight.tsx` use **removed
   tokens** (`--coral`, `--border-strong`, `--gradient-soft`, `text-coral-ink`, `.glass-strong`).
   These MUST be remapped to current tokens — do not reintroduce the old design system.
+- `ui.showcase.watchDemo` ("Watch demo / Xem demo") already exists but is **unused**. The old site
+  also embedded a **YouTube demo video** below the Showcase grid via `site.videoUrl =
+  "https://www.youtube.com/embed/h94H81kNK9I"` — dropped in the redesign. Both are re-used (§6).
+
+### 3.1 Effects audit (world-class sites) — what we adopt
+
+A scan of reference sites (madeinhaus, cedricpereira, Loom, Wozber, ESPN, FWA, Cyprium) mapped to
+this project's **register = "credible academic/product platform," not "WebGL art piece."** Decisions:
+
+- **Adopt (already in this spec):** smooth/momentum scroll (Lenis), scroll reveals, count-up,
+  magnetic CTA (1–2 only), hero parallax, **exactly one** pinned/scrub scene (PTalk), scroll-progress bar.
+- **Adopt (added by this revision):** **split-text** hero headline (§4.7), **hover-to-preview** tiles
+  for Showcase + Products (§6/§7), **route crossfade** page transitions (§4.8), and the re-added
+  **demo video** embed (§6). Partners stays a **staggered reveal** (logos are plain text, not images —
+  a marquee would read weak; revisit if real logo assets arrive).
+- **Drop entirely** (heavy / off-register / a11y risk): WebGL shader image-distortion on hover,
+  custom cursor, animated preloader, image-sequence scroll-scrub.
+- **Defer** (premature for current content): category **filter** on Products (only 4 apps across 4
+  categories → near-empty results) and **horizontal rail / carousel** (the "gold for gamehub" pattern,
+  but the gamehub is Phase 2). Revisit when the catalog grows.
 
 ---
 
@@ -163,8 +187,26 @@ A scroll-reveal wrapper. Props:
   without spring overshoot.
 - Mounted **once in the root layout** (`src/app/layout.tsx`) so it is consistent on every route.
 
+### 4.7 `src/components/ui/SplitText.tsx`
+
+- Splits a string into word spans and reveals them with a small staggered fade/rise (`Stagger`
+  semantics) — plays **once** on view. Word-level (not per-character) to stay tasteful and a11y-safe;
+  the full string stays readable to screen readers (`aria-label` = the sentence, word spans `aria-hidden`).
+- No GSAP SplitText — implemented with Motion + a pure word-split helper (unit-tested).
+- Reduced-motion → renders the plain string, no animation. Used for the **hero headline only**.
+
+### 4.8 `src/components/ui/PageTransition.tsx`
+
+- A subtle route **crossfade/slide** between pages so navigation feels seamless (no element morphing).
+- Implementation verifies the correct **Next 16** mechanism first (per `AGENTS.md`: read
+  `node_modules/next/dist/docs/`). Preference order: the browser **View Transitions API** if Next 16
+  exposes it cleanly; otherwise a thin Motion `AnimatePresence` wrapper keyed on `usePathname()`.
+- Short (≈200–300ms) opacity (+ tiny `y`) crossfade. Reduced-motion → instant (no transition).
+  Must not block navigation, trap focus, or delay LCP. Mounted in the root layout around `children`.
+
 **Isolation note:** each component answers "what does it do / how to use / what it depends on"
-cleanly and is independently testable. `CountUp`'s number-parsing is pure and unit-tested.
+cleanly and is independently testable. `CountUp`'s number-parsing and `SplitText`'s word-split are
+pure and unit-tested.
 
 ---
 
@@ -286,7 +328,8 @@ All brand-tinted (red `#f2555b` / blue `#5b8def`), restrained, and guarded (see 
 `src/app/page.tsx` order becomes: `HomeHero → SpotlightSection → HomeStats → ShowcaseSection →
 EcosystemBento → Partners → HomeCTA`.
 
-- **HomeHero** — migrate `rise()` to shared `Reveal`/`Stagger`. **Replace** the flat red placeholder
+- **HomeHero** — migrate `rise()` to shared `Reveal`/`Stagger`; render the headline through
+  **`SplitText`** (word-level reveal, once). **Replace** the flat red placeholder
   card: use `MediaFrame` with `public/img/vr.jpg`, a centered play-button overlay, a subtle sheen
   sweep on hover, and the existing `★ Featured` chip + caption. Wrap the hero primary CTA in `Magnetic`.
   **Multi-layer scroll parallax:** `useScroll` on the hero → `useTransform` drives the background grid,
@@ -295,9 +338,14 @@ EcosystemBento → Partners → HomeCTA`.
   Plus light **mouse-parallax** on the glows. All parallax is `transform`/`opacity` only and is
   **disabled under `prefers-reduced-motion`** (static layers).
 - **HomeStats** — `StatBand` numbers animate via `CountUp` on view; reveal the SSO card.
-- **ShowcaseSection** — keep reveal (migrate to `Stagger`); add gentle media zoom-on-hover in `MediaFrame`/`Card`.
+- **ShowcaseSection** — migrate reveal to `Stagger`; tiles become **hover-to-preview** (media
+  zoom + a smooth overlay revealing `category` + truncated `description` on hover — see §7 UI
+  primitives). **Re-add the demo video** below the grid: an `aspect-video` YouTube `<iframe>`
+  (`site.videoUrl`) framed `border border-border bg-card p-2`, with a `Play` + `t(ui.showcase.watchDemo)`
+  pill — restyled from the old `.glass`/`text-coral-ink` to current tokens. Lazy/`loading="lazy"`.
 - **EcosystemBento** — currently static → wrap cards in `Stagger`/`StaggerItem`; keep `Card` hover lift.
-- **Partners** — wrap links in `Stagger` (restrained, no marquee); keep hover color shift.
+- **Partners** — wrap links in `Stagger` (restrained, **no marquee** — they are text names, not logos);
+  keep hover color shift.
 - **HomeCTA** — wrap in `Reveal`; animate the radial glow subtly (slow opacity/scale breathing,
   reduced-motion → static); `Magnetic` + sheen on the primary "Email us" button.
 
@@ -305,7 +353,8 @@ EcosystemBento → Partners → HomeCTA`.
 
 ## 7. Site-wide consistency (apply the same vocabulary)
 
-- **Products (`ProductsGrid`)** — wrap cards in `Stagger`; media zoom-on-hover.
+- **Products (`ProductsGrid`)** — wrap cards in `Stagger`; tiles use the same **hover-to-preview**
+  pattern as Showcase (media zoom + overlay revealing `categoryLabel` + `excerpt` + first tags).
 - **Product detail (`ProductDetail`)** — `Reveal` the image block and the spec/feature blocks (slight
   stagger); breadcrumb unchanged.
 - **Team (`TeamGrid`)** — `Stagger` the member cards; subtle hover lift (reuse `Card` language).
@@ -313,8 +362,12 @@ EcosystemBento → Partners → HomeCTA`.
 - **Navbar** — add an animated active-link indicator (Motion `layoutId` underline) that slides between
   links; keep existing scroll-aware blur + mobile menu.
 - **VR tour (`VRTourShell`)** — polish the loading state only (the iframe experience is unchanged).
-- **UI primitives** — `Button` primary variants get a consistent sheen/press language; ensure
-  `MediaFrame` supports an optional `hover-zoom` so Showcase/Products share one implementation.
+- **Page transitions** — `PageTransition` (§4.8) wraps route content in the layout for a subtle
+  crossfade on navigation across the whole site.
+- **UI primitives** — `Button` primary variants get a consistent sheen/press language. **Hover-to-preview**
+  is one shared implementation (extend `MediaFrame` with a `hover-zoom` + an optional overlay slot, or a
+  small `HoverPreview` wrapper) so Showcase and Products tiles behave identically. Reduced-motion →
+  overlay shows on focus/tap without the zoom; always keyboard-focusable and accessible.
 
 Everything uses the same `EASE`, the same reveal distances/timings, and the same hover idioms →
 visual coherence across routes.
@@ -335,7 +388,8 @@ visual coherence across routes.
 ## 9. Testing & verification
 
 - **Unit (vitest):** `CountUp` number parsing (`"164"`→164, `"05"`→preserves pad, `"PTIT"`→passthrough);
-  `Reveal`/`Stagger` reduced-motion fallback (renders children, no motion props) — light DOM assertions.
+  `Reveal`/`Stagger` reduced-motion fallback (renders children, no motion props) — light DOM assertions;
+  `SplitText` word-split helper (preserves spacing/order, `aria-label` = full string).
   Pure step-segmentation helper for `SpotlightSection` (map progress 0→1 to active step index) unit-tested.
 - **Build/lint:** `npm run build` (verifies dynamic import + three.js chunking + SSR safety),
   `npm run lint`, `npm run test` all green.
@@ -351,6 +405,10 @@ visual coherence across routes.
   on load; bloom lights only emissive bits (not the whole robot). Mobile → sparkles reduced, bloom off,
   callouts omitted. Reduced-motion → rings/sparkles frozen, no scan-in, no bloom. Profile FPS on a
   mid-range device; if the composer janks, confirm the shader-glow fallback path.
+- **Audit effects:** hero headline reveals word-by-word once (and reads correctly to a screen reader /
+  under reduced motion as a plain heading); Showcase + Products tiles reveal their preview overlay on
+  hover **and** on keyboard focus / tap; the demo video iframe loads and plays; navigating between
+  routes shows a subtle crossfade (instant under reduced motion) without focus loss or LCP regression.
 
 ---
 
@@ -362,33 +420,39 @@ visual coherence across routes.
 - `src/components/ui/CountUp.tsx`
 - `src/components/ui/Magnetic.tsx`
 - `src/components/ui/ScrollProgress.tsx`
+- `src/components/ui/SplitText.tsx`
+- `src/components/ui/PageTransition.tsx`
+- `src/components/ui/HoverPreview.tsx` (or `MediaFrame` extension — shared hover-to-preview)
 - `src/components/home/RobotViewer.tsx` (model + full in-scene AR layer: shadow, environment,
   sparkles, holographic ring, materialize scan-in, bloom composer, `<Html>` callout anchors)
 - `src/components/home/SpotlightSection.tsx` (pin + overlay HUD frame + scroll-tied callout content)
-- tests: `src/components/ui/CountUp.test.ts` (+ reveal reduced-motion test + spotlight step-segmentation test)
+- tests: `src/components/ui/CountUp.test.ts` (+ reveal reduced-motion test + spotlight step-segmentation
+  test + `SplitText` word-split test)
 
 **Modified**
 - `package.json` / `package-lock.json` (add `@react-three/postprocessing`)
 - `src/lib/motion.ts` (expand variants)
 - `src/content/ui.ts` (add `ui.spotlight.steps` — 3 bilingual feature captions)
-- `src/app/layout.tsx` (mount `ScrollProgress`)
+- `src/content/site.ts` (add `videoUrl` — re-added demo video, §6)
+- `src/app/layout.tsx` (mount `ScrollProgress` + wrap children in `PageTransition`)
 - `src/app/page.tsx` (insert `SpotlightSection`)
-- `src/components/home/HomeHero.tsx`, `HomeStats.tsx`, `ShowcaseSection.tsx`,
+- `src/components/home/HomeHero.tsx` (split-text headline, parallax, hero card),
+  `HomeStats.tsx`, `ShowcaseSection.tsx` (hover-preview + demo video),
   `EcosystemBento.tsx`, `Partners.tsx`, `HomeCTA.tsx`
-- `src/components/ui/StatBand.tsx` (use `CountUp`), `MediaFrame.tsx` (optional hover-zoom),
+- `src/components/ui/StatBand.tsx` (use `CountUp`), `MediaFrame.tsx` (hover-preview support),
   `Button.tsx` (sheen), `Navbar.tsx` (active-link indicator)
-- `src/components/products/ProductsGrid.tsx`, `ProductDetail.tsx`,
+- `src/components/products/ProductsGrid.tsx` (hover-preview), `ProductDetail.tsx`,
   `src/components/team/TeamGrid.tsx`, `src/components/StubPage.tsx`,
   `src/components/VRTourShell.tsx` (loading state)
 
-**Unchanged (reuse):** `public/model/robot.glb`, `public/draco/*`, `src/content/site.ts`.
+**Unchanged (reuse):** `public/model/robot.glb`, `public/draco/*`.
 
 ---
 
 ## 11. Rollout / sequencing (for the implementation plan)
 
-1. Motion foundation (`lib/motion.ts`, `Reveal`, `Stagger`, `CountUp`, `Magnetic`, `ScrollProgress`)
-   + tests; mount `ScrollProgress` in the layout.
+1. Motion foundation (`lib/motion.ts`, `Reveal`, `Stagger`, `CountUp`, `Magnetic`, `ScrollProgress`,
+   `SplitText`, `HoverPreview`) + tests; mount `ScrollProgress` in the layout.
 2. 3D base: `RobotViewer` (with optional `progress` rotation prop) + the **non-pinned fallback**
    `SpotlightSection`, wired into `page.tsx`. Verify drag/zoom/lazy-load first.
 3. Scrollytelling: upgrade `SpotlightSection` to the pinned/scroll-scrub variant (sticky stage,
@@ -397,6 +461,8 @@ visual coherence across routes.
 4. AR/VR motion-graphics layer: in-scene (contact shadow, environment, sparkles, holographic ring,
    materialize scan-in, Bloom via `@react-three/postprocessing`) + overlay (HUD frame, scroll-tied
    callouts anchored to robot parts). Verify all guards (mobile / reduced-motion) and FPS.
-5. Home enrichment (hero card swap, stats count-up, ecosystem/partners/CTA reveals).
-6. Site-wide application (products, detail, team, games, navbar indicator, VR loading).
+5. Home enrichment (hero card swap + **split-text** headline, stats count-up, Showcase
+   **hover-preview** + **re-added demo video**, ecosystem/partners/CTA reveals).
+6. Site-wide application (products **hover-preview**, detail, team, games, navbar indicator, VR loading)
+   + **`PageTransition`** route crossfade (verify the Next 16 mechanism per `node_modules/next/dist/docs/`).
 7. Full verification pass (build/lint/test + manual matrix in §9).
