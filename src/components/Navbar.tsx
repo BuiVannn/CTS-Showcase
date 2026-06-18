@@ -42,13 +42,17 @@ export default function Navbar() {
         scrolled ? "border-border bg-bg/80 backdrop-blur-xl" : "border-transparent bg-transparent"
       }`}
     >
-      <div className="container-x flex h-16 items-center justify-between gap-4">
+      <div className="container-x flex h-16 items-center justify-between gap-4 sm:h-20">
         {/* Brand */}
-        <Link href="/" className="flex items-center gap-2.5">
-          <Image src="/img/cts-logo.jpg" alt="CTS Lab" width={64} height={64} className="h-12 w-12 rounded-[10px] object-contain" />
-          <span className="text-display text-base font-bold tracking-tight">
-            <span className="text-red">CTS</span> <span className="text-ink">LAB</span>
-          </span>
+        <Link href="/" className="flex items-center" aria-label="CTS Lab — home">
+          <Image
+            src="/img/cts-logo.png"
+            alt="CTS — Creative Technologies & Simulation Lab"
+            width={840}
+            height={297}
+            priority
+            className="h-11 w-auto object-contain sm:h-14"
+          />
         </Link>
 
         {/* Desktop links */}

@@ -39,10 +39,13 @@ export default function Footer() {
           <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
             {/* Brand */}
             <div>
-              <div className="flex items-center gap-3">
-                <Image src="/img/cts-logo.jpg" alt="CTS Lab" width={36} height={36} className="h-9 w-9 rounded-[10px] object-contain" />
-                <span className="text-display text-sm font-semibold text-ink">{site.siteNameShort}</span>
-              </div>
+              <Image
+                src="/img/cts-logo.png"
+                alt="CTS — Creative Technologies & Simulation Lab"
+                width={840}
+                height={297}
+                className="h-12 w-auto object-contain"
+              />
               <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink-2">{t(site.footerDescription)}</p>
             </div>
 
