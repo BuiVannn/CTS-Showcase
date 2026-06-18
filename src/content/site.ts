@@ -25,7 +25,7 @@ export const site: SiteConfig = {
   signature: "CTS Lab, PTIT",
   contact: {
     email: "contact@cts.ptit.edu.vn",
-    phone: "+84 xxx xxx xxx",
+    phone: "035 735 3236",
     address: {
       en: "Posts & Telecommunications Institute of Technology, Km10 Nguyen Trai, Ha Dong, Hanoi",
       vi: "Học viện Công nghệ Bưu chính Viễn thông, Km10 Nguyễn Trãi, Hà Đông, Hà Nội",
