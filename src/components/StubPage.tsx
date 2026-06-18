@@ -14,6 +14,7 @@ export default function StubPage({ titleVi, titleEn }: { titleVi: string; titleE
     <section className="section pt-28">
       <Container>
         <Breadcrumb items={[{ label: "CTS Lab", href: "/" }, { label: title }]} />
+        <h1 className="text-section mt-6 text-ink">{title}</h1>
         <div className="mt-10">
           <EmptyState title={t(ui.home.comingSoon)}>
             <p className="text-sm text-ink-2">{t(ui.home.underConstruction)}</p>
