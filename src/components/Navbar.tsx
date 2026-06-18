@@ -45,8 +45,8 @@ export default function Navbar() {
       <div className="container-x flex h-16 items-center justify-between gap-4">
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2.5">
-          <Image src="/img/cts-logo.jpg" alt="CTS Lab" width={32} height={32} className="h-8 w-8 rounded-[8px] object-contain" />
-          <span className="text-display text-sm font-bold tracking-tight">
+          <Image src="/img/cts-logo.jpg" alt="CTS Lab" width={48} height={48} className="h-10 w-10 rounded-[9px] object-contain" />
+          <span className="text-display text-base font-bold tracking-tight">
             <span className="text-red">CTS</span> <span className="text-ink">LAB</span>
           </span>
         </Link>
