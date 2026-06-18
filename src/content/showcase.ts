@@ -54,3 +54,8 @@ export const showcase: ShowcaseItem[] = [
     image: { src: "/img/vr.jpg", alt: { en: "VR Lab", vi: "Phòng thí nghiệm VR" } },
   },
 ];
+
+/** Repository seam, mirroring getProduct: look up a showcase build by id. */
+export function getShowcaseItem(id: string): ShowcaseItem | undefined {
+  return showcase.find((s) => s.id === id);
+}

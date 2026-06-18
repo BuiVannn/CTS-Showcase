@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useLocale } from "@/lib/locale";
 import { showcase } from "@/content/showcase";
 import { site } from "@/content/site";
@@ -28,7 +29,10 @@ export default function ShowcaseSection() {
         <Stagger className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((s) => (
             <StaggerItem key={s.id}>
-              <div className="h-full rounded-[var(--radius-lg)] border border-border bg-card p-3 shadow-[var(--shadow-sm)]">
+              <Link
+                href={`/showcase/${s.id}`}
+                className="block h-full rounded-[var(--radius-lg)] border border-border bg-card p-3 shadow-[var(--shadow-sm)] transition duration-300 hover:-translate-y-1 hover:border-blue"
+              >
                 <HoverPreview
                   src={s.image.src}
                   alt={t(s.image.alt)}
@@ -40,7 +44,7 @@ export default function ShowcaseSection() {
                   <Badge tone="neutral">{t(s.category)}</Badge>
                   <h3 className="text-display mt-2 text-base text-ink">{s.title}</h3>
                 </div>
-              </div>
+              </Link>
             </StaggerItem>
           ))}
         </Stagger>
