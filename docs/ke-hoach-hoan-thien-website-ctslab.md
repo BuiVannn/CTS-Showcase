@@ -30,7 +30,7 @@ Các hạng mục sau đã được phát triển và đưa lên website hiện 
 
 ## 3. Các hạng mục đề xuất
 
-> **Tiến độ nhanh:** ✅ Đã xong: Đăng nhập/đăng ký (SSO), 3.1, 3.2, 3.5, 3.6, 3.8 · 🟡 Phần lớn: 3.3, 3.7 (Game Hub đã có lát cắt 1: host + chơi game của lab) · ▶ Đang làm: 3.4 · ❌ Chưa làm: 3.9, 3.10, 3.11, 3.12.
+> **Tiến độ nhanh:** ✅ Đã xong: Đăng nhập/đăng ký (SSO), 3.1, 3.2, 3.4, 3.5, 3.6, 3.8 · 🟡 Phần lớn: 3.3, 3.7 (Game Hub đã có lát cắt 1: host + chơi game của lab) · ❌ Chưa làm: 3.9, 3.10, 3.11, 3.12.
 
 ### 3.1 Khu "Một tài khoản" → lưới logo ứng dụng — ✅ ĐÃ XONG
 **Hiện trạng:** đã thay đoạn văn bằng lưới 7 ô app (3 logo thật + bổ sung 3 app KidMentor / PTalk Signature / P‑Connect), bấm ra trang chi tiết; có câu kết "…và hơn thế nữa."
@@ -43,9 +43,9 @@ Các hạng mục sau đã được phát triển và đưa lên website hiện 
 ### 3.3 Bổ sung thêm hiệu ứng động, hiện đại hơn — 🟡 PHẦN LỚN ĐÃ XONG (con trỏ tùy biến, particle network, mascot, chuyển động chữ; còn dư địa mở rộng)
 **Đề xuất:** mở rộng có chọn lọc thêm hiệu ứng (chuyển cảnh, vi tương tác, nền động ở các mục còn tĩnh) trên nền các hiệu ứng đã có, ưu tiên giữ trải nghiệm mượt và đồng nhất phong cách.
 
-### 3.4 Demo chat thử với PTalk (cạnh mô hình 3D) — ❌ CHƯA LÀM (mục lớn: cần API DeepSeek + RAG)
-**Đề xuất:** thêm **khung chat thử** bên phải mô hình 3D PTalk để khách trải nghiệm trực tiếp. Giới hạn **5–10 câu/tài khoản/ngày** (gắn với tài khoản đăng nhập đã có). Kết nối **API DeepSeek** kèm **RAG nội bộ** của lab để trả lời sát ngữ cảnh sản phẩm.
-**Hướng triển khai:** gọi mô hình qua máy chủ (ẩn khóa API), giới hạn lượt theo ngày để kiểm soát chi phí.
+### 3.4 Demo chat thử với PTalk (cạnh mô hình 3D) — ✅ ĐÃ XONG
+**Đã làm:** khung chat bên phải mô hình 3D PTalk (khu "Gặp gỡ PTalk"). Login-gated (SSO), giới hạn **8 câu/tài khoản/ngày** (lưu SQLite), ghi chú "đoạn chat thử không lưu lại". Máy chủ **truy xuất RAG nội bộ thật của lab** (`rag_server :8888`, Qdrant/Neo4j) rồi sinh lời qua **DeepSeek (OpenRouter, model free)** — không đụng GPU production. Câu trả lời render **Markdown + công thức toán (KaTeX)**. Key chỉ ở server; lỗi không trừ lượt.
+**Đề xuất ban đầu:** thêm khung chat thử bên phải mô hình 3D; giới hạn 5–10 câu/tài khoản/ngày; gọi mô hình qua máy chủ (ẩn khóa API) kèm RAG nội bộ.
 
 ### 3.5 Trang chi tiết KidMentor: đặt thiết bị vật lý & liên hệ lab — ✅ ĐÃ XONG
 **Đã làm:** khối "Đặt thiết bị vật lý" trên trang KidMentor: nút mở email soạn sẵn + hiển thị số điện thoại lab (data-driven, có thể bật cho app khác sau).
