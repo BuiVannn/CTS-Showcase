@@ -13,6 +13,7 @@ import Tag from "@/components/ui/Tag";
 import Reveal from "@/components/ui/Reveal";
 import { Stagger, StaggerItem } from "@/components/ui/Stagger";
 import SectionGlow from "@/components/ui/SectionGlow";
+import DeviceOrderBlock from "@/components/products/DeviceOrderBlock";
 
 export default function ProductDetail({ slug }: { slug: string }) {
   const { t, locale } = useLocale();
@@ -86,6 +87,12 @@ export default function ProductDetail({ slug }: { slug: string }) {
                 ))}
               </div>
             </Reveal>
+
+            {p.device && (
+              <Reveal delay={0.12}>
+                <DeviceOrderBlock appName={p.name} />
+              </Reveal>
+            )}
 
             <Reveal delay={0.14}>
               <div className="mt-8 flex flex-wrap gap-3">
