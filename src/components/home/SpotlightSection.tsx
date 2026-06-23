@@ -11,6 +11,7 @@ import { activeStepFromProgress } from "@/lib/scrollSteps";
 import type { Callout } from "./RobotViewer";
 import Container from "@/components/ui/Container";
 import Reveal from "@/components/ui/Reveal";
+import RevealLines from "@/components/ui/RevealLines";
 
 const RobotViewer = dynamic(() => import("./RobotViewer"), {
   ssr: false,
@@ -104,11 +105,12 @@ export default function SpotlightSection() {
         <Container>
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
             <Reveal>
-              <span className="eyebrow">{t(ui.spotlight.eyebrow)}</span>
+              <span className="eyebrow eyebrow-draw">{t(ui.spotlight.eyebrow)}</span>
               <h2 className="text-section mt-4 text-ink">{t(ui.spotlight.title)}</h2>
-              <p className="mt-5 max-w-md text-base leading-relaxed text-ink-2 sm:text-lg">
-                {t(ui.spotlight.lead)}
-              </p>
+              <RevealLines
+                text={t(ui.spotlight.lead)}
+                className="mt-5 max-w-md text-base leading-relaxed text-ink-2 sm:text-lg"
+              />
               <ul className="mt-6 space-y-3">
                 {steps.map((s, i) => (
                   <li key={i} className="flex items-baseline gap-3">
@@ -141,11 +143,12 @@ export default function SpotlightSection() {
         <Container>
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
             <div>
-              <span className="eyebrow">{t(ui.spotlight.eyebrow)}</span>
+              <span className="eyebrow eyebrow-draw">{t(ui.spotlight.eyebrow)}</span>
               <h2 className="text-section mt-4 text-ink">{t(ui.spotlight.title)}</h2>
-              <p className="mt-5 max-w-md text-base leading-relaxed text-ink-2 sm:text-lg">
-                {t(ui.spotlight.lead)}
-              </p>
+              <RevealLines
+                text={t(ui.spotlight.lead)}
+                className="mt-5 max-w-md text-base leading-relaxed text-ink-2 sm:text-lg"
+              />
               <ul className="mt-8 space-y-4">
                 {steps.map((s, i) => {
                   const on = i === activeStep;

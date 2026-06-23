@@ -11,6 +11,7 @@ import Reveal from "@/components/ui/Reveal";
 import { Stagger, StaggerItem } from "@/components/ui/Stagger";
 import HoverPreview from "@/components/ui/HoverPreview";
 import DemoVideo from "@/components/home/DemoVideo";
+import SplitText from "@/components/ui/SplitText";
 
 const FEATURED = ["robot-clover", "pcar", "vex", "vr"];
 
@@ -21,8 +22,10 @@ export default function ShowcaseSection() {
     <section className="section bg-surface">
       <Container>
         <Reveal>
-          <span className="eyebrow">{t(ui.showcase.eyebrow)}</span>
-          <h2 className="text-section mt-2 text-ink">{t(ui.showcase.title)}</h2>
+          <span className="eyebrow eyebrow-draw">{t(ui.showcase.eyebrow)}</span>
+          <h2 className="text-section mt-2 text-ink">
+            <SplitText clip segments={[{ text: t(ui.showcase.title) }]} />
+          </h2>
           <p className="mt-3 mb-9 max-w-2xl text-sm leading-relaxed text-ink-2">{t(ui.showcase.lead)}</p>
         </Reveal>
 
