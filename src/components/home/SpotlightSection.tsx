@@ -104,29 +104,33 @@ export default function SpotlightSection() {
       <section className="section overflow-hidden">
         <Container>
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-            <Reveal>
-              <span className="eyebrow eyebrow-draw">{t(ui.spotlight.eyebrow)}</span>
-              <h2 className="text-section mt-4 text-ink">{t(ui.spotlight.title)}</h2>
+            <div>
+              <Reveal>
+                <span className="eyebrow eyebrow-draw">{t(ui.spotlight.eyebrow)}</span>
+                <h2 className="text-section mt-4 text-ink">{t(ui.spotlight.title)}</h2>
+              </Reveal>
               <RevealLines
                 text={t(ui.spotlight.lead)}
                 className="mt-5 max-w-md text-base leading-relaxed text-ink-2 sm:text-lg"
               />
-              <ul className="mt-6 space-y-3">
-                {steps.map((s, i) => (
-                  <li key={i} className="flex items-baseline gap-3">
-                    <span className="font-mono text-xs text-blue">{String(i + 1).padStart(2, "0")}</span>
-                    <span>
-                      <span className="text-display text-sm text-ink">{t(s.title)}</span>
-                      <span className="ml-2 text-sm text-ink-2">{t(s.desc)}</span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-7 inline-flex items-center gap-2 rounded-[var(--radius-pill)] px-4 py-2 text-xs font-medium text-red" style={{ background: "var(--red-soft)" }}>
-                <Rotate3d size={14} />
-                {t(ui.spotlight.hint)}
-              </div>
-            </Reveal>
+              <Reveal delay={0.05}>
+                <ul className="mt-6 space-y-3">
+                  {steps.map((s, i) => (
+                    <li key={i} className="flex items-baseline gap-3">
+                      <span className="font-mono text-xs text-blue">{String(i + 1).padStart(2, "0")}</span>
+                      <span>
+                        <span className="text-display text-sm text-ink">{t(s.title)}</span>
+                        <span className="ml-2 text-sm text-ink-2">{t(s.desc)}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-7 inline-flex items-center gap-2 rounded-[var(--radius-pill)] px-4 py-2 text-xs font-medium text-red" style={{ background: "var(--red-soft)" }}>
+                  <Rotate3d size={14} />
+                  {t(ui.spotlight.hint)}
+                </div>
+              </Reveal>
+            </div>
             <Reveal delay={0.1}>
               <Stage callouts={callouts} effects={false} />
             </Reveal>
