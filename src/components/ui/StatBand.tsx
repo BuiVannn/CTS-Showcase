@@ -11,7 +11,7 @@ export default function StatBand({ items }: { items: Stat[] }) {
     <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-lg)] border border-border bg-border md:grid-cols-4">
       {items.map((s, i) => (
         <div key={i} className="bg-bg p-5">
-          <div className="font-mono text-2xl font-bold text-ink">
+          <div className="font-mono text-3xl font-bold text-ink sm:text-4xl">
             <CountUp value={s.value} />
             {s.unit && <span className="text-blue">{s.unit}</span>}
           </div>
