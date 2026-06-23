@@ -17,14 +17,21 @@ const word = {
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
 };
 
+const wordClip = {
+  hidden: { y: "120%" },
+  show: { y: 0, transition: { duration: 0.7, ease: EASE } },
+};
+
 export default function SplitText({
   segments,
   className,
   delayChildren = 0.05,
+  clip = false,
 }: {
   segments: SplitSegment[];
   className?: string;
   delayChildren?: number;
+  clip?: boolean;
 }) {
   const reduce = useReducedMotionSafe();
   const label = segments.map((s) => s.text).join(" ");
@@ -57,9 +64,17 @@ export default function SplitText({
     >
       {words.map((item, i) => (
         <Fragment key={i}>
-          <motion.span aria-hidden className={`inline-block ${item.className ?? ""}`} variants={word}>
-            {item.w}
-          </motion.span>
+          {clip ? (
+            <span className="inline-block overflow-hidden align-bottom">
+              <motion.span aria-hidden className={`inline-block ${item.className ?? ""}`} variants={wordClip}>
+                {item.w}
+              </motion.span>
+            </span>
+          ) : (
+            <motion.span aria-hidden className={`inline-block ${item.className ?? ""}`} variants={word}>
+              {item.w}
+            </motion.span>
+          )}
           {i < words.length - 1 ? " " : ""}
         </Fragment>
       ))}

@@ -163,3 +163,12 @@ body {
   50%  { transform: translate3d(4%, -3%, 0) scale(1.08); }
   100% { transform: translate3d(0,0,0) scale(1); }
 }
+
+@keyframes eyebrow-rule {
+  from { width: 0; opacity: 0; }
+  to   { width: 2.4rem; opacity: 1; }
+}
+.eyebrow-draw::before { animation: eyebrow-rule 0.7s ease forwards; }
+@media (prefers-reduced-motion: reduce) {
+  .eyebrow-draw::before { animation: none; }
+}

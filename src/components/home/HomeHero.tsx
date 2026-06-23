@@ -13,6 +13,7 @@ import { EASE } from "@/lib/motion";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import SplitText from "@/components/ui/SplitText";
+import RevealLines from "@/components/ui/RevealLines";
 import Magnetic from "@/components/ui/Magnetic";
 import Scramble from "@/components/ui/Scramble";
 
@@ -48,6 +49,7 @@ export default function HomeHero() {
             </motion.span>
             <h1 className="text-hero mt-5 text-ink">
               <SplitText
+                clip
                 segments={[
                   { text: t(ui.home.heroLead) },
                   { text: t(ui.home.heroKw1), className: "text-red" },
@@ -56,9 +58,7 @@ export default function HomeHero() {
                 ]}
               />
             </h1>
-            <motion.p {...rise(0.12)} className="mt-4 max-w-xl text-base leading-relaxed text-ink-2 sm:text-lg">
-              {t(site.hero.subtitle)}
-            </motion.p>
+            <RevealLines className="mt-4 max-w-xl text-base leading-relaxed text-ink-2 sm:text-lg" text={t(site.hero.subtitle)} delay={0.12} />
             <motion.div {...rise(0.18)} className="mt-8 flex flex-wrap gap-3">
               <Magnetic>
                 <Button href="/products" variant="blue">
