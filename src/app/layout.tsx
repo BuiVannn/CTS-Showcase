@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Be_Vietnam_Pro, JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { LocaleProvider } from "@/lib/locale";
@@ -19,8 +19,9 @@ const display = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-// Body — clean, native Vietnamese coverage.
-const body = Be_Vietnam_Pro({
+// Body — same family as display for one unified brand font (Plus Jakarta Sans,
+// Vietnamese subset). Shared with the apps for a consistent identity.
+const body = Plus_Jakarta_Sans({
   variable: "--font-body",
   subsets: ["latin", "vietnamese"],
   weight: ["300", "400", "500", "600", "700"],
