@@ -6,6 +6,7 @@ import SpotlightSection from "@/components/home/SpotlightSection";
 import HomeStats from "@/components/home/HomeStats";
 import ShowcaseSection from "@/components/home/ShowcaseSection";
 import EcosystemBento from "@/components/home/EcosystemBento";
+import GamesTeaser from "@/components/home/GamesTeaser";
 import Partners from "@/components/home/Partners";
 import HomeCTA from "@/components/home/HomeCTA";
 
@@ -20,6 +21,7 @@ export default function Home() {
         <HomeStats />
         <ShowcaseSection />
         <EcosystemBento />
+        <GamesTeaser />
         <Partners />
         <HomeCTA />
       </main>
