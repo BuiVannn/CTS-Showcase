@@ -125,7 +125,7 @@ export default function Navbar() {
               {t(link.label)}
             </Link>
           ))}
-          <div className="px-1 pt-2"><AuthMenu /></div>
+          <div className="px-1 pt-2"><AuthMenu variant="inline" /></div>
         </div>
       </div>
     </header>

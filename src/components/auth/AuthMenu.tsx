@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { User, ChevronDown } from "lucide-react";
 import { useLocale } from "@/lib/locale";
@@ -9,10 +9,27 @@ import { ui } from "@/content/ui";
 import { resolveEnrollUrl } from "@/lib/auth-helpers";
 import SignOutButton from "./SignOutButton";
 
-export default function AuthMenu() {
+export default function AuthMenu({ variant = "menu" }: { variant?: "menu" | "inline" }) {
   const { data: session, status } = useSession();
   const { t } = useLocale();
   const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
   if (status !== "authenticated") {
     return (
@@ -35,8 +52,22 @@ export default function AuthMenu() {
   }
 
   const name = session.user?.name ?? session.user?.email ?? "";
+
+  if (variant === "inline") {
+    return (
+      <div className="flex flex-col gap-1">
+        <Link href="/account" className="rounded-[var(--radius-md)] px-4 py-3 text-sm text-ink-2 hover:bg-surface hover:text-ink">{t(ui.auth.account)}</Link>
+        <Link href="/members" className="rounded-[var(--radius-md)] px-4 py-3 text-sm text-ink-2 hover:bg-surface hover:text-ink">{t(ui.auth.members)}</Link>
+        {session.isAdmin && (
+          <Link href="/admin" className="rounded-[var(--radius-md)] px-4 py-3 text-sm text-ink-2 hover:bg-surface hover:text-ink">{t(ui.auth.admin)}</Link>
+        )}
+        <div className="px-4 py-2"><SignOutButton /></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="relative">
+    <div ref={wrapRef} className="relative">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
