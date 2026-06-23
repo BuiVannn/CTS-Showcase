@@ -7,6 +7,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import PageTransition from "@/components/ui/PageTransition";
 import CursorSpotlight from "@/components/fx/CursorSpotlight";
+import GrainOverlay from "@/components/fx/GrainOverlay";
 
 // Display — clean geometric sans, includes the Vietnamese subset.
 const display = Plus_Jakarta_Sans({
@@ -67,6 +68,7 @@ export default function RootLayout({
           }}
         />
         <CursorSpotlight />
+        <GrainOverlay />
         <ThemeProvider>
           <LocaleProvider>
             <ScrollProgress />
