@@ -143,4 +143,105 @@ export const ecosystem: EcosystemApp[] = [
     downloadHref: "#",
     image: { src: "/img/unilearn.jpg", alt: { en: "Unilearn", vi: "Unilearn" } },
   },
+  {
+    id: "kidmentor",
+    name: "KidMentor",
+    slug: "kidmentor",
+    year: 2025,
+    category: "learning-ai",
+    categoryLabel: { en: "Kids Learning", vi: "Học tập cho trẻ" },
+    icon: "graduation",
+    excerpt: {
+      en: "An AI learning companion that guides children through lessons at their own pace.",
+      vi: "Người bạn học AI đồng hành, dẫn dắt trẻ qua từng bài học theo nhịp độ riêng.",
+    },
+    description: {
+      en: "KidMentor is an AI companion for young learners — it personalises lessons by grade and curriculum, answers questions patiently, and gives parents a clear view of progress in a safe, age-appropriate space.",
+      vi: "KidMentor là người bạn AI cho trẻ nhỏ — cá nhân hoá bài học theo lớp và chương trình, kiên nhẫn trả lời câu hỏi và cho phụ huynh thấy rõ tiến độ trong một không gian an toàn, phù hợp lứa tuổi.",
+    },
+    features: {
+      en: [
+        "Lessons personalised by grade and curriculum",
+        "Patient, age-appropriate AI tutoring",
+        "Parent view of learning progress",
+      ],
+      vi: [
+        "Bài học cá nhân hoá theo lớp và chương trình",
+        "Gia sư AI kiên nhẫn, phù hợp lứa tuổi",
+        "Phụ huynh theo dõi tiến độ học tập",
+      ],
+    },
+    tags: { en: ["AI", "Kids", "Learning"], vi: ["AI", "Trẻ em", "Học tập"] },
+    downloadHref: "#",
+    // image = existing placeholder so /products + Hệ sinh thái cards never break;
+    // logo = convention path the user drops a file at (grid shows it when present).
+    image: { src: "/img/1account.png", alt: { en: "KidMentor", vi: "KidMentor" } },
+    logo: "/img/logos/kidmentor.png",
+  },
+  {
+    id: "ptalk-signature",
+    name: "PTalk Signature",
+    slug: "ptalk-signature",
+    year: 2025,
+    category: "ai-voice",
+    categoryLabel: { en: "AI Voice", vi: "Giọng nói AI" },
+    icon: "signature",
+    excerpt: {
+      en: "The signature PTalk voice assistant — a refined everyday companion that listens and responds naturally.",
+      vi: "Bản Signature của trợ lý giọng nói PTalk — người bạn đồng hành hằng ngày, lắng nghe và phản hồi tự nhiên.",
+    },
+    description: {
+      en: "PTalk Signature is the premium voice-assistant experience of the PTalk family — natural spoken dialogue, helpful daily routines, and a friendly companion designed for comfort and everyday use.",
+      vi: "PTalk Signature là trải nghiệm trợ lý giọng nói cao cấp của dòng PTalk — đối thoại tự nhiên bằng giọng nói, hỗ trợ thói quen hằng ngày và là người bạn thân thiện, dễ dùng.",
+    },
+    features: {
+      en: [
+        "Natural, real-time spoken dialogue",
+        "Helpful daily routines and reminders",
+        "Friendly companion designed for everyday use",
+      ],
+      vi: [
+        "Đối thoại tự nhiên bằng giọng nói, thời gian thực",
+        "Hỗ trợ thói quen và nhắc việc hằng ngày",
+        "Người bạn thân thiện, dễ dùng hằng ngày",
+      ],
+    },
+    tags: { en: ["AI", "Voice", "Assistant"], vi: ["AI", "Giọng nói", "Trợ lý"] },
+    downloadHref: "#",
+    image: { src: "/img/1account.png", alt: { en: "PTalk Signature", vi: "PTalk Signature" } },
+    logo: "/img/logos/ptalk-signature.png",
+  },
+  {
+    id: "p-connect",
+    name: "P-Connect",
+    slug: "p-connect",
+    year: 2025,
+    category: "connectivity",
+    categoryLabel: { en: "Connectivity", vi: "Kết nối" },
+    icon: "bluetooth",
+    excerpt: {
+      en: "Pairs and manages the lab's assistant devices over Bluetooth — one tap to connect.",
+      vi: "Ghép nối và quản lý các thiết bị trợ lý của lab qua Bluetooth — chạm một lần là kết nối.",
+    },
+    description: {
+      en: "P-Connect is the companion app that discovers, pairs, and manages CTS Lab's assistant hardware over Bluetooth — keep devices updated, switch between them, and connect in a single tap.",
+      vi: "P-Connect là ứng dụng đồng hành giúp dò tìm, ghép nối và quản lý các thiết bị trợ lý của CTS Lab qua Bluetooth — cập nhật thiết bị, chuyển đổi giữa các thiết bị và kết nối chỉ với một chạm.",
+    },
+    features: {
+      en: [
+        "Discover and pair devices over Bluetooth",
+        "Manage and update connected hardware",
+        "One-tap switching between devices",
+      ],
+      vi: [
+        "Dò tìm và ghép nối thiết bị qua Bluetooth",
+        "Quản lý và cập nhật thiết bị đã kết nối",
+        "Chuyển đổi giữa các thiết bị chỉ với một chạm",
+      ],
+    },
+    tags: { en: ["Bluetooth", "Devices", "Connectivity"], vi: ["Bluetooth", "Thiết bị", "Kết nối"] },
+    downloadHref: "#",
+    image: { src: "/img/1account.png", alt: { en: "P-Connect", vi: "P-Connect" } },
+    logo: "/img/logos/p-connect.png",
+  },
 ];

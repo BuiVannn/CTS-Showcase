@@ -3,7 +3,7 @@ import { getProducts, getProduct } from "./products";
 
 describe("getProducts", () => {
   it("returns all ecosystem products", () => {
-    expect(getProducts().length).toBeGreaterThanOrEqual(4);
+    expect(getProducts().length).toBeGreaterThanOrEqual(7);
   });
 });
 
@@ -13,5 +13,12 @@ describe("getProduct", () => {
   });
   it("returns undefined for an unknown slug", () => {
     expect(getProduct("does-not-exist")).toBeUndefined();
+  });
+  it("includes the three new apps with logos", () => {
+    for (const slug of ["kidmentor", "ptalk-signature", "p-connect"]) {
+      const app = getProduct(slug);
+      expect(app, `missing app: ${slug}`).toBeDefined();
+      expect(app?.logo).toBe(`/img/logos/${slug}.png`);
+    }
   });
 });
