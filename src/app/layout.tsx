@@ -6,7 +6,7 @@ import { ThemeProvider } from "@/lib/theme-context";
 import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import PageTransition from "@/components/ui/PageTransition";
-import CursorSpotlight from "@/components/fx/CursorSpotlight";
+import CustomCursor from "@/components/fx/CustomCursor";
 import GrainOverlay from "@/components/fx/GrainOverlay";
 import ScrollToTop from "@/components/ui/ScrollToTop";
 
@@ -68,7 +68,7 @@ export default function RootLayout({
             __html: `(function(){try{var k='cts-theme',s=localStorage.getItem(k);var t=(s==='dark')?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`,
           }}
         />
-        <CursorSpotlight />
+        <CustomCursor />
         <GrainOverlay />
         <ThemeProvider>
           <LocaleProvider>

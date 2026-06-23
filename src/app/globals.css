@@ -172,3 +172,8 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .eyebrow-draw::before { animation: none; }
 }
+
+/* Hide the native cursor only while the custom cursor is active; keep a text
+   caret in editable fields. */
+html.cursor-none, html.cursor-none * { cursor: none; }
+html.cursor-none input, html.cursor-none textarea, html.cursor-none [contenteditable="true"] { cursor: text; }
