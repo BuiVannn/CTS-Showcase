@@ -56,6 +56,8 @@
   --radius-pill: 999px;
   --background: var(--bg);
   --foreground: var(--ink);
+  --mx: 50vw;
+  --my: 30vh;
 }
 
 @theme inline {
