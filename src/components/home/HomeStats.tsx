@@ -2,7 +2,6 @@
 
 import { useLocale } from "@/lib/locale";
 import { getProducts } from "@/content/products";
-import { team } from "@/content/team";
 import { ui } from "@/content/ui";
 import { sso } from "@/content/sso";
 import Container from "@/components/ui/Container";
@@ -14,9 +13,11 @@ import OneAccountApps from "@/components/home/OneAccountApps";
 export default function HomeStats() {
   const { t } = useLocale();
   const stats = [
+    { value: "10,000+", label: t(ui.home.statUsers) },
+    { value: "25,000+", label: t(ui.home.statDownloads) },
+    { value: "30+", label: t(ui.home.statSchools) },
     { value: String(getProducts().length).padStart(2, "0"), label: t(ui.home.statApps) },
     { value: "164", label: t(ui.home.statScenes) },
-    { value: String(team.length), label: t(ui.home.statTeam) },
     { value: "PTIT", label: t(ui.home.statPartner) },
   ];
   return (

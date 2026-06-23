@@ -8,7 +8,7 @@ export interface Stat {
 
 export default function StatBand({ items }: { items: Stat[] }) {
   return (
-    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-lg)] border border-border bg-border md:grid-cols-4">
+    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-lg)] border border-border bg-border sm:grid-cols-3 lg:grid-cols-6">
       {items.map((s, i) => (
         <div key={i} className="bg-bg p-5">
           <div className="font-mono text-3xl font-bold text-ink sm:text-4xl">
