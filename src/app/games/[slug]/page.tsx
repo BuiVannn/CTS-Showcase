@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Container from "@/components/ui/Container";
-import Breadcrumb from "@/components/ui/Breadcrumb";
-import GameEmbed from "@/components/games/GameEmbed";
+import GamePlayView from "@/components/games/GamePlayView";
 import { getGames, getGame } from "@/content/games";
 
 export function generateStaticParams() {
@@ -23,26 +19,10 @@ export default async function GamePlayPage({ params }: { params: Promise<{ slug:
   const { slug } = await params;
   const g = getGame(slug);
   if (!g) notFound();
-
   return (
     <>
       <Navbar />
-      <main className="section pt-28">
-        <Container>
-          <Breadcrumb items={[{ label: "CTS Lab", href: "/" }, { label: "Games", href: "/games" }, { label: g.title }]} />
-          <Link href="/games" className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-ink-2 transition-colors hover:text-blue">
-            <ArrowLeft size={15} /> Quay lại Game Hub
-          </Link>
-          <h1 className="text-section mt-4 text-ink">{g.title}</h1>
-          <p className="mt-1 text-sm text-dim">by {g.author} · {g.year}</p>
-          <div className="mt-6 max-w-4xl">
-            <GameEmbed src={g.embedPath} title={g.title} />
-            <p className="mt-3 text-xs text-dim">
-              Game khá nặng — nên chơi trên máy tính; lần tải đầu có thể hơi lâu.
-            </p>
-          </div>
-        </Container>
-      </main>
+      <main><GamePlayView game={g} /></main>
       <Footer />
     </>
   );
