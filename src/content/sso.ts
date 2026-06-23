@@ -8,6 +8,8 @@ export const sso: {
   bannerTitle: Localized;
   bannerDescription: Localized;
   image: string;
+  lead: Localized;
+  more: Localized;
 } = {
   eyebrow: { en: "Identity", vi: "Định danh" },
   title: { en: "One Account", vi: "Một tài khoản" },
@@ -25,4 +27,6 @@ export const sso: {
     vi: "Mọi ứng dụng của CTS Lab dùng chung một hệ thống xác thực. Tạo tài khoản một lần và tận hưởng quyền truy cập liền mạch trên mọi sản phẩm.",
   },
   image: "/img/1account.png",
+  lead: { en: "One account for every CTS Lab app.", vi: "Một tài khoản cho mọi ứng dụng CTS Lab." },
+  more: { en: "…and more.", vi: "…và hơn thế nữa." },
 };
