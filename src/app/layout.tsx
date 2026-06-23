@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Unbounded, Be_Vietnam_Pro, JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Be_Vietnam_Pro, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { LocaleProvider } from "@/lib/locale";
 import { ThemeProvider } from "@/lib/theme-context";
@@ -7,10 +7,11 @@ import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import PageTransition from "@/components/ui/PageTransition";
 
-// Display — distinctive rounded-geometric, includes the Vietnamese subset.
-const display = Unbounded({
+// Display — clean geometric sans, includes the Vietnamese subset.
+const display = Plus_Jakarta_Sans({
   variable: "--font-display",
   subsets: ["latin", "vietnamese"],
+  weight: ["500", "600", "700", "800"],
   display: "swap",
 });
 

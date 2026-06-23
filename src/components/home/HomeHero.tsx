@@ -37,7 +37,7 @@ export default function HomeHero() {
         };
 
   return (
-    <section ref={ref} className="relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-28">
+    <section ref={ref} className="relative overflow-hidden pt-24 pb-20 lg:pt-28 lg:pb-28">
       {/* Tech atmosphere: faint grid + soft brand glows (parallax layers) */}
       <motion.div aria-hidden className="pointer-events-none absolute inset-0 -z-10" style={reduce ? undefined : { opacity: fade }}>
         <motion.div
@@ -56,7 +56,7 @@ export default function HomeHero() {
       </motion.div>
 
       <Container>
-        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.1fr]">
           {/* Left — copy */}
           <motion.div style={reduce ? undefined : { y: yCopy }}>
             <motion.span {...rise(0)} className="eyebrow">
@@ -72,7 +72,7 @@ export default function HomeHero() {
                 ]}
               />
             </h1>
-            <motion.p {...rise(0.12)} className="mt-6 max-w-xl text-base leading-relaxed text-ink-2 sm:text-lg">
+            <motion.p {...rise(0.12)} className="mt-4 max-w-xl text-base leading-relaxed text-ink-2 sm:text-lg">
               {t(site.hero.subtitle)}
             </motion.p>
             <motion.div {...rise(0.18)} className="mt-8 flex flex-wrap gap-3">
@@ -94,21 +94,21 @@ export default function HomeHero() {
             </span>
             <Link
               href="/vr-tour"
-              className="group block rounded-[var(--radius-lg)] border border-border bg-card p-5 shadow-[var(--shadow-lg)] transition-transform duration-300 hover:-translate-y-1"
+              className="group block rounded-[var(--radius-lg)] border border-border bg-card p-6 shadow-[var(--shadow-lg)] transition-transform duration-300 hover:-translate-y-1 sm:p-7"
             >
-              <div className="relative h-44 overflow-hidden rounded-[var(--radius-md)] border border-border">
-                <Image src="/img/vr.jpg" alt={t(ui.home.vrCardTitle)} fill sizes="(max-width: 1024px) 100vw, 40vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div className="relative h-56 overflow-hidden rounded-[var(--radius-md)] border border-border sm:h-64 lg:h-80">
+                <Image src="/img/vr.jpg" alt={t(ui.home.vrCardTitle)} fill sizes="(max-width: 1024px) 100vw, 52vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                 <span aria-hidden className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                 <span className="absolute inset-0 flex items-center justify-center">
-                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-red shadow-[var(--shadow-md)]">
-                    <Play size={18} className="ml-0.5" />
+                  <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-white/90 text-red shadow-[var(--shadow-md)]">
+                    <Play size={24} className="ml-0.5" />
                   </span>
                 </span>
-                <span className="font-mono absolute bottom-2.5 left-3 text-[0.55rem] tracking-wider text-white/90">PTIT · VR</span>
+                <span className="font-mono absolute bottom-3 left-3.5 text-[0.6rem] tracking-wider text-white/90">PTIT · VR</span>
               </div>
-              <div className="font-mono mt-4 text-[0.66rem] tracking-wider text-blue">{"// "}{t(ui.home.vrCardLabel)}</div>
-              <h2 className="text-display mt-1 text-lg text-ink">{t(ui.home.vrCardTitle)}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-ink-2">{t(ui.home.vrCardBlurb)}</p>
+              <div className="font-mono mt-5 text-[0.7rem] tracking-wider text-blue">{"// "}{t(ui.home.vrCardLabel)}</div>
+              <h2 className="text-display mt-1.5 text-xl text-ink sm:text-2xl">{t(ui.home.vrCardTitle)}</h2>
+              <p className="mt-2.5 text-sm leading-relaxed text-ink-2 sm:text-base">{t(ui.home.vrCardBlurb)}</p>
               <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-blue">
                 {t(ui.hero.vrCta)}
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />

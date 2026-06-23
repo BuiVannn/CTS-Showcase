@@ -41,7 +41,7 @@ export const site: SiteConfig = {
     { id: "/", label: { en: "Home", vi: "Trang chủ" } },
     { id: "/products", label: { en: "Products", vi: "Sản phẩm" } },
     { id: "/games", label: { en: "Games", vi: "Games" } },
-    { id: "/team", label: { en: "Team", vi: "Đội ngũ" } },
+    { id: "/vr-tour", label: { en: "VR Tour", vi: "Tham quan VR" } },
   ],
   footerDescription: {
     en: "STEM Innovation Lab at the Posts & Telecommunications Institute of Technology.",

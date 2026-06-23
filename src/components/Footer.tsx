@@ -76,6 +76,10 @@ export default function Footer() {
                   <Mail size={16} />
                 </a>
               </div>
+              <div className="mt-6 flex flex-col gap-2.5">
+                <a href="https://dashboard.ctslab.net/privacy" target="_blank" rel="noopener noreferrer" className="text-sm text-ink-2 transition-colors hover:text-blue">{t(ui.footer.privacy)}</a>
+                <a href="https://dashboard.ctslab.net/terms" target="_blank" rel="noopener noreferrer" className="text-sm text-ink-2 transition-colors hover:text-blue">{t(ui.footer.terms)}</a>
+              </div>
             </div>
           </div>
 

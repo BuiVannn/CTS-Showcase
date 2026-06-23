@@ -5,14 +5,12 @@ import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X, Play } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { getLenis } from "@/lib/lenis";
 import { useLocale } from "@/lib/locale";
 import { site } from "@/content/site";
-import { ui } from "@/content/ui";
 import ThemeToggle from "./ThemeToggle";
 import LanguageToggle from "./LanguageToggle";
-import Button from "./ui/Button";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -83,9 +81,6 @@ export default function Navbar() {
         <div className="hidden items-center gap-2 lg:flex">
           <LanguageToggle />
           <ThemeToggle />
-          <Button href="/vr-tour" variant="ghost" size="sm">
-            <Play size={14} /> {t(ui.hero.vrCta)}
-          </Button>
         </div>
 
         {/* Mobile controls */}
@@ -117,9 +112,6 @@ export default function Navbar() {
               {t(link.label)}
             </Link>
           ))}
-          <Button href="/vr-tour" variant="ghost" className="mt-2 w-full" onClick={() => setMobileOpen(false)}>
-            <Play size={14} /> {t(ui.hero.vrCta)}
-          </Button>
         </div>
       </div>
     </header>

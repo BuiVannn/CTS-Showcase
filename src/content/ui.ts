@@ -89,6 +89,8 @@ export const ui = {
     contact: { en: "Contact", vi: "Liên hệ" } as Localized,
     follow: { en: "Follow us", vi: "Theo dõi" } as Localized,
     rights: { en: "All rights reserved.", vi: "Bảo lưu mọi quyền." } as Localized,
+    privacy: { en: "Privacy Policy", vi: "Chính sách bảo mật" } as Localized,
+    terms: { en: "Terms of Use", vi: "Điều khoản sử dụng" } as Localized,
   },
   products: {
     eyebrow: { en: "Our apps", vi: "Ứng dụng của chúng tôi" } as Localized,
