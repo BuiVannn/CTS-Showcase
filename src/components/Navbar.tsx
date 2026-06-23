@@ -7,6 +7,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { getLenis } from "@/lib/lenis";
+import { scrollToTop } from "@/lib/scrollToTop";
 import { useLocale } from "@/lib/locale";
 import { site } from "@/content/site";
 import ThemeToggle from "./ThemeToggle";
@@ -42,7 +43,17 @@ export default function Navbar() {
     >
       <div className="container-x flex h-16 items-center justify-between gap-4 sm:h-20">
         {/* Brand */}
-        <Link href="/" className="flex items-center" aria-label="CTS Lab — home">
+        <Link
+          href="/"
+          className="flex items-center"
+          aria-label="CTS Lab — home"
+          onClick={(e) => {
+            if (pathname === "/") {
+              e.preventDefault();
+              scrollToTop(!!reduce);
+            }
+          }}
+        >
           <Image
             src="/img/cts-logo.png"
             alt="CTS — Creative Technologies & Simulation Lab"
