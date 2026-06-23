@@ -52,6 +52,17 @@ export interface TeamMember {
   image: LocalImage;
 }
 
+export interface Game {
+  id: string;
+  slug: string;
+  title: string;   // proper name, kept as-is
+  author: string;
+  year: number;
+  embedPath: string; // static path to the game's index.html
+  cover?: string;    // public path to a cover image; falls back to a placeholder
+  blurb?: Localized;
+}
+
 export interface Partner {
   name: string;
   url: string;

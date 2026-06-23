@@ -183,6 +183,21 @@ export const ui = {
       { key: "games", title: { en: "Games", vi: "Games" } as Localized, desc: { en: "Play-to-learn experiences", vi: "Học qua trò chơi" } as Localized },
     ],
   },
+  games: {
+    hubTitle: { en: "Game Hub", vi: "Khu Game" } as Localized,
+    hubLead: {
+      en: "Play games built by the lab — right in your browser.",
+      vi: "Chơi các game do lab tạo ra — ngay trên trình duyệt.",
+    } as Localized,
+    play: { en: "Play", vi: "Chơi" } as Localized,
+    by: { en: "by", vi: "bởi" } as Localized,
+    fullscreen: { en: "Fullscreen", vi: "Toàn màn hình" } as Localized,
+    breadcrumb: { en: "Games", vi: "Games" } as Localized,
+    heavyNote: {
+      en: "Heavy game — best on desktop; first load may take a moment.",
+      vi: "Game khá nặng — nên chơi trên máy tính; lần tải đầu có thể hơi lâu.",
+    } as Localized,
+  },
   gamesTeaser: {
     eyebrow: { en: "Play", vi: "Chơi" } as Localized,
     title: { en: "The lab's games hub", vi: "Khu game của lab" } as Localized,
