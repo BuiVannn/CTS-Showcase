@@ -30,14 +30,15 @@ Các hạng mục sau đã được phát triển và đưa lên website hiện 
 
 ## 3. Các hạng mục đề xuất
 
-> **Tiến độ nhanh:** ✅ Đã xong: Đăng nhập/đăng ký (SSO), 3.1, 3.5, 3.8 · 🟡 Phần lớn: 3.3 · ▶ Đang làm: 3.6 · ❌ Chưa làm: 3.2, 3.4, 3.7, 3.9, 3.10, 3.11, 3.12.
+> **Tiến độ nhanh:** ✅ Đã xong: Đăng nhập/đăng ký (SSO), 3.1, 3.2, 3.5, 3.6, 3.8 · 🟡 Phần lớn: 3.3, 3.7 (Game Hub đã có lát cắt 1: host + chơi game của lab) · ▶ Đang làm: 3.4 · ❌ Chưa làm: 3.9, 3.10, 3.11, 3.12.
 
 ### 3.1 Khu "Một tài khoản" → lưới logo ứng dụng — ✅ ĐÃ XONG
 **Hiện trạng:** đã thay đoạn văn bằng lưới 7 ô app (3 logo thật + bổ sung 3 app KidMentor / PTalk Signature / P‑Connect), bấm ra trang chi tiết; có câu kết "…và hơn thế nữa."
 **Đề xuất:** thay bằng **lưới logo các ứng dụng** (PTalk, VietCreative, Vision Tale, Unilearn… và các app khác); bấm vào mỗi logo mở **trang chi tiết sản phẩm** tương ứng. Bổ sung câu kết "…và hơn thế nữa." để gợi mở hệ sinh thái đang mở rộng.
 
-### 3.2 Thống nhất một font chữ với các ứng dụng — ❌ CHƯA LÀM (cần biết font các app dùng)
-**Đề xuất:** chọn **một font dùng chung** cho cả website và các app trong hệ sinh thái để nhận diện thương hiệu nhất quán. (Cần thống nhất font mục tiêu với nhóm phát triển app.)
+### 3.2 Thống nhất một font chữ với các ứng dụng — ✅ ĐÃ XONG (phía web)
+**Đã làm:** toàn website dùng **một font Plus Jakarta Sans** cho cả tiêu đề + body (bỏ Be Vietnam Pro), giữ mono cho số/code.
+**Còn lại (note, chưa làm):** các **app** đổi font sang Plus Jakarta Sans để đồng bộ — việc phía project app, **tạm hoãn theo yêu cầu** (chưa sửa app lúc này).
 
 ### 3.3 Bổ sung thêm hiệu ứng động, hiện đại hơn — 🟡 PHẦN LỚN ĐÃ XONG (con trỏ tùy biến, particle network, mascot, chuyển động chữ; còn dư địa mở rộng)
 **Đề xuất:** mở rộng có chọn lọc thêm hiệu ứng (chuyển cảnh, vi tương tác, nền động ở các mục còn tĩnh) trên nền các hiệu ứng đã có, ưu tiên giữ trải nghiệm mượt và đồng nhất phong cách.
@@ -50,10 +51,10 @@ Các hạng mục sau đã được phát triển và đưa lên website hiện 
 **Đã làm:** khối "Đặt thiết bị vật lý" trên trang KidMentor: nút mở email soạn sẵn + hiển thị số điện thoại lab (data-driven, có thể bật cho app khác sau).
 **Đề xuất ban đầu:** trong trang chi tiết KidMentor, thêm **mục "Đặt thiết bị vật lý"** và **nút liên hệ lab** để khách quan tâm phần cứng có thể đăng ký/đặt mua hoặc kết nối trực tiếp.
 
-### 3.6 Bổ sung số liệu nổi bật, tăng tính chuyên nghiệp — ▶ ĐANG LÀM
+### 3.6 Bổ sung số liệu nổi bật, tăng tính chuyên nghiệp — ✅ ĐÃ XONG (dải Impact 6 số có đếm động: 10.000+ người dùng, 25.000+ lượt tải, 30+ trường, …)
 **Đề xuất:** thêm **dải số liệu định vị** (người dùng, lượt tải, số trường/đối tác, số sản phẩm…) để tạo cảm giác quy mô và uy tín. Ưu tiên dùng **số liệu thật khi có**; với chỉ số chưa đo được thì dùng con số định hướng/khoảng hợp lý để giữ độ tin cậy.
 
-### 3.7 Khu Game Hub (mô hình giống itch.io) — ❌ CHƯA LÀM (mục lớn; đã thống nhất làm theo lát cắt: host game của lab trước)
+### 3.7 Khu Game Hub (mô hình giống itch.io) — 🟡 LÁT CẮT 1 ĐÃ XONG (host + chơi game của lab trên web, hub + trang chơi đã polish & song ngữ). CÒN LẠI: sinh viên đăng ký + tự upload/deploy + duyệt + sandbox (mục lớn, làm sau).
 **Đề xuất:** xây **khu Game Hub** nơi sinh viên ngành game **đăng ký tài khoản, tải lên và đăng (deploy) game** lên website và **chơi trực tiếp** trên trình duyệt.
 **Hướng triển khai:** cho phép tải lên bản build game (WebGL); game của người dùng được **chạy ở miền tách biệt (sandbox)** để bảo đảm an toàn cho website; có **bước duyệt** trước khi công khai. Đây là hạng mục lớn, nên xem như một sản phẩm con và làm theo từng bước.
 
