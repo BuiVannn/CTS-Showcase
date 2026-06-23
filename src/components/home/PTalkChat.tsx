@@ -5,6 +5,7 @@ import { useSession, signIn } from "next-auth/react";
 import { Send, Lock, Sparkles } from "lucide-react";
 import { useLocale } from "@/lib/locale";
 import { ui } from "@/content/ui";
+import MessageContent from "./MessageContent";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -113,17 +114,21 @@ export default function PTalkChat() {
         {messages.length === 0 && (
           <p className="text-sm text-dim">{t(ui.ptalkChat.emptyHint)}</p>
         )}
-        {messages.map((m, i) => (
-          <div key={i} className={m.role === "user" ? "text-right" : "text-left"}>
-            <span
-              className={`inline-block max-w-[85%] rounded-[var(--radius-md)] px-3 py-2 text-sm ${
-                m.role === "user" ? "bg-blue text-white" : "border border-border bg-surface text-ink"
-              }`}
-            >
-              {m.content}
-            </span>
-          </div>
-        ))}
+        {messages.map((m, i) =>
+          m.role === "user" ? (
+            <div key={i} className="text-right">
+              <span className="inline-block max-w-[85%] rounded-[var(--radius-md)] bg-blue px-3 py-2 text-sm text-white">
+                {m.content}
+              </span>
+            </div>
+          ) : (
+            <div key={i} className="text-left">
+              <div className="inline-block max-w-[85%] rounded-[var(--radius-md)] border border-border bg-surface px-3 py-2 text-ink">
+                <MessageContent content={m.content} />
+              </div>
+            </div>
+          ),
+        )}
         {busy && <p className="text-sm text-dim">{t(ui.ptalkChat.thinking)}</p>}
         {limited && <p className="text-sm text-red">{t(ui.ptalkChat.limitReached)}</p>}
         {error && <p className="text-sm text-red">{t(ui.ptalkChat.error)}</p>}
