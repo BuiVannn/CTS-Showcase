@@ -1,10 +1,9 @@
 "use client";
 
-import { Download, Check, ArrowRight, Mic, Paintbrush, Film, Music } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { Download, Check, ArrowRight } from "lucide-react";
 import { useLocale } from "@/lib/locale";
 import { getProduct } from "@/content/products";
-import type { IconKey } from "@/content/types";
+import { APP_ICONS } from "@/lib/app-icons";
 import { ui } from "@/content/ui";
 import Container from "@/components/ui/Container";
 import Breadcrumb from "@/components/ui/Breadcrumb";
@@ -15,18 +14,11 @@ import Reveal from "@/components/ui/Reveal";
 import { Stagger, StaggerItem } from "@/components/ui/Stagger";
 import SectionGlow from "@/components/ui/SectionGlow";
 
-const ICONS: Record<IconKey, LucideIcon> = {
-  mic: Mic,
-  paintbrush: Paintbrush,
-  film: Film,
-  music: Music,
-};
-
 export default function ProductDetail({ slug }: { slug: string }) {
   const { t, locale } = useLocale();
   const p = getProduct(slug);
   if (!p) return null; // the route already guards with notFound()
-  const Icon = ICONS[p.icon] ?? Mic;
+  const Icon = APP_ICONS[p.icon] ?? APP_ICONS.mic;
 
   return (
     <article className="relative overflow-hidden pt-28 pb-20 lg:pt-32">

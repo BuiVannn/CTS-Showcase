@@ -10,13 +10,14 @@ export interface LocalImage {
   alt: Localized;
 }
 
-export type IconKey = "mic" | "paintbrush" | "film" | "music";
+export type IconKey = "mic" | "paintbrush" | "film" | "music" | "graduation" | "signature" | "bluetooth";
 
 export type EcosystemCategory =
   | "ai-voice"
   | "creative-ai"
   | "video-ai"
-  | "learning-ai";
+  | "learning-ai"
+  | "connectivity";
 
 export interface ShowcaseItem {
   id: string;
@@ -40,6 +41,7 @@ export interface EcosystemApp {
   tags: Localized<string[]>;
   downloadHref: string;
   image: LocalImage;
+  logo?: string; // public path to a tile logo, e.g. "/img/logos/ptalk.png"; falls back to `icon`
 }
 
 export interface TeamMember {
