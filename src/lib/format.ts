@@ -10,13 +10,16 @@ export interface CountParts {
 }
 
 export function parseCountValue(value: string): CountParts {
-  const match = value.match(/^(\d+)(.*)$/);
+  const match = value.match(/^([\d,]+)(.*)$/);
   if (!match) return { target: null, pad: 0, suffix: "", raw: value };
-  const digits = match[1];
+  const digits = match[1].replace(/,/g, "");
+  if (digits.length === 0) return { target: null, pad: 0, suffix: "", raw: value };
   const pad = digits.length > 1 && digits.startsWith("0") ? digits.length : 0;
   return { target: parseInt(digits, 10), pad, suffix: match[2] ?? "", raw: value };
 }
 
 export function formatCount(n: number, pad: number, suffix: string): string {
-  return String(Math.round(n)).padStart(pad, "0") + suffix;
+  const rounded = Math.round(n);
+  const body = pad > 0 ? String(rounded).padStart(pad, "0") : rounded.toLocaleString("en-US");
+  return body + suffix;
 }

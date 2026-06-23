@@ -14,6 +14,9 @@ describe("parseCountValue", () => {
   it("returns null target for non-numeric values", () => {
     expect(parseCountValue("PTIT")).toEqual({ target: null, pad: 0, suffix: "", raw: "PTIT" });
   });
+  it("parses a comma-grouped number, stripping commas", () => {
+    expect(parseCountValue("10,000+")).toEqual({ target: 10000, pad: 0, suffix: "+", raw: "10,000+" });
+  });
 });
 
 describe("formatCount", () => {
@@ -22,5 +25,12 @@ describe("formatCount", () => {
   });
   it("appends the suffix", () => {
     expect(formatCount(164, 0, "+")).toBe("164+");
+  });
+  it("groups thousands when not zero-padded", () => {
+    expect(formatCount(10000, 0, "+")).toBe("10,000+");
+    expect(formatCount(3521, 0, "")).toBe("3,521");
+  });
+  it("keeps zero-padding without grouping", () => {
+    expect(formatCount(7, 2, "")).toBe("07");
   });
 });
