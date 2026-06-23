@@ -12,6 +12,7 @@ import { useLocale } from "@/lib/locale";
 import { site } from "@/content/site";
 import ThemeToggle from "./ThemeToggle";
 import LanguageToggle from "./LanguageToggle";
+import AuthMenu from "@/components/auth/AuthMenu";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -92,6 +93,7 @@ export default function Navbar() {
         <div className="hidden items-center gap-2 lg:flex">
           <LanguageToggle />
           <ThemeToggle />
+          <AuthMenu />
         </div>
 
         {/* Mobile controls */}
@@ -123,6 +125,7 @@ export default function Navbar() {
               {t(link.label)}
             </Link>
           ))}
+          <div className="px-1 pt-2"><AuthMenu /></div>
         </div>
       </div>
     </header>

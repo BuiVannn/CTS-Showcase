@@ -79,6 +79,23 @@ export const ui = {
     success: { en: "Message sent — thank you!", vi: "Đã gửi — cảm ơn bạn!" } as Localized,
     error: { en: "Something went wrong. Please try again.", vi: "Đã có lỗi xảy ra. Vui lòng thử lại." } as Localized,
   },
+  auth: {
+    signIn: { en: "Sign in", vi: "Đăng nhập" } as Localized,
+    signUp: { en: "Sign up", vi: "Đăng ký" } as Localized,
+    signOut: { en: "Sign out", vi: "Đăng xuất" } as Localized,
+    account: { en: "Account", vi: "Tài khoản" } as Localized,
+    members: { en: "Members", vi: "Thành viên" } as Localized,
+    admin: { en: "Admin", vi: "Quản trị" } as Localized,
+    profile: { en: "Profile", vi: "Hồ sơ" } as Localized,
+    memberLead: {
+      en: "Your gateway to the CTS ecosystem — one account across every app.",
+      vi: "Cổng vào hệ sinh thái CTS — một tài khoản cho mọi ứng dụng.",
+    } as Localized,
+    adminStub: {
+      en: "Management tools are coming — game review and user management land here.",
+      vi: "Công cụ quản trị sắp có — duyệt game và quản lý người dùng sẽ ở đây.",
+    } as Localized,
+  },
   nav: {
     download: { en: "Download", vi: "Tải xuống" } as Localized,
     viewAll: { en: "View all products", vi: "Xem tất cả sản phẩm" } as Localized,
