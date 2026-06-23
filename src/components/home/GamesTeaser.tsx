@@ -8,6 +8,7 @@ import Button from "@/components/ui/Button";
 import Magnetic from "@/components/ui/Magnetic";
 import Reveal from "@/components/ui/Reveal";
 import AmbientField from "@/components/fx/AmbientField";
+import ParticleNetwork from "@/components/fx/ParticleNetwork";
 
 export default function GamesTeaser() {
   const { t } = useLocale();
@@ -17,6 +18,7 @@ export default function GamesTeaser() {
         <Reveal>
           <div className="relative overflow-hidden rounded-[var(--radius-lg)] border border-border bg-card p-8 sm:p-12">
             <AmbientField tone="warm" />
+            <ParticleNetwork tone="warm" />
             <div className="relative flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div className="max-w-xl">
                 <span className="eyebrow eyebrow-draw" style={{ color: "var(--red)" }}>{t(ui.gamesTeaser.eyebrow)}</span>

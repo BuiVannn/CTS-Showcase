@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import AmbientField from "@/components/fx/AmbientField";
+import ParticleNetwork from "@/components/fx/ParticleNetwork";
 import { Play, ArrowRight } from "lucide-react";
 import { useLocale } from "@/lib/locale";
 import { site } from "@/content/site";
@@ -39,6 +40,7 @@ export default function HomeHero() {
   return (
     <section ref={ref} className="relative overflow-hidden pt-24 pb-20 lg:pt-28 lg:pb-28">
       <AmbientField tone="cool" />
+      <ParticleNetwork tone="cool" />
 
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.1fr]">

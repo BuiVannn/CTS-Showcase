@@ -25,21 +25,6 @@ export default function AmbientField({ tone = "cool" }: { tone?: "cool" | "warm"
           WebkitMaskImage: "radial-gradient(115% 80% at 50% 0%, #000 25%, transparent 75%)",
         }}
       />
-      {/* cursor-reactive grid highlight (no-op until pointer moves) */}
-      {!reduce && (
-        <div
-          className="absolute inset-0 opacity-70"
-          style={{
-            backgroundImage:
-              "linear-gradient(var(--blue) 1px, transparent 1px), linear-gradient(90deg, var(--blue) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-            maskImage:
-              "radial-gradient(180px circle at var(--mx) var(--my), #000 0%, transparent 70%)",
-            WebkitMaskImage:
-              "radial-gradient(180px circle at var(--mx) var(--my), #000 0%, transparent 70%)",
-          }}
-        />
-      )}
       {/* aurora blobs */}
       <div
         className="absolute -top-24 right-[6%] h-72 w-72 rounded-full blur-[90px]"
