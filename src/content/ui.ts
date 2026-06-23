@@ -84,6 +84,7 @@ export const ui = {
     viewAll: { en: "View all products", vi: "Xem tất cả sản phẩm" } as Localized,
     getInTouch: { en: "Get in touch", vi: "Liên hệ" } as Localized,
     menu: { en: "Menu", vi: "Menu" } as Localized,
+    backToTop: { en: "Back to top", vi: "Lên đầu trang" } as Localized,
   },
   footer: {
     contact: { en: "Contact", vi: "Liên hệ" } as Localized,
