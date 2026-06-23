@@ -122,6 +122,15 @@ export const ui = {
     backText: { en: "Interested in our research and other projects?", vi: "Quan tâm đến nghiên cứu và các dự án khác của chúng tôi?" } as Localized,
     backCta: { en: "Explore our full ecosystem", vi: "Khám phá toàn bộ hệ sinh thái" } as Localized,
   },
+  device: {
+    title: { en: "Order the physical device", vi: "Đặt thiết bị vật lý" } as Localized,
+    blurb: {
+      en: "Want the hardware for your school or home? Contact the lab to order a device or arrange a trial.",
+      vi: "Muốn có thiết bị cho trường hoặc gia đình? Liên hệ lab để đặt thiết bị hoặc sắp xếp dùng thử.",
+    } as Localized,
+    cta: { en: "Contact to order", vi: "Liên hệ đặt thiết bị" } as Localized,
+    subjectPrefix: { en: "Device order:", vi: "Đặt thiết bị:" } as Localized,
+  },
   vrTour: {
     eyebrow: { en: "PTIT Virtual Tour", vi: "Tham quan ảo PTIT" } as Localized,
     loading: { en: "Loading the 360° campus experience…", vi: "Đang tải trải nghiệm khuôn viên 360°…" } as Localized,

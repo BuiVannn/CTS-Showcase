@@ -177,6 +177,7 @@ export const ecosystem: EcosystemApp[] = [
     // logo = convention path the user drops a file at (grid shows it when present).
     image: { src: "/img/1account.png", alt: { en: "KidMentor", vi: "KidMentor" } },
     logo: "/img/logos/logo_kidmentor.png",
+    device: true,
   },
   {
     id: "ptalk-signature",

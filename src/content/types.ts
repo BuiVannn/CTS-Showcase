@@ -42,6 +42,7 @@ export interface EcosystemApp {
   downloadHref: string;
   image: LocalImage;
   logo?: string; // public path to a tile logo, e.g. "/img/logos/ptalk.png"; falls back to `icon`
+  device?: boolean; // true → show the "order physical device" block on the detail page
 }
 
 export interface TeamMember {

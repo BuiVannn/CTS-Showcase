@@ -26,4 +26,7 @@ describe("getProduct", () => {
       expect(app?.logo).toBe(expectedLogo);
     }
   });
+  it("marks KidMentor as having a physical device", () => {
+    expect(getProduct("kidmentor")?.device).toBe(true);
+  });
 });
