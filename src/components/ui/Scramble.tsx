@@ -22,28 +22,28 @@ export default function Scramble({
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
   const reduce = useReducedMotionSafe();
-  const [display, setDisplay] = useState(text);
+  // animated scramble frame; only used when !reduce && inView
+  const [frame, setFrame] = useState<string | null>(null);
 
   useEffect(() => {
-    if (reduce || !inView) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setDisplay(text);
-      return;
-    }
+    if (reduce || !inView) return;
     let raf = 0;
-    let frame = 0;
+    let f = 0;
     const start = performance.now();
     const tick = (now: number) => {
       const p = Math.min(1, (now - start) / durationMs);
       const reveal = Math.floor(p * text.length);
-      setDisplay(scrambleText(text, reveal, frame));
-      frame++;
+      setFrame(p < 1 ? scrambleText(text, reveal, f) : text);
+      f++;
       if (p < 1) raf = requestAnimationFrame(tick);
-      else setDisplay(text);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [inView, reduce, text, durationMs]);
+
+  // Under reduced motion (or before entering view) show the final text directly
+  // without routing through setState-in-effect.
+  const display = reduce || !inView ? text : frame ?? text;
 
   return (
     <span ref={ref} className={className} aria-label={text}>
