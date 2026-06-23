@@ -8,6 +8,7 @@ const games: Game[] = [
     author: "KillDee8",
     year: 2024,
     embedPath: "/games/tyrp/index.html",
+    tags: ["Unity", "WebGL"],
     blurb: {
       en: "A browser game built in Unity — play it right here.",
       vi: "Một game trên trình duyệt dựng bằng Unity — chơi ngay tại đây.",

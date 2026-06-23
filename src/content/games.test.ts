@@ -13,4 +13,7 @@ describe("games content", () => {
   it("returns undefined for an unknown slug", () => {
     expect(getGame("nope")).toBeUndefined();
   });
+  it("tags the tyrp game with its tech", () => {
+    expect(getGame("tyrp")?.tags).toEqual(["Unity", "WebGL"]);
+  });
 });

@@ -61,6 +61,7 @@ export interface Game {
   embedPath: string; // static path to the game's index.html
   cover?: string;    // public path to a cover image; falls back to a placeholder
   blurb?: Localized;
+  tags?: string[]; // plain tech/genre labels, e.g. ["Unity", "WebGL"]
 }
 
 export interface Partner {

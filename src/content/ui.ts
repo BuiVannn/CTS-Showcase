@@ -197,6 +197,8 @@ export const ui = {
       en: "Heavy game — best on desktop; first load may take a moment.",
       vi: "Game khá nặng — nên chơi trên máy tính; lần tải đầu có thể hơi lâu.",
     } as Localized,
+    backToHub: { en: "Back to Game Hub", vi: "Quay lại Game Hub" } as Localized,
+    fullscreenHint: { en: "Tap the ⛶ button to play fullscreen.", vi: "Bấm nút ⛶ để chơi toàn màn hình." } as Localized,
   },
   gamesTeaser: {
     eyebrow: { en: "Play", vi: "Chơi" } as Localized,
