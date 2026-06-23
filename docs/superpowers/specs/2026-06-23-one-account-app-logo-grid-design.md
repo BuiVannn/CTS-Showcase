@@ -1,64 +1,76 @@
-# "Một tài khoản" → App Logo Grid (Quick win 3.1)
+# "Một tài khoản" → App Logo Grid + 3 new ecosystem apps (Quick win 3.1)
 
-**Date:** 2026-06-23
+**Date:** 2026-06-23 (rev. 2)
 **Status:** Draft for review
-**Scope:** Homepage — replace the text paragraph in the "Một tài khoản / One Account" (SSO) block with a grid of clickable app **logos** that link to each app's detail page, ending with "…và hơn thế nữa." No backend/auth changes.
+**Scope:** (a) Add three new ecosystem apps — **KidMentor, PTalk Signature, P-Connect** — as full products with mock content + real (temporary, background) logos; (b) replace the text paragraph in the "Một tài khoản / One Account" (SSO) block with a grid of clickable app **logos** linking to each app's detail page, showing **all 7 apps**. No backend/auth changes.
 
 ---
 
 ## 1. Goal
 
-Turn the static SSO description sentence into a **visual app launcher**: a row of app tiles (PTalk, VietCreative, Vision Tale, Unilearn, … và hơn thế nữa) where each tile shows the app's **logo** and links to its detail page (`/products/<slug>`). This makes the "one account for every app" message tangible and drives traffic into the product pages.
+Make "one account for every app" tangible: a grid of app tiles (logo + name) in the "Một tài khoản" block, each linking to its product detail page, ending with "…và hơn thế nữa." At the same time, grow the ecosystem from 4 to 7 apps so the grid (and the existing "Hệ sinh thái" section + `/products`) reflect the full product family.
 
 ## 2. Decisions (settled with the user)
 
-- **Tile artwork = real per-app logos**, which the user will provide. To ship immediately and degrade gracefully, each tile renders the app's logo **if the file exists**, otherwise falls back to the app's existing **icon** (`mic`/`paintbrush`/`film`/`music`). Dropping a logo file in later upgrades the tile automatically — no code change.
-- **Location:** the existing "Một tài khoản" (SSO) block rendered in `HomeStats` — keep the eyebrow ("Đăng nhập một lần") and title ("Một tài khoản"); replace the long `sso.description` paragraph with a short lead + the logo grid + the "…và hơn thế nữa." ending.
-- **Apps shown:** the four existing ecosystem apps (`ptalk`, `viet-creative`, `vision-tale`, `unilearn`), read from the existing `ecosystem` data (single source of truth), so the grid stays in sync if apps are added/removed.
+- **7 apps in the grid:** the 4 existing (`PTalk`, `VietCreative`, `Vision Tale`, `Unilearn`) + 3 new (`KidMentor`, `PTalk Signature`, `P-Connect`).
+- **3 new apps = full products with mock content:** added to the `ecosystem` data so they get detail pages and also appear in the "Hệ sinh thái" section and `/products`. Copy (excerpt/description/features/tags) is **mock/placeholder** for now; real logos are used.
+- **Logos:** the user provides **3 real logos (images WITH background, temporary)** for KidMentor, PTalk Signature, P-Connect. The other 4 apps have **no logo yet → fall back to the app icon**. Each tile renders the logo if `app.logo` is set, else the icon — so the grid works today and upgrades when assets/logos arrive (drop-in, no code change).
+- **Tile artwork is framed** (bordered rounded tile) so background-bearing logos still look clean.
 
 ## 3. Asset deliverable (user provides)
 
-Drop transparent logo files (PNG or SVG, roughly square, ~256px) at:
+Place the 3 logo files (any of png/jpg/webp; background is fine for now) at:
 
 ```
-public/img/logos/ptalk.png
-public/img/logos/viet-creative.png
-public/img/logos/vision-tale.png
-public/img/logos/unilearn.png
+public/img/logos/kidmentor.png
+public/img/logos/ptalk-signature.png
+public/img/logos/p-connect.png
 ```
 
-Filenames match the app **slug**. Until a file is present, that tile shows the app's lucide icon instead (no broken image).
+Filenames match the app **slug**. If a file isn't there yet, that tile shows the app's icon (no broken image). The 4 existing apps can get logos later by dropping `public/img/logos/<slug>.png` and setting `logo` on their data entry.
 
 ## 4. Architecture & components
 
-**Data (`src/content/ecosystem.ts` + `src/content/types.ts`):**
-- Add an optional `logo?: string` field to `EcosystemApp` (a public path, e.g. `/img/logos/ptalk.png`). Populate it for the four apps pointing at the convention paths above. The grid treats a missing/absent file via the icon fallback (the field can be set now; the file arrives later).
+### 4.1 Types (`src/content/types.ts`)
+- Extend `IconKey` with keys for the new apps, e.g. add `"graduation" | "signature" | "bluetooth"` (final lucide choice during implementation; any sensible mapping).
+- Extend `EcosystemCategory` if needed for P-Connect (e.g. add `"connectivity"`); reuse existing categories for KidMentor (`learning-ai`) and PTalk Signature (`ai-voice`).
+- Add an optional `logo?: string` field to `EcosystemApp` (public path, e.g. `/img/logos/kidmentor.png`).
 
-**Component (`src/components/home/OneAccountApps.tsx`, new):**
-- Reads `getProducts()` and renders a responsive grid of tiles.
-- Each tile: a square logo frame (Next `<Image>` from `app.logo`) **or** the app's icon (reusing the existing `IconKey → lucide` mapping already used by the product pages) when no logo; the app **name**; wrapped in a `<Link href={'/products/' + app.slug}>` with hover lift. Bilingual `alt`/labels via `useLocale`.
-- A trailing "…và hơn thế nữa." tile/label (bilingual) signaling the ecosystem is growing.
+### 4.2 Shared icon map (`src/content/icons.ts`, new — small refactor)
+- Centralize the `IconKey → lucide component` map currently inline in `ProductDetail.tsx` so both `ProductDetail` and the new grid use one source. Update `ProductDetail.tsx` to import it (no behaviour change). Add the new icons to the map.
 
-**Integration (`src/components/home/HomeStats.tsx`):**
-- In the SSO sub-card, keep `sso.caption` eyebrow + `sso.title`. Replace the `<p>{t(sso.description)}</p>` with: a short one-line lead + `<OneAccountApps />`.
+### 4.3 New ecosystem entries (`src/content/ecosystem.ts`)
+- Append 3 entries with **mock bilingual content** + `logo`:
+  - **KidMentor** — slug `kidmentor`, category `learning-ai`, icon `graduation`, logo `/img/logos/kidmentor.png`. Mock copy: an AI learning companion for children.
+  - **PTalk Signature** — slug `ptalk-signature`, category `ai-voice`, icon `signature`, logo `/img/logos/ptalk-signature.png`. Mock copy: the signature voice-assistant experience.
+  - **P-Connect** — slug `p-connect`, category `connectivity`, icon `bluetooth`, logo `/img/logos/p-connect.png`. Mock copy: connects the lab's assistant devices (Bluetooth).
+- Each entry has the same shape as existing apps (name, slug, year, category, categoryLabel, icon, excerpt, description, features, tags, downloadHref `#`, image). For `image`, point to the logo path for now (or an existing placeholder) so detail pages and the "Hệ sinh thái" cards render without a broken image.
 
-**Strings (`src/content/sso.ts` or `src/content/ui.ts`):**
-- Add a short bilingual lead (e.g. EN "One account for every CTS Lab app." / VI "Một tài khoản cho mọi ứng dụng CTS Lab.") and the "…và hơn thế nữa." / "…and more." label. The long `sso.description` stays in the data (it may still be used elsewhere) but is no longer rendered in this block.
+### 4.4 Grid component (`src/components/home/OneAccountApps.tsx`, new)
+- Reads `getProducts()`; renders a responsive grid of all apps.
+- Each tile: a framed square showing `<Image src={app.logo}>` when `app.logo` is set, else the app icon (from the shared map); the app **name**; wrapped in `<Link href={'/products/' + app.slug}>` with hover lift; bilingual `alt`/labels.
+- A trailing "…và hơn thế nữa." / "…and more." label.
+
+### 4.5 Integration (`src/components/home/HomeStats.tsx`)
+- In the SSO sub-card: keep `sso.caption` eyebrow + `sso.title`; replace `<p>{t(sso.description)}</p>` with a short one-line lead + `<OneAccountApps />`.
+
+### 4.6 Strings
+- Add a short bilingual lead + the "…và hơn thế nữa." label (in `sso.ts` or `ui.ts`). The long `sso.description` stays in data (unused in this block).
 
 ## 5. Behaviour & quality
-
-- **Fallback:** missing `logo` → render the app icon (no broken `<img>`). Decide "has logo" by the presence of `app.logo` (string set) — the user sets the field when they add the file; if they prefer zero-config, the component may instead always try the logo path and let `<Image>` error to the icon, but the explicit field is simpler and SSR-safe.
-- **Accessibility:** each tile is a real link with an accessible name (app name); logo `<Image>` has bilingual `alt`; icon fallback is `aria-hidden` with the visible name carrying the label.
-- **Responsive:** grid reflows (e.g. 2 cols mobile → 4 cols desktop); the "…và hơn thế nữa." item wraps cleanly.
-- **Motion:** reuse the existing `Reveal`/`Stagger` pattern; respects reduced motion via the existing components.
-- **Bilingual:** all visible text via `t(...)`.
-- No new dependencies; existing tokens only.
+- **Fallback:** missing `logo` → app icon (no broken `<img>`).
+- **Accessibility:** tiles are real links named by the app; logo `<Image>` has bilingual `alt`; icon fallback `aria-hidden` with the visible name as the label.
+- **Responsive:** grid reflows (≈2 cols mobile → 4 desktop) for 7 tiles + the "more" label.
+- **Motion:** reuse `Reveal`/`Stagger`; respects reduced motion.
+- **Bilingual** throughout; existing tokens only; no new dependencies.
+- **Mock content is clearly serviceable** (no "lorem ipsum"); written as plausible placeholder so detail pages don't look broken.
 
 ## 6. Out of scope
-- Real logo asset creation (user provides; icon fallback covers the gap).
-- Changing the product detail pages or the `EcosystemBento` section (which already shows app cards) — this is only the "Một tài khoản" block.
-- A dedicated Vision Tale image (still reuses VietCreative's — unrelated to this logo grid).
+- Final marketing copy for the 3 new apps (mock now; real copy later).
+- Transparent/branded logos for all 7 (background logos used temporarily; 4 apps use icon fallback until assets arrive).
+- The KidMentor "đặt thiết bị vật lý" block (that is item 3.5 — a separate quick win).
+- Changes to `EcosystemBento` beyond what naturally follows from the data gaining 3 apps.
 
 ## 7. Testing
-- **Manual/live:** the SSO block shows the four app tiles; each links to the correct `/products/<slug>`; tiles with no logo file show the icon fallback (no broken image); reflows on mobile; VI/EN labels correct. Verified via `npm run build` + `pm2 restart cts-redesign` + a click-through.
-- No new pure-logic unit needed (the icon-mapping reuse and link composition are declarative); if a small helper is introduced (e.g. resolving logo-or-icon), it gets a Vitest unit per the repo pattern.
+- **Unit (Vitest):** the existing `products`/`showcase` content tests already validate data shape; if a `logo-or-icon` resolver helper is introduced, add a small unit (in/out logo present). Extend the products test to assert the 3 new slugs exist and resolve.
+- **Manual/live:** SSO block shows 7 tiles; the 3 new apps show their logos, the other 4 show icons; every tile links to the correct `/products/<slug>`; the 3 new detail pages render with mock content; `/products` + "Hệ sinh thái" now list 7 apps; mobile reflow OK; VI/EN correct. Verified via `npm run build` + `pm2 restart cts-redesign` + click-through.
