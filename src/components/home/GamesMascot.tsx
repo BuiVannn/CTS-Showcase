@@ -51,7 +51,7 @@ export default function GamesMascot() {
       ref={rootRef}
       aria-hidden
       viewBox="0 0 120 120"
-      className="h-20 w-20 shrink-0 text-blue"
+      className="hidden h-20 w-20 shrink-0 text-blue sm:block"
       style={{ animation: reduce ? undefined : "mascot-bob 2.8s ease-in-out infinite" }}
     >
       {/* antenna */}
