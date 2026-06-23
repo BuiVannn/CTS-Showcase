@@ -139,4 +139,27 @@ export const ui = {
       vi: "Mục này đang được hoàn thiện — quay lại sau nhé.",
     } as Localized,
   },
+  whatWeDo: {
+    eyebrow: { en: "What we build", vi: "Chúng tôi làm gì" } as Localized,
+    title: { en: "Four ways we make learning physical", vi: "Bốn cách biến bài học thành điều chạm được" } as Localized,
+    lead: {
+      en: "Robots, immersive worlds, AI tools, and games — built so students learn by doing.",
+      vi: "Robot, thế giới nhập vai, công cụ AI và games — tạo ra để học sinh học bằng cách làm.",
+    } as Localized,
+    pillars: [
+      { key: "robot", title: { en: "Robots", vi: "Robot" } as Localized, desc: { en: "Hands-on STEM hardware", vi: "Phần cứng STEM thực hành" } as Localized },
+      { key: "vr", title: { en: "VR worlds", vi: "Thế giới VR" } as Localized, desc: { en: "360° campus & labs", vi: "Khuôn viên & phòng lab 360°" } as Localized },
+      { key: "ai", title: { en: "AI tools", vi: "Công cụ AI" } as Localized, desc: { en: "Voice & learning companions", vi: "Trợ lý giọng nói & học tập" } as Localized },
+      { key: "games", title: { en: "Games", vi: "Games" } as Localized, desc: { en: "Play-to-learn experiences", vi: "Học qua trò chơi" } as Localized },
+    ],
+  },
+  gamesTeaser: {
+    eyebrow: { en: "Play", vi: "Chơi" } as Localized,
+    title: { en: "The lab's games hub", vi: "Khu game của lab" } as Localized,
+    lead: {
+      en: "Browse and play the games we build — rolling out soon.",
+      vi: "Duyệt và chơi những game lab tạo ra — sắp ra mắt.",
+    } as Localized,
+    cta: { en: "Open Games", vi: "Vào khu Games" } as Localized,
+  },
 };
