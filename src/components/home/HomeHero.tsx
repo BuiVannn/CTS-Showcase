@@ -14,6 +14,7 @@ import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import SplitText from "@/components/ui/SplitText";
 import Magnetic from "@/components/ui/Magnetic";
+import Scramble from "@/components/ui/Scramble";
 
 export default function HomeHero() {
   const { t } = useLocale();
@@ -89,7 +90,7 @@ export default function HomeHero() {
                 </span>
                 <span className="font-mono absolute bottom-3 left-3.5 text-[0.6rem] tracking-wider text-white/90">PTIT · VR</span>
               </div>
-              <div className="font-mono mt-5 text-[0.7rem] tracking-wider text-blue">{"// "}{t(ui.home.vrCardLabel)}</div>
+              <div className="font-mono mt-5 text-[0.7rem] tracking-wider text-blue">{"// "}<Scramble text={t(ui.home.vrCardLabel)} /></div>
               <h2 className="text-display mt-1.5 text-xl text-ink sm:text-2xl">{t(ui.home.vrCardTitle)}</h2>
               <p className="mt-2.5 text-sm leading-relaxed text-ink-2 sm:text-base">{t(ui.home.vrCardBlurb)}</p>
               <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-blue">
