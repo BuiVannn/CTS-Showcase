@@ -79,6 +79,7 @@ export default function HomeHero() {
             <Link
               href="/vr-tour"
               className="group block rounded-[var(--radius-lg)] border border-border bg-card p-6 shadow-[var(--shadow-lg)] transition-transform duration-300 hover:-translate-y-1 sm:p-7"
+              data-cursor="Xem"
             >
               <div className="relative h-56 overflow-hidden rounded-[var(--radius-md)] border border-border sm:h-64 lg:h-80">
                 <Image src="/img/vr.jpg" alt={t(ui.home.vrCardTitle)} fill sizes="(max-width: 1024px) 100vw, 52vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />

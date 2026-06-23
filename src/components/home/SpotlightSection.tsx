@@ -41,7 +41,7 @@ function Stage({
   effects: boolean;
 }) {
   return (
-    <div className="relative overflow-hidden rounded-[var(--radius-lg)] border border-border bg-card p-3 shadow-[var(--shadow-lg)]">
+    <div className="relative overflow-hidden rounded-[var(--radius-lg)] border border-border bg-card p-3 shadow-[var(--shadow-lg)]" data-cursor="Kéo">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"

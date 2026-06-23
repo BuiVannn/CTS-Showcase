@@ -48,6 +48,7 @@ export default function DemoVideo({
           onClick={() => setPlaying(true)}
           aria-label={title}
           className="group absolute inset-0 h-full w-full cursor-pointer"
+          data-cursor="Play"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
