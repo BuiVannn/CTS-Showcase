@@ -13,7 +13,7 @@ export default function SectionHeader({
     <div className="mb-8 flex items-end justify-between gap-4">
       <div>
         <span className="eyebrow">{eyebrow}</span>
-        <h2 className="text-section mt-2 text-ink">{title}</h2>
+        <h2 className="text-section mt-3 text-ink">{title}</h2>
       </div>
       {cta && (
         <Link href={cta.href} className="shrink-0 text-sm font-semibold text-blue hover:underline">
