@@ -9,6 +9,7 @@ import Container from "@/components/ui/Container";
 import StatBand from "@/components/ui/StatBand";
 import Reveal from "@/components/ui/Reveal";
 import AmbientField from "@/components/fx/AmbientField";
+import OneAccountApps from "@/components/home/OneAccountApps";
 
 export default function HomeStats() {
   const { t } = useLocale();
@@ -31,7 +32,7 @@ export default function HomeStats() {
           <div className="mt-6 rounded-[var(--radius-lg)] border border-border bg-surface p-7 sm:p-10">
             <span className="eyebrow">{t(sso.caption)}</span>
             <h2 className="text-section mt-3 text-ink">{t(sso.title)}</h2>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-2">{t(sso.description)}</p>
+            <OneAccountApps />
           </div>
         </Reveal>
       </Container>
