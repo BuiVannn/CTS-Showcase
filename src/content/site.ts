@@ -24,7 +24,7 @@ export const site: SiteConfig = {
   },
   signature: "CTS Lab, PTIT",
   contact: {
-    email: "contact@cts.ptit.edu.vn",
+    email: "info@ctslab.net",
     phone: "035 735 3236",
     address: {
       en: "Posts & Telecommunications Institute of Technology, Km10 Nguyen Trai, Ha Dong, Hanoi",
@@ -35,7 +35,7 @@ export const site: SiteConfig = {
     github: "https://github.com/cts",
     facebook: "https://facebook.com/cts",
     youtube: "https://youtube.com/@cts",
-    email: "contact@cts.ptit.edu.vn",
+    email: "info@ctslab.net",
   },
   nav: [
     { id: "/", label: { en: "Home", vi: "Trang chủ" } },

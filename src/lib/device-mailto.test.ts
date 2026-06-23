@@ -3,9 +3,9 @@ import { deviceMailto } from "./device-mailto";
 
 describe("deviceMailto", () => {
   it("builds a mailto with the encoded subject", () => {
-    const href = deviceMailto("contact@cts.ptit.edu.vn", "Đặt thiết bị:", "KidMentor");
+    const href = deviceMailto("info@ctslab.net", "Đặt thiết bị:", "KidMentor");
     expect(href).toBe(
-      "mailto:contact@cts.ptit.edu.vn?subject=" + encodeURIComponent("Đặt thiết bị: KidMentor")
+      "mailto:info@ctslab.net?subject=" + encodeURIComponent("Đặt thiết bị: KidMentor")
     );
   });
   it("encodes spaces in the subject", () => {
