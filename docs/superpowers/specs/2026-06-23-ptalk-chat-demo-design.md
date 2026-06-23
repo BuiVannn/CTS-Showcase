@@ -2,35 +2,36 @@
 
 **Date:** 2026-06-23
 **Status:** Draft for review (updated: backend = local PTalk RAG)
-**Scope:** Add a **login-gated text chat demo** beside the PTalk 3D model on the home page. A signed-in visitor types a question; the website (server-side) calls the lab's **local PTalk RAG** (retrieve from the knowledge base, then generate with Gemma) and shows the answer. Usage is capped per account per day (SQLite). A visible note states the demo chat isn't saved. **Excludes** voice/STT/TTS, anonymous access, streaming, and any new RAG building.
+**Scope:** Add a **login-gated text chat demo** beside the PTalk 3D model on the home page. A signed-in visitor types a question; the website (server-side) **retrieves context from the lab's local PTalk RAG**, then **generates the answer via the DeepSeek API** (a free model) — deliberately NOT the local Gemma, so the web demo never competes for the GPU that the production apps rely on. Usage is capped per account per day (SQLite). A visible note states the demo chat isn't saved. **Excludes** voice/STT/TTS, anonymous access, streaming, and any new RAG building.
 
 ---
 
 ## 1. Goal
 
-Let visitors experience PTalk's actual brain on ctslab.net: ask a question, get an answer grounded in the lab's education knowledge base — without exposing keys, and with a daily per-account cap to control load.
+Let visitors experience PTalk's actual knowledge on ctslab.net: ask a question, get an answer grounded in the lab's education knowledge base — without exposing keys, without loading the production GPU, and with a daily per-account cap.
 
 ## 2. Key technical finding (verified, de-risked)
 
-The ctslab web server runs on the **same machine** as the whole PTalk stack, and every backend is reachable from it (verified with live `curl`):
+The ctslab web server runs on the **same machine** as the PTalk RAG stack, so retrieval is a local call (verified with live `curl`). Generation is offloaded to the **DeepSeek cloud API** so it never contends with the local Gemma that real app users hit.
 
-| Backend | Address | Role | Reachable |
+| Backend | Address | Role | Status |
 |---|---|---|---|
-| **PTalk RAG server** (`rag_server.py`) | `http://localhost:8888` | retrieval over Qdrant + Neo4j + Postgres → returns `context` | ✅ health 200 |
-| **Gemma-4** (LLM) | `http://localhost:8080/v1/chat/completions` | generates the answer (OpenAI-compatible) | ✅ 401 (reachable; key required) |
+| **PTalk RAG server** (`rag_server.py`) | `http://localhost:8888/v2/rag/retrieve` | retrieval over Qdrant + Neo4j + Postgres → returns `context` | ✅ local, health 200 |
 | Qdrant (vector DB) | `localhost:6333` | knowledge vectors (used by rag_server) | ✅ 200 |
+| **DeepSeek API** | `https://api.deepseek.com/chat/completions` (config) | generates the answer (OpenAI-compatible, free model) | key provided by user |
+| ~~Gemma-4~~ | `localhost:8080` | production LLM — **intentionally NOT used** by the web demo (avoid contention) | — |
 
-**Chosen backend (settled with user): the local PTalk RAG — two steps:**
-1. **Retrieve:** `POST http://localhost:8888/v2/rag/retrieve` body `{ "query": <question>, "session_id": <userId> }` → `{ context: string, intent: object, sources: array }`.
-2. **Generate:** `POST http://localhost:8080/v1/chat/completions` with `Authorization: Bearer <gemma key>`, body `{ model: "gemma-4", messages: [ {role:"system", content: <grounding + context>}, {role:"user", content: <question>} ], temperature: 0.3, max_tokens: 320 }` → `data.choices[0].message.content`.
+**Chosen flow (settled with user): local RAG retrieval + DeepSeek generation — two steps:**
+1. **Retrieve:** `POST http://localhost:8888/v2/rag/retrieve` body `{ "query": <question>, "session_id": <userId> }` → `{ context: string, intent: object, sources: array }`. (Contract confirmed from `CloudPTalk/rag_server.py`.)
+2. **Generate:** `POST https://api.deepseek.com/chat/completions` with `Authorization: Bearer <DEEPSEEK_KEY>`, body `{ model: <free model>, messages: [ {role:"system", content: <grounding + context>}, {role:"user", content: <question>} ], temperature: 0.3, max_tokens: 320 }` → `data.choices[0].message.content`. (OpenAI-compatible; the Dashboard's `api/rag-query/route.ts` is a proven Next.js precedent for this same chat-completions shape.)
 
-(Contract confirmed from `CloudPTalk/rag_server.py`: `/v2/rag/retrieve` shape + its own `call_gemma` payload — model `gemma-4`, Bearer key, OpenAI chat format. Dashboard's `api/rag-query/route.ts` is a proven Next.js precedent for the Gemma call.)
+This means **no RAG is built on the website** — it orchestrates one local retrieval + one cloud generation call, server-side. The production Gemma is untouched; all keys stay server-only.
 
-This means **no RAG is built on the website** — it orchestrates two local HTTP calls server-side. Faster than a public dependency; the keys stay server-only.
+> **User to confirm (for `.env.local`):** the exact DeepSeek **endpoint base** (`https://api.deepseek.com/chat/completions` for the official API, or another OpenAI-compatible base if the "free model" is via a different provider) and the **model name** of the free model. The key the user already created goes in `PTALK_LLM_KEY`.
 
 ## 3. Decisions (settled with the user)
 
-- **Backend:** local PTalk RAG (`rag_server :8888` retrieve → `Gemma :8080` generate). Not Dify, not raw-Gemma.
+- **Backend:** local PTalk RAG **retrieve** (`rag_server :8888`) → **DeepSeek API generate** (free model). The local Gemma is intentionally avoided so the demo never throttles the production apps. Not Dify.
 - **Login-gated:** only signed-in users (existing Authentik SSO) can chat; count **per account per day**.
 - **Storage:** **SQLite** (file, survives restart; `*.db` already git-ignored) — `usage(user_id, day, count)`.
 - **Daily limit:** default **8** (env-overridable, within the agreed 5–10).
@@ -40,10 +41,10 @@ This means **no RAG is built on the website** — it orchestrates two local HTTP
 ## 4. Architecture & components
 
 ### 4.1 Env config (`.env.local`, documented in `.env.example`)
-- `PTALK_RAG_URL` (default `http://localhost:8888/v2/rag/retrieve`)
-- `PTALK_LLM_URL` (default `http://localhost:8080/v1/chat/completions`)
-- `PTALK_LLM_KEY` — Gemma gateway key (server-only; the local value is `gemma4-openclaw-2026`, kept in `.env.local`).
-- `PTALK_LLM_MODEL` (default `gemma-4`)
+- `PTALK_RAG_URL` (default `http://localhost:8888/v2/rag/retrieve`) — local RAG retrieval.
+- `PTALK_LLM_URL` (default `https://api.deepseek.com/chat/completions`) — DeepSeek (OpenAI-compatible) generation.
+- `PTALK_LLM_KEY` — **DeepSeek API key** (server-only; the user already created it; kept in `.env.local`, documented as a name only in `.env.example`).
+- `PTALK_LLM_MODEL` (default `deepseek-chat`) — the free model name the user specifies.
 - `PTALK_CHAT_DAILY_LIMIT` (default `8`)
 - `PTALK_USAGE_DB` (default `./data/ptalk-usage.db`)
 
@@ -62,7 +63,7 @@ This means **no RAG is built on the website** — it orchestrates two local HTTP
   2. **Validate:** `{ message: string }`; reject empty / > ~1000 chars → `400`.
   3. **Rate-limit:** `day = todayKey(new Date())`, `count = getUsage(userId, day)`; if `count >= DAILY_LIMIT` → `429 { error: "limit", remaining: 0 }`.
   4. **Retrieve:** `POST PTALK_RAG_URL { query: message, session_id: userId }` (timeout ~8s). On failure, proceed with empty context (graceful — Gemma still answers) but log it.
-  5. **Generate:** `POST PTALK_LLM_URL` (Bearer `PTALK_LLM_KEY`) with the grounding system prompt + retrieved `context` + the user question (timeout ~30s). Grounding prompt (Vietnamese, concise): instruct it to answer as PTalk using the provided context, briefly, in the user's language, and to say it doesn't know if the context lacks the answer.
+  5. **Generate:** `POST PTALK_LLM_URL` (DeepSeek, Bearer `PTALK_LLM_KEY`, model `PTALK_LLM_MODEL`) with the grounding system prompt + retrieved `context` + the user question (timeout ~30s — cloud call). Grounding prompt (Vietnamese, concise): instruct it to answer as PTalk using the provided context, briefly, in the user's language, and to say it doesn't know if the context lacks the answer.
   6. On success: `incrementUsage(userId, day)`; return `200 { answer, remaining }`.
   7. On generate error/timeout: `502 { error: "upstream" }` (do **not** increment).
 - Keys read server-side only; generic error codes (no upstream details leaked).
@@ -85,10 +86,11 @@ This means **no RAG is built on the website** — it orchestrates two local HTTP
 - New `ui.ptalkChat` block (`Localized`): intro line, `placeholder`, `send`, `signInPrompt`, `signInCta`, `quota` (interpolate n), `limitReached`, `error`, `privacyNote`, `thinking`.
 
 ## 5. Behaviour & quality
-- **Security:** the Gemma key is server-only (env), never in client bundles or responses. The route gates on a real session; the per-user counter caps load. Generic error codes.
+- **Security:** the DeepSeek key is server-only (env), never in client bundles or responses. The route gates on a real session; the per-user counter caps cost/load. Generic error codes.
 - **Privacy:** the website stores no chat content — only an integer per user/day. The visible note says so.
-- **Rate limit:** enforced server-side (the client quota line is advisory). Per account per calendar day (Asia/Ho_Chi_Minh).
-- **Resilience:** retrieve failure → still answers (empty context); generate failure → graceful 502, no increment; the rest of the home page is unaffected (chat is an isolated island). All upstream calls are localhost (low latency).
+- **Rate limit:** enforced server-side (the client quota line is advisory). Per account per calendar day (Asia/Ho_Chi_Minh). Caps DeepSeek spend.
+- **Production safety:** generation runs on DeepSeek (cloud), so the demo never competes for the local Gemma GPU that real apps use.
+- **Resilience:** retrieve failure → still answers (empty context); generate failure → graceful 502, no increment; the rest of the home page is unaffected (chat is an isolated island). Retrieval is localhost (fast); generation is a DeepSeek cloud call (~seconds), with a typing indicator while waiting.
 - **Accessibility:** labelled input; real send button; readable message region; focus states; reduced motion respected.
 - **Bilingual**; existing tokens; no `eslint-disable`; no `react-hooks/set-state-in-effect`.
 
@@ -105,4 +107,4 @@ This means **no RAG is built on the website** — it orchestrates two local HTTP
   - `todayKey(new Date("2026-06-23T20:00:00Z"))` → correct `YYYY-MM-DD` for Asia/Ho_Chi_Minh (boundary check around midnight).
   - `getUsage`/`incrementUsage` against a temp/`:memory:` DB: increments, isolates per `user_id`+`day`, `remaining` math.
 - **Route limit logic:** a thin testable helper (`remaining`, `limitReached`) unit-tested; the upstream fetches exercised manually.
-- **Manual/live (keys are local, already reachable):** signed-out → sign-in state; signed-in → ask a question → grounded answer appears (verify it reflects retrieved context); quota decrements; after the limit → friendly block; privacy note visible; refresh clears conversation; mobile reflow OK; the Gemma key never appears in page source / network body. Verified via `npm run build` + `pm2 restart cts-redesign`.
+- **Manual/live (after the user sets `PTALK_LLM_KEY`/model in `.env.local`):** signed-out → sign-in state; signed-in → ask a question → grounded answer appears (verify it reflects retrieved local-RAG context); quota decrements; after the limit → friendly block; privacy note visible; refresh clears conversation; mobile reflow OK; the DeepSeek key never appears in page source / network body. Verified via `npm run build` + `pm2 restart cts-redesign`.
