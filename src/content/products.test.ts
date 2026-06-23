@@ -15,10 +15,15 @@ describe("getProduct", () => {
     expect(getProduct("does-not-exist")).toBeUndefined();
   });
   it("includes the three new apps with logos", () => {
-    for (const slug of ["kidmentor", "ptalk-signature", "p-connect"]) {
+    const slugLogoMap: Record<string, string> = {
+      kidmentor: "/img/logos/logo_kidmentor.png",
+      "ptalk-signature": "/img/logos/logo_ptalk_signature.png",
+      "p-connect": "/img/logos/logo_p_connect.png",
+    };
+    for (const [slug, expectedLogo] of Object.entries(slugLogoMap)) {
       const app = getProduct(slug);
       expect(app, `missing app: ${slug}`).toBeDefined();
-      expect(app?.logo).toBe(`/img/logos/${slug}.png`);
+      expect(app?.logo).toBe(expectedLogo);
     }
   });
 });

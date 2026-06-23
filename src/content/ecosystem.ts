@@ -176,7 +176,7 @@ export const ecosystem: EcosystemApp[] = [
     // image = existing placeholder so /products + Hệ sinh thái cards never break;
     // logo = convention path the user drops a file at (grid shows it when present).
     image: { src: "/img/1account.png", alt: { en: "KidMentor", vi: "KidMentor" } },
-    logo: "/img/logos/kidmentor.png",
+    logo: "/img/logos/logo_kidmentor.png",
   },
   {
     id: "ptalk-signature",
@@ -209,7 +209,7 @@ export const ecosystem: EcosystemApp[] = [
     tags: { en: ["AI", "Voice", "Assistant"], vi: ["AI", "Giọng nói", "Trợ lý"] },
     downloadHref: "#",
     image: { src: "/img/1account.png", alt: { en: "PTalk Signature", vi: "PTalk Signature" } },
-    logo: "/img/logos/ptalk-signature.png",
+    logo: "/img/logos/logo_ptalk_signature.png",
   },
   {
     id: "p-connect",
@@ -242,6 +242,6 @@ export const ecosystem: EcosystemApp[] = [
     tags: { en: ["Bluetooth", "Devices", "Connectivity"], vi: ["Bluetooth", "Thiết bị", "Kết nối"] },
     downloadHref: "#",
     image: { src: "/img/1account.png", alt: { en: "P-Connect", vi: "P-Connect" } },
-    logo: "/img/logos/p-connect.png",
+    logo: "/img/logos/logo_p_connect.png",
   },
 ];
