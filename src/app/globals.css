@@ -177,3 +177,8 @@ body {
    caret in editable fields. */
 html.cursor-none, html.cursor-none * { cursor: none; }
 html.cursor-none input, html.cursor-none textarea, html.cursor-none [contenteditable="true"] { cursor: text; }
+
+@keyframes mascot-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
