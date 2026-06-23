@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HomeHero from "@/components/home/HomeHero";
+import WhatWeDo from "@/components/home/WhatWeDo";
 import SpotlightSection from "@/components/home/SpotlightSection";
 import HomeStats from "@/components/home/HomeStats";
 import ShowcaseSection from "@/components/home/ShowcaseSection";
@@ -14,6 +15,7 @@ export default function Home() {
       <Navbar />
       <main className="relative">
         <HomeHero />
+        <WhatWeDo />
         <SpotlightSection />
         <HomeStats />
         <ShowcaseSection />
