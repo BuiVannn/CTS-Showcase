@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import AmbientField from "@/components/fx/AmbientField";
 import { Play, ArrowRight } from "lucide-react";
 import { useLocale } from "@/lib/locale";
 import { site } from "@/content/site";
@@ -21,11 +22,8 @@ export default function HomeHero() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
 
   // Multi-layer parallax (disabled under reduced motion via the conditional styles below).
-  const yGrid = useTransform(scrollYProgress, [0, 1], [0, 80]);
-  const yGlow = useTransform(scrollYProgress, [0, 1], [0, 140]);
   const yCopy = useTransform(scrollYProgress, [0, 1], [0, 40]);
   const yCard = useTransform(scrollYProgress, [0, 1], [0, -30]);
-  const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   const rise = (delay: number) =>
     reduce
@@ -38,22 +36,7 @@ export default function HomeHero() {
 
   return (
     <section ref={ref} className="relative overflow-hidden pt-24 pb-20 lg:pt-28 lg:pb-28">
-      {/* Tech atmosphere: faint grid + soft brand glows (parallax layers) */}
-      <motion.div aria-hidden className="pointer-events-none absolute inset-0 -z-10" style={reduce ? undefined : { opacity: fade }}>
-        <motion.div
-          className="absolute inset-0 opacity-60"
-          style={{
-            backgroundImage:
-              "linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-            maskImage: "radial-gradient(115% 80% at 50% 0%, #000 25%, transparent 75%)",
-            WebkitMaskImage: "radial-gradient(115% 80% at 50% 0%, #000 25%, transparent 75%)",
-            ...(reduce ? {} : { y: yGrid }),
-          }}
-        />
-        <motion.div className="absolute -top-24 right-[6%] h-72 w-72 rounded-full blur-[90px]" style={{ background: "var(--blue-soft)", ...(reduce ? {} : { y: yGlow }) }} />
-        <motion.div className="absolute top-52 -left-12 h-64 w-64 rounded-full blur-[100px]" style={{ background: "var(--red-soft)", ...(reduce ? {} : { y: yGlow }) }} />
-      </motion.div>
+      <AmbientField tone="cool" />
 
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.1fr]">
