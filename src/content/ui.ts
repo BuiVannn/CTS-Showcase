@@ -209,4 +209,29 @@ export const ui = {
     } as Localized,
     cta: { en: "Open Games", vi: "Vào khu Games" } as Localized,
   },
+  ptalkChat: {
+    intro: { en: "Ask PTalk", vi: "Hỏi thử PTalk" } as Localized,
+    placeholder: { en: "Type a question…", vi: "Nhập câu hỏi…" } as Localized,
+    send: { en: "Send", vi: "Gửi" } as Localized,
+    emptyHint: {
+      en: "Ask about learning, CTS products, or anything PTalk knows.",
+      vi: "Hỏi về học tập, sản phẩm CTS, hay bất cứ điều gì PTalk biết.",
+    } as Localized,
+    signInPrompt: {
+      en: "Sign in to try chatting with PTalk.",
+      vi: "Đăng nhập để chat thử với PTalk.",
+    } as Localized,
+    signInCta: { en: "Sign in", vi: "Đăng nhập" } as Localized,
+    quota: { en: "{n} tries left today", vi: "Còn {n} lượt hôm nay" } as Localized,
+    limitReached: {
+      en: "You've used all your tries today. Come back tomorrow!",
+      vi: "Bạn đã dùng hết lượt thử hôm nay. Quay lại vào ngày mai nhé!",
+    } as Localized,
+    error: { en: "PTalk is busy — please try again.", vi: "PTalk đang bận, thử lại sau giây lát." } as Localized,
+    privacyNote: {
+      en: "This demo chat isn't saved.",
+      vi: "Đoạn chat thử này không được lưu lại.",
+    } as Localized,
+    thinking: { en: "PTalk is thinking…", vi: "PTalk đang trả lời…" } as Localized,
+  },
 };
