@@ -32,12 +32,21 @@ A student signs in, submits their WebGL game, and sees "pending review". An admi
 
 ## 4. Architecture & components
 
+### 4.0 Env config (all limits adjustable without code changes)
+All thresholds are env vars with the agreed defaults (documented in `.env.example`; real values overridable in `.env.local`):
+- `GAMES_MAX_UNCOMPRESSED_MB` (default `300`) — total size after extraction.
+- `GAMES_MAX_FILES` (default `2000`) — entry count per zip.
+- `GAMES_MAX_FILE_MB` (default `100`) — largest single extracted file.
+- `GAMES_MAX_PENDING_PER_USER` (default `3`).
+- `GAMES_MAX_TOTAL_PER_USER` (default `10`).
+- (existing from 2a: `GAMES_MAX_UPLOAD_MB` (default `100`) — compressed zip size; `GAMES_ORIGIN`, `GAMES_STORAGE_DIR`, `GAMES_DB`.)
+
 ### 4.1 Data model (`src/lib/games-db.ts`, extend)
 - Add columns: `owner_id TEXT`, `owner_email TEXT`, and use `status` ∈ `{ "pending", "published", "rejected" }`. (Migration: `ALTER TABLE ... ADD COLUMN` guarded by a `PRAGMA table_info` check, or recreate-if-missing — implement a tiny idempotent migration in `createGamesStore`.)
 - New accessors: `listByStatus(status)`, `listByOwner(ownerId)`, `countByOwner(ownerId, status?)`, `setStatus(slug, status)`. `getCatalog()` continues to show only `published`.
 
 ### 4.2 Zip-bomb limits (`src/lib/game-upload.ts`, extend `safeExtractZip`)
-- Add an options arg `limits?: { maxTotalBytes; maxFiles; maxFileBytes }`. **Before writing anything**, sum each entry's uncompressed size (`entry.header.size`) and count; if total > `maxTotalBytes`, files > `maxFiles`, or any single entry > `maxFileBytes` → return `{ ok:false, error:"too-big-uncompressed" }`. Defaults from env. Unit-tested with a crafted high-ratio entry set (assert rejection without writing).
+- Add an options arg `limits?: { maxTotalBytes; maxFiles; maxFileBytes }`. **Before writing anything**, sum each entry's uncompressed size (`entry.header.size`) and count; if total > `maxTotalBytes`, files > `maxFiles`, or any single entry > `maxFileBytes` → return `{ ok:false, error:"too-big-uncompressed" }`. Caller passes limits from env (defaults 300 MB / 2000 files / 100 MB per file — see §4.0). Unit-tested with a crafted high-ratio entry set (assert rejection without writing).
 
 ### 4.3 Quota (`src/lib/games-db.ts` counts + route check)
 - Env: `GAMES_MAX_PENDING_PER_USER` (default 3), `GAMES_MAX_TOTAL_PER_USER` (default 10). On submit: if `countByOwner(uid,"pending") >= maxPending` or `countByOwner(uid) >= maxTotal` → `429 { error:"quota" }`.
