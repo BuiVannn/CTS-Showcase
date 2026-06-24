@@ -67,7 +67,7 @@ const sceneGroups = [
     ]
   },
   {
-    "title": "Trung tâm IEC",
+    "title": "Trung tâm CIE",
     "scenes": [
       "scene_gpbk2224_1773131289876"
     ]
