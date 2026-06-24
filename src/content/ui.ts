@@ -135,6 +135,13 @@ export const ui = {
     eyebrow: { en: "PTIT Virtual Tour", vi: "Tham quan ảo PTIT" } as Localized,
     loading: { en: "Loading the 360° campus experience…", vi: "Đang tải trải nghiệm khuôn viên 360°…" } as Localized,
     back: { en: "Back", vi: "Quay lại" } as Localized,
+    backHome: { en: "Back", vi: "Quay lại" } as Localized,
+    backToCampus: { en: "Main campus", vi: "Khuôn viên chính" } as Localized,
+    entryTitle: { en: "360° experience", vi: "Trải nghiệm 360°" } as Localized,
+    entryLead: { en: "Tour the PTIT campus in virtual reality.", vi: "Tham quan khuôn viên PTIT bằng thực tế ảo." } as Localized,
+    enter: { en: "Start", vi: "Bắt đầu" } as Localized,
+    statusCampus: { en: "PTIT CAMPUS · 360°", vi: "KHUÔN VIÊN PTIT · 360°" } as Localized,
+    statusCie: { en: "CIE CENTER · 360°", vi: "TRUNG TÂM CIE · 360°" } as Localized,
   },
   home: {
     heroEyebrow: { en: "Learn · Create · Play ecosystem", vi: "Hệ sinh thái Học · Sáng tạo · Chơi" } as Localized,
