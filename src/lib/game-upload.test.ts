@@ -1,10 +1,25 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { mkdtempSync, rmSync, existsSync } from "node:fs";
+import { mkdtempSync, rmSync, existsSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { randomUUID } from "node:crypto";
 import AdmZip from "adm-zip";
-import { slugify, resolveInside, safeExtractZip } from "./game-upload";
+import { slugify, resolveInside, safeExtractZip, injectViewerCss } from "./game-upload";
+
+describe("injectViewerCss", () => {
+  it("inserts the fit stylesheet before </head>", () => {
+    const out = injectViewerCss("<html><head><title>g</title></head><body></body></html>");
+    expect(out).toContain('id="cts-viewer-fit"');
+    expect(out.indexOf("cts-viewer-fit")).toBeLessThan(out.indexOf("</head>"));
+  });
+  it("is idempotent", () => {
+    const once = injectViewerCss("<html><head></head></html>");
+    expect(injectViewerCss(once)).toBe(once);
+  });
+  it("still injects when there is no <head>", () => {
+    expect(injectViewerCss("<body>x</body>")).toContain("cts-viewer-fit");
+  });
+});
 
 describe("slugify", () => {
   it("strips Vietnamese diacritics to ascii dashes", () => {
@@ -130,6 +145,19 @@ describe("safeExtractZip (end-to-end extraction)", () => {
     const result = safeExtractZip(zip.toBuffer(), dest);
     expect(result).toEqual({ ok: true });
     expect(existsSync(join(dest, "index.html"))).toBe(true);
+  });
+
+  it("injects the viewer CSS into index.html and skips OS junk (.DS_Store)", () => {
+    const zip = new AdmZip();
+    zip.addFile("index.html", Buffer.from("<html><head></head><body></body></html>"));
+    zip.addFile(".DS_Store", Buffer.from("junk"));
+    zip.addFile("Build/app.data", Buffer.from("data"));
+    const dest = makeTmpDir();
+    const result = safeExtractZip(zip.toBuffer(), dest);
+    expect(result).toEqual({ ok: true });
+    expect(readFileSync(join(dest, "index.html"), "utf8")).toContain('id="cts-viewer-fit"');
+    expect(existsSync(join(dest, ".DS_Store"))).toBe(false);
+    expect(existsSync(join(dest, "Build", "app.data"))).toBe(true);
   });
 
   it("rejects a zip with a path-traversal entry (../evil.txt) — no file written outside dest", () => {
