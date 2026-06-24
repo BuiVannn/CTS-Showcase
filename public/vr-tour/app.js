@@ -1489,6 +1489,14 @@ function initSidebar() {
              `;
              
              item.onclick = () => {
+                 // CIE opens its dedicated standalone sub-tour in the parent shell.
+                 if (scene.sceneName === 'scene_gpbk2224_1773131289876') {
+                     window.parent.postMessage(
+                         { type: 'cts-vr-load', src: '/vr-tour/vtour-cie/tour.html' },
+                         location.origin
+                     );
+                     return;
+                 }
                  krpano.call(`loadscene(${scene.sceneName}, null, MERGE, BLEND(1.0))`);
              };
              
