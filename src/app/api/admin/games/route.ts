@@ -4,7 +4,7 @@ import { rmSync } from "node:fs";
 import { resolve } from "node:path";
 import { auth } from "@/auth";
 import { getGamesStore } from "@/lib/games-db";
-import { slugify, safeExtractZip } from "@/lib/game-upload";
+import { slugify, safeExtractZip, resolveInside } from "@/lib/game-upload";
 
 export const runtime = "nodejs";
 
@@ -41,8 +41,8 @@ export async function POST(req: Request) {
   let slug = base;
   for (let i = 2; store.exists(slug); i++) slug = `${base}-${i}`;
 
-  const dest = resolve(STORAGE, slug);
-  if (!dest.startsWith(resolve(STORAGE))) {
+  const dest = resolveInside(STORAGE, slug);
+  if (!dest || dest === resolve(STORAGE)) {
     return NextResponse.json({ error: "bad" }, { status: 400 });
   }
 
@@ -64,8 +64,8 @@ export async function DELETE(req: Request) {
   if (!(await requireAdmin())) return NextResponse.json({ error: "forbidden" }, { status: 403 });
   const slug = new URL(req.url).searchParams.get("slug");
   if (!slug) return NextResponse.json({ error: "bad" }, { status: 400 });
-  const dest = resolve(STORAGE, slug);
-  if (dest.startsWith(resolve(STORAGE)) && dest !== resolve(STORAGE)) {
+  const dest = resolveInside(STORAGE, slug);
+  if (dest && dest !== resolve(STORAGE)) {
     try { rmSync(dest, { recursive: true, force: true }); } catch {}
   }
   getGamesStore().remove(slug);
