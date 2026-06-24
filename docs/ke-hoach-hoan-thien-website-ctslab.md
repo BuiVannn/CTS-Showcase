@@ -30,7 +30,7 @@ Các hạng mục sau đã được phát triển và đưa lên website hiện 
 
 ## 3. Các hạng mục đề xuất
 
-> **Tiến độ nhanh:** ✅ Đã xong: Đăng nhập/đăng ký (SSO), 3.1, 3.2, 3.4, 3.5, 3.6, 3.8 · 🟡 Phần lớn: 3.3, 3.7 (Game Hub đã có lát cắt 1: host + chơi game của lab) · ❌ Chưa làm: 3.9, 3.10, 3.11, 3.12.
+> **Tiến độ nhanh:** ✅ Đã xong: Đăng nhập/đăng ký (SSO), 3.1, 3.2, 3.4, 3.5, 3.6, 3.8 · 🟡 Phần lớn: 3.3, 3.7 (Game Hub: lát cắt 1 + 2a admin-upload + serving sandbox đã xong; 2b sinh viên tự nộp + duyệt đã có spec) · ❌ Chưa làm: 3.9, 3.10, 3.11, 3.12.
 
 ### 3.1 Khu "Một tài khoản" → lưới logo ứng dụng — ✅ ĐÃ XONG
 **Hiện trạng:** đã thay đoạn văn bằng lưới 7 ô app (3 logo thật + bổ sung 3 app KidMentor / PTalk Signature / P‑Connect), bấm ra trang chi tiết; có câu kết "…và hơn thế nữa."
@@ -54,7 +54,9 @@ Các hạng mục sau đã được phát triển và đưa lên website hiện 
 ### 3.6 Bổ sung số liệu nổi bật, tăng tính chuyên nghiệp — ✅ ĐÃ XONG (dải Impact 6 số có đếm động: 10.000+ người dùng, 25.000+ lượt tải, 30+ trường, …)
 **Đề xuất:** thêm **dải số liệu định vị** (người dùng, lượt tải, số trường/đối tác, số sản phẩm…) để tạo cảm giác quy mô và uy tín. Ưu tiên dùng **số liệu thật khi có**; với chỉ số chưa đo được thì dùng con số định hướng/khoảng hợp lý để giữ độ tin cậy.
 
-### 3.7 Khu Game Hub (mô hình giống itch.io) — 🟡 LÁT CẮT 1 ĐÃ XONG (host + chơi game của lab trên web, hub + trang chơi đã polish & song ngữ). CÒN LẠI: sinh viên đăng ký + tự upload/deploy + duyệt + sandbox (mục lớn, làm sau).
+### 3.7 Khu Game Hub (mô hình giống itch.io) — 🟡 ĐANG TRIỂN KHAI THEO LÁT CẮT
+**Đã xong:** **Lát cắt 1** (host + chơi game của lab, hub + trang chơi polish & song ngữ) · **Lát cắt 2a** (admin tải game lên qua form → giải nén an-toàn → **phục vụ sandbox từ origin tách `games.ctslab.net`**, tự vá khung game vừa màn). Đã xác minh kiến trúc bảo mật (origin tách, cookie host-only, chống path-traversal).
+**Đã có spec, chờ làm:** **Lát cắt 2b** (sinh viên tự nộp + **hàng đợi duyệt** + các tấm khiên: chống zip-bomb, quota, CSP frame-ancestors). **Sau nữa:** per-game subdomain `*.games.ctslab.net`, dashboard "game của tôi".
 **Đề xuất:** xây **khu Game Hub** nơi sinh viên ngành game **đăng ký tài khoản, tải lên và đăng (deploy) game** lên website và **chơi trực tiếp** trên trình duyệt.
 **Hướng triển khai:** cho phép tải lên bản build game (WebGL); game của người dùng được **chạy ở miền tách biệt (sandbox)** để bảo đảm an toàn cho website; có **bước duyệt** trước khi công khai. Đây là hạng mục lớn, nên xem như một sản phẩm con và làm theo từng bước.
 
