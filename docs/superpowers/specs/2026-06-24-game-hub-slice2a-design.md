@@ -20,7 +20,8 @@ A maintainer adds a new game without editing code or touching the server filesys
 - Slice **2a** = admin-only upload + sandboxed serving (trusted uploader; auto-published).
 - Serve user games from the **single subdomain** `games.ctslab.net` (per-game subdomains deferred to 2b).
 - Storage = local filesystem dir served by the :8090 static server.
-- **Defaults to confirm in review:** optional **cover image** allowed at 2a; max upload **60 MB**.
+- **DB:** SQLite (`better-sqlite3`), confirmed — fits the single-server scale; behind a repository seam so it's swappable later. Not a cloud DB (app + data are co-located; cloud would add latency + an external dependency for no benefit at this scale).
+- Optional **cover image** allowed at 2a; max upload **100 MB** (env-configurable; Unity WebGL builds can be large — note `formData()` buffers the upload in memory, fine for occasional admin uploads, stream later if needed).
 
 ## 4. Architecture & components
 
@@ -28,7 +29,7 @@ A maintainer adds a new game without editing code or touching the server filesys
 - `GAMES_ORIGIN` (default `https://games.ctslab.net`) — public origin for user-game iframes.
 - `GAMES_STORAGE_DIR` (default `/home/namnx/ctslab-games`) — extraction target (the :8090 server's root).
 - `GAMES_DB` (default `./data/games.db`) — SQLite.
-- `GAMES_MAX_UPLOAD_MB` (default `60`).
+- `GAMES_MAX_UPLOAD_MB` (default `100`).
 
 ### 4.2 Games DB (`src/lib/games-db.ts`, new — `better-sqlite3`, already a dep)
 - Table: `games(id TEXT PK, slug TEXT UNIQUE, title TEXT, author TEXT, cover TEXT NULL, status TEXT NOT NULL, created_at TEXT NOT NULL)`.
