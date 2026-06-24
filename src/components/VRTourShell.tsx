@@ -19,14 +19,19 @@ export default function VRTourShell() {
   const [mode, setMode] = useState<ViewerMode>(CAMPUS_MODE);
   const [ready, setReady] = useState(false);
   const [showEntry, setShowEntry] = useState(true);
-  const firstLoad = useRef(true);
+  // isFirstLoad drives the variant prop (render-safe state, not a ref).
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+  // Ref mirrors isFirstLoad so the onLoad callback can read the current value
+  // without a stale closure — it is never read during render.
+  const isFirstLoadRef = useRef(true);
 
   // Swap tours when the krpano app.js asks (same-origin, validated).
   useEffect(() => {
     function onMessage(event: MessageEvent) {
       const next = parseViewerMessage(event.data, event.origin, window.location.origin);
       if (!next || next.src === mode.src) return;
-      firstLoad.current = false;
+      isFirstLoadRef.current = false;
+      setIsFirstLoad(false);
       setMode(next);
       setReady(false);
       setShowEntry(true);
@@ -35,14 +40,24 @@ export default function VRTourShell() {
     return () => window.removeEventListener("message", onMessage);
   }, [mode.src]);
 
-  // The light loader auto-dismisses once the swapped tour has painted.
-  useEffect(() => {
-    if (ready && !firstLoad.current) setShowEntry(false);
-  }, [ready]);
+  // onLoad: mark iframe ready; for non-first loads the loader auto-dismisses here.
+  function handleLoad() {
+    setReady(true);
+    if (!isFirstLoadRef.current) setShowEntry(false);
+  }
 
   const isCie = mode.area === "cie";
   const back = isCie
-    ? { label: t(ui.vrTour.backToCampus), onClick: () => { firstLoad.current = false; setMode(CAMPUS_MODE); setReady(false); setShowEntry(true); } }
+    ? {
+        label: t(ui.vrTour.backToCampus),
+        onClick: () => {
+          isFirstLoadRef.current = false;
+          setIsFirstLoad(false);
+          setMode(CAMPUS_MODE);
+          setReady(false);
+          setShowEntry(true);
+        },
+      }
     : { label: t(ui.vrTour.backHome), href: "/" };
   const status = isCie ? t(ui.vrTour.statusCie) : t(ui.vrTour.statusCampus);
 
@@ -52,14 +67,14 @@ export default function VRTourShell() {
         key={mode.src}
         src={mode.src}
         title="PTIT Virtual Tour"
-        onLoad={() => setReady(true)}
+        onLoad={handleLoad}
         className="absolute inset-0 z-10 h-full w-full border-0"
         allow="fullscreen; autoplay; xr-spatial-tracking; gyroscope; accelerometer"
         allowFullScreen
       />
       {showEntry && (
         <ViewerEntry
-          variant={firstLoad.current ? "hero" : "loader"}
+          variant={isFirstLoad ? "hero" : "loader"}
           title={isCie ? t(ui.vrTour.statusCie) : t(ui.vrTour.entryTitle)}
           lead={t(ui.vrTour.entryLead)}
           meta={status}
