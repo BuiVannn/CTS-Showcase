@@ -20,7 +20,7 @@ export default function GamePlayView({ game }: { game: CatalogGame }) {
         </Link>
         <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-[1.6fr_1fr]">
           <div>
-            <GameEmbed src={game.embedUrl} title={game.title} sandboxed={game.sandboxed} />
+            <GameEmbed src={game.embedUrl} title={game.title} />
             <p className="mt-3 text-xs text-dim">{t(ui.games.heavyNote)}</p>
           </div>
           <aside>

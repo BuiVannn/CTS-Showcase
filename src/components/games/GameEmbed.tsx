@@ -7,10 +7,15 @@ import { ui } from "@/content/ui";
 
 /**
  * Embeds a self-contained static game (its own index.html) in a sandboxed,
- * 16:9 responsive iframe with a fullscreen button. Same-origin is acceptable
- * for trusted lab games; user-uploaded games will use a separate origin later.
+ * 16:9 responsive iframe with a fullscreen button.
+ *
+ * `allow-same-origin` is REQUIRED: Unity WebGL (and most engines) use
+ * IndexedDB / Web Workers / Cache at init, which throw in an opaque-origin
+ * iframe — without it the loader crashes before fetching the build. Isolation
+ * from ctslab.net comes from serving untrusted games on a SEPARATE ORIGIN
+ * (GAMES_ORIGIN), not from dropping this flag — the same model itch.io uses.
  */
-export default function GameEmbed({ src, title, sandboxed = false }: { src: string; title: string; sandboxed?: boolean }) {
+export default function GameEmbed({ src, title }: { src: string; title: string }) {
   const { t } = useLocale();
   const ref = useRef<HTMLIFrameElement>(null);
 
@@ -24,7 +29,7 @@ export default function GameEmbed({ src, title, sandboxed = false }: { src: stri
         src={src}
         title={title}
         className="absolute inset-0 h-full w-full"
-        sandbox={sandboxed ? "allow-scripts allow-pointer-lock allow-popups" : "allow-scripts allow-same-origin allow-pointer-lock allow-popups"}
+        sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-popups"
         allow="fullscreen; autoplay; gamepad"
         allowFullScreen
       />
