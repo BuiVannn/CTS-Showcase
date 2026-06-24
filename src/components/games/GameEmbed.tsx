@@ -10,7 +10,7 @@ import { ui } from "@/content/ui";
  * 16:9 responsive iframe with a fullscreen button. Same-origin is acceptable
  * for trusted lab games; user-uploaded games will use a separate origin later.
  */
-export default function GameEmbed({ src, title }: { src: string; title: string }) {
+export default function GameEmbed({ src, title, sandboxed = false }: { src: string; title: string; sandboxed?: boolean }) {
   const { t } = useLocale();
   const ref = useRef<HTMLIFrameElement>(null);
 
@@ -24,7 +24,7 @@ export default function GameEmbed({ src, title }: { src: string; title: string }
         src={src}
         title={title}
         className="absolute inset-0 h-full w-full"
-        sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-popups"
+        sandbox={sandboxed ? "allow-scripts allow-pointer-lock allow-popups" : "allow-scripts allow-same-origin allow-pointer-lock allow-popups"}
         allow="fullscreen; autoplay; gamepad"
         allowFullScreen
       />

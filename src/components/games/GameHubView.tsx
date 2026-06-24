@@ -1,8 +1,7 @@
 "use client";
-
 import Link from "next/link";
 import { useLocale } from "@/lib/locale";
-import { getGames } from "@/content/games";
+import type { CatalogGame } from "@/lib/game-catalog";
 import { ui } from "@/content/ui";
 import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
@@ -10,10 +9,8 @@ import GameCover from "@/components/games/GameCover";
 import { Stagger, StaggerItem } from "@/components/ui/Stagger";
 import AmbientField from "@/components/fx/AmbientField";
 
-export default function GameHubView() {
+export default function GameHubView({ games }: { games: CatalogGame[] }) {
   const { t } = useLocale();
-  const games = getGames();
-
   return (
     <section className="section relative overflow-hidden pt-28">
       <AmbientField tone="warm" />
@@ -21,7 +18,6 @@ export default function GameHubView() {
         <span className="eyebrow eyebrow-draw">{t(ui.games.breadcrumb)}</span>
         <h1 className="text-section mt-3 text-ink">{t(ui.games.hubTitle)}</h1>
         <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-2">{t(ui.games.hubLead)}</p>
-
         <Stagger className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {games.map((g) => (
             <StaggerItem key={g.id}>
@@ -38,7 +34,9 @@ export default function GameHubView() {
                   )}
                 </div>
                 <h2 className="text-display mt-3 text-lg text-ink">{g.title}</h2>
-                <p className="mt-1 text-sm text-ink-2">{t(ui.games.by)} {g.author} · {g.year}</p>
+                <p className="mt-1 text-sm text-ink-2">
+                  {t(ui.games.by)} {g.author}{g.year ? ` · ${g.year}` : ""}
+                </p>
               </Link>
             </StaggerItem>
           ))}

@@ -1,9 +1,8 @@
 import Image from "next/image";
 import { Gamepad2 } from "lucide-react";
-import type { Game } from "@/content/types";
 
 /** A game's cover: the cover image when set, else a branded placeholder tile. */
-export default function GameCover({ game, className = "" }: { game: Game; className?: string }) {
+export default function GameCover({ game, className = "" }: { game: { title: string; cover?: string }; className?: string }) {
   return (
     <div
       className={`relative w-full overflow-hidden rounded-[var(--radius-md)] border border-border ${className}`}
