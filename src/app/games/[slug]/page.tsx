@@ -12,7 +12,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const g = getGame(slug);
-  return { title: g ? `${g.title} — CTS Lab` : "Không tìm thấy — CTS Lab" };
+  return { title: g ? g.title : "Không tìm thấy" };
 }
 
 export default async function GamePlayPage({ params }: { params: Promise<{ slug: string }> }) {

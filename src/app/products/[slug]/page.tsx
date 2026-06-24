@@ -14,7 +14,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await params;
   const p = getProduct(slug);
-  return { title: p ? `${p.name} — CTS Lab` : "Không tìm thấy — CTS Lab" };
+  return { title: p ? p.name : "Không tìm thấy" };
 }
 
 export default async function ProductDetailPage(

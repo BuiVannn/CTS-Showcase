@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import TeamGrid from "@/components/team/TeamGrid";
 
 export const metadata: Metadata = {
-  title: "Đội ngũ — CTS Lab",
+  title: "Đội ngũ",
   description: "Đội ngũ giảng viên và sinh viên xây dựng CTS Lab tại PTIT.",
 };
 

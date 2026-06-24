@@ -44,8 +44,8 @@ export const site: SiteConfig = {
     { id: "/vr-tour", label: { en: "VR Tour", vi: "Tham quan VR" } },
   ],
   footerDescription: {
-    en: "STEM Innovation Lab at the Posts & Telecommunications Institute of Technology.",
-    vi: "Phòng thí nghiệm Đổi mới STEM tại Học viện Công nghệ Bưu chính Viễn thông.",
+    en: "Creative Technologies and Simulation Lab",
+    vi: "Phòng thí nghiệm Công nghệ Sáng tạo và Mô phỏng",
   },
   footerTagline: {
     en: "Empowering the next generation of innovators.",

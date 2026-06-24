@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import ProductsGrid from "@/components/products/ProductsGrid";
 
 export const metadata: Metadata = {
-  title: "Sản phẩm — CTS Lab",
+  title: "Sản phẩm",
   description: "Hệ sinh thái ứng dụng AI của CTS Lab: PTalk, VietCreative, Vision Tale, Unilearn.",
 };
 

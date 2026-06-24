@@ -8,7 +8,7 @@ import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
 import StatBand from "@/components/ui/StatBand";
 
-export const metadata: Metadata = { title: "Styleguide — CTS Lab", robots: { index: false } };
+export const metadata: Metadata = { title: "Styleguide", robots: { index: false } };
 
 export default function StyleguidePage() {
   return (

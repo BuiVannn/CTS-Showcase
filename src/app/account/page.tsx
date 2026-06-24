@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import Container from "@/components/ui/Container";
 import SignOutButton from "@/components/auth/SignOutButton";
 
-export const metadata: Metadata = { title: "Tài khoản — CTS Lab", robots: { index: false } };
+export const metadata: Metadata = { title: "Tài khoản", robots: { index: false } };
 
 export default async function AccountPage() {
   const session = await auth();

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import VRTourShell from "@/components/VRTourShell";
 
 export const metadata: Metadata = {
-  title: "CTS Lab — PTIT Virtual Tour",
+  title: "PTIT Virtual Tour",
   description:
     "Explore the PTIT campus in 360° virtual reality. Walk through buildings, labs, the library, and more.",
 };

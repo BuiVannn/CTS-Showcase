@@ -37,7 +37,7 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CTS Lab — Creative Technologies and Simulation Lab, PTIT",
+  title: "CTS Lab",
   description:
     "CTS Lab at the Posts & Telecommunications Institute of Technology builds robots, immersive VR worlds, and AI learning tools that turn abstract lessons into hands-on experiences.",
   keywords: [

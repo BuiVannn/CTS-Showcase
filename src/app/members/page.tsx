@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Container from "@/components/ui/Container";
 
-export const metadata: Metadata = { title: "Thành viên — CTS Lab", robots: { index: false } };
+export const metadata: Metadata = { title: "Thành viên", robots: { index: false } };
 
 const APPS = [
   { name: "Dashboard", href: "https://dashboard.ctslab.net", desc: "Quản lý hệ sinh thái" },

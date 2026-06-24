@@ -14,7 +14,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { id } = await params;
   const s = getShowcaseItem(id);
-  return { title: s ? `${s.title} — CTS Lab` : "Không tìm thấy — CTS Lab" };
+  return { title: s ? s.title : "Không tìm thấy" };
 }
 
 export default async function ShowcaseDetailPage(

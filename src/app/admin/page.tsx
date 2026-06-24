@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Container from "@/components/ui/Container";
 
-export const metadata: Metadata = { title: "Quản trị — CTS Lab", robots: { index: false } };
+export const metadata: Metadata = { title: "Quản trị", robots: { index: false } };
 
 export default async function AdminPage() {
   const session = await auth();
