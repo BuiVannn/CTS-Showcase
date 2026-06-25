@@ -18,6 +18,9 @@ export default function GameHubView({ games }: { games: CatalogGame[] }) {
         <span className="eyebrow eyebrow-draw">{t(ui.games.breadcrumb)}</span>
         <h1 className="text-section mt-3 text-ink">{t(ui.games.hubTitle)}</h1>
         <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-2">{t(ui.games.hubLead)}</p>
+        <Link href="/games/submit" className="mt-4 inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-border px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-blue hover:text-blue">
+          + Đăng game của bạn
+        </Link>
         <Stagger className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {games.map((g) => (
             <StaggerItem key={g.id}>
