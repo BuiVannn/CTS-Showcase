@@ -211,6 +211,7 @@ export const ecosystem: EcosystemApp[] = [
     downloadHref: "#",
     image: { src: "/img/1account.png", alt: { en: "PTalk Signature", vi: "PTalk Signature" } },
     logo: "/img/logos/logo_ptalk_signature.png",
+    device: true,
   },
   {
     id: "p-connect",
