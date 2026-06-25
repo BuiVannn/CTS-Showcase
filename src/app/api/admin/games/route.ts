@@ -17,7 +17,8 @@ async function requireAdmin() {
 }
 
 export async function POST(req: Request) {
-  if (!(await requireAdmin())) return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  const session = await requireAdmin();
+  if (!session) return NextResponse.json({ error: "forbidden" }, { status: 403 });
 
   let form: FormData;
   try {
@@ -56,6 +57,9 @@ export async function POST(req: Request) {
   store.insert({
     id: randomUUID(), slug, title, author, cover: null,
     status: "published", created_at: new Date().toISOString(),
+    owner_id: (session as { user?: { id?: string; email?: string } }).user?.id
+      ?? (session as { user?: { email?: string } }).user?.email ?? "admin",
+    owner_email: (session as { user?: { email?: string } }).user?.email ?? null,
   });
   return NextResponse.json({ slug }, { status: 201 });
 }
