@@ -16,7 +16,7 @@ export default function DeviceOrderBlock({ appName }: { appName: string }) {
   const tel = `tel:${site.contact.phone.replace(/\s+/g, "")}`;
 
   return (
-    <div className="mt-8 rounded-[var(--radius-lg)] border border-border bg-surface p-6">
+    <div id="order-device" className="mt-8 scroll-mt-24 rounded-[var(--radius-lg)] border border-border bg-surface p-6">
       <h2 className="text-display text-lg text-ink">{t(ui.device.title)}</h2>
       <p className="mt-2 max-w-xl text-sm leading-relaxed text-ink-2">{t(ui.device.blurb)}</p>
       <div className="mt-5 flex flex-wrap items-center gap-4">
