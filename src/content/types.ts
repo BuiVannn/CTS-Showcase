@@ -62,6 +62,14 @@ export interface Game {
   cover?: string;    // public path to a cover image; falls back to a placeholder
   blurb?: Localized;
   tags?: string[]; // plain tech/genre labels, e.g. ["Unity", "WebGL"]
+  tagline?: Localized;
+  description?: Localized; // Markdown
+  classification?: string;
+  projectType?: string;
+  releaseStatus?: string;
+  genre?: string;
+  externalUrl?: string;
+  videoUrl?: string;
 }
 
 export interface Partner {
