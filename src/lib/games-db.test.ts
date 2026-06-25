@@ -38,3 +38,17 @@ describe("games store — owner + status (slice 2b)", () => {
     expect(s.get("a")?.status).toBe("published");
   });
 });
+
+describe("games store — metadata update (redesign A)", () => {
+  it("updates only whitelisted fields, leaves others intact", () => {
+    const s = createGamesStore(":memory:");
+    s.insert({ id: "1", slug: "a", title: "A", author: "x", cover: null, status: "published", created_at: "2026-06-24T00:00:00Z", owner_id: "u1", owner_email: "u1@x" });
+    s.update("a", { tagline: "Quick game", genre: "Puzzle", project_type: "web", evil: "DROP" } as never);
+    const g = s.get("a")!;
+    expect(g.tagline).toBe("Quick game");
+    expect(g.genre).toBe("Puzzle");
+    expect(g.project_type).toBe("web");
+    expect(g.title).toBe("A"); // untouched
+    expect((g as unknown as Record<string, unknown>).evil).toBeUndefined(); // non-column ignored
+  });
+});

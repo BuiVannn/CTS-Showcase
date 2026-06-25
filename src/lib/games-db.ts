@@ -6,6 +6,10 @@ export interface DbGame {
   id: string; slug: string; title: string; author: string;
   cover: string | null; status: string; created_at: string;
   owner_id: string | null; owner_email: string | null;
+  tagline?: string | null; description?: string | null;
+  classification?: string | null; project_type?: string | null;
+  release_status?: string | null; genre?: string | null; tags?: string | null;
+  video_url?: string | null; external_url?: string | null; updated_at?: string | null;
 }
 
 export interface GamesStore {
@@ -18,6 +22,7 @@ export interface GamesStore {
   listByOwner(ownerId: string): DbGame[];
   countByOwner(ownerId: string, status?: string): number;
   setStatus(slug: string, status: string): void;
+  update(slug: string, patch: Partial<DbGame>): void;
 }
 
 export function createGamesStore(dbPath: string): GamesStore {
@@ -34,6 +39,9 @@ export function createGamesStore(dbPath: string): GamesStore {
   const cols = new Set((db.prepare("PRAGMA table_info(games)").all() as { name: string }[]).map((c) => c.name));
   if (!cols.has("owner_id")) db.exec("ALTER TABLE games ADD COLUMN owner_id TEXT");
   if (!cols.has("owner_email")) db.exec("ALTER TABLE games ADD COLUMN owner_email TEXT");
+  for (const col of ["tagline","description","classification","project_type","release_status","genre","tags","video_url","external_url","updated_at"]) {
+    if (!cols.has(col)) db.exec(`ALTER TABLE games ADD COLUMN ${col} TEXT`);
+  }
 
   return {
     listPublished: () =>
@@ -58,6 +66,13 @@ export function createGamesStore(dbPath: string): GamesStore {
         : (db.prepare("SELECT COUNT(*) n FROM games WHERE owner_id = ?").get(ownerId) as { n: number })).n,
     setStatus: (slug: string, status: string) =>
       void db.prepare("UPDATE games SET status = ? WHERE slug = ?").run(status, slug),
+    update: (slug, patch) => {
+      const allowed = ["title","author","cover","status","tagline","description","classification","project_type","release_status","genre","tags","video_url","external_url","updated_at"];
+      const keys = Object.keys(patch).filter((k) => allowed.includes(k));
+      if (keys.length === 0) return;
+      const setClause = keys.map((k) => `${k} = @${k}`).join(", ");
+      db.prepare(`UPDATE games SET ${setClause} WHERE slug = @slug`).run({ ...patch, slug });
+    },
   };
 }
 
