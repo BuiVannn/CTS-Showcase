@@ -75,3 +75,24 @@ export async function DELETE(req: Request) {
   getGamesStore().remove(slug);
   return NextResponse.json({ ok: true });
 }
+
+export async function PATCH(req: Request) {
+  if (!(await requireAdmin())) return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  let body: { slug?: string; action?: string };
+  try { body = await req.json(); } catch { return NextResponse.json({ error: "bad" }, { status: 400 }); }
+  const { slug, action } = body;
+  if (!slug || (action !== "approve" && action !== "reject")) {
+    return NextResponse.json({ error: "bad" }, { status: 400 });
+  }
+  const store = getGamesStore();
+  if (action === "approve") {
+    store.setStatus(slug, "published");
+  } else {
+    store.setStatus(slug, "rejected");
+    const dest = resolveInside(STORAGE, slug);
+    if (dest && dest !== resolveInside(STORAGE, "")) {
+      try { rmSync(dest, { recursive: true, force: true }); } catch {}
+    }
+  }
+  return NextResponse.json({ ok: true });
+}
