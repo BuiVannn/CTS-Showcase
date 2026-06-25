@@ -57,7 +57,11 @@ export function resolveInside(destDir: string, name: string): string | null {
  * index.html (flattening a single wrapper folder) and writes its contents,
  * rejecting any entry that escapes destDir.
  */
-export function safeExtractZip(buffer: Buffer, destDir: string): { ok: boolean; error?: string } {
+export function safeExtractZip(
+  buffer: Buffer,
+  destDir: string,
+  limits?: { maxTotalBytes: number; maxFiles: number; maxFileBytes: number },
+): { ok: boolean; error?: string } {
   let zip: AdmZip;
   try {
     zip = new AdmZip(buffer);
@@ -74,6 +78,18 @@ export function safeExtractZip(buffer: Buffer, destDir: string): { ok: boolean; 
   if (indexes.length === 0) return { ok: false, error: "no-index" };
   indexes.sort((a, b) => a.entryName.split("/").length - b.entryName.split("/").length);
   const prefix = indexes[0].entryName.replace(/index\.html$/i, ""); // "MyGame/" or ""
+
+  if (limits) {
+    const files = entries.filter((e) => !e.isDirectory && !isJunkEntry(e.entryName));
+    if (files.length > limits.maxFiles) return { ok: false, error: "too-big-uncompressed" };
+    let total = 0;
+    for (const e of files) {
+      const size = e.header.size; // uncompressed size
+      if (size > limits.maxFileBytes) return { ok: false, error: "too-big-uncompressed" };
+      total += size;
+      if (total > limits.maxTotalBytes) return { ok: false, error: "too-big-uncompressed" };
+    }
+  }
 
   for (const e of entries) {
     if (e.isDirectory || isJunkEntry(e.entryName)) continue;

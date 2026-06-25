@@ -175,4 +175,21 @@ describe("safeExtractZip (end-to-end extraction)", () => {
     // The evil file must not have been written outside the destination dir.
     expect(existsSync(join(dest, "..", "evil.txt"))).toBe(false);
   });
+
+  it("rejects an over-limit zip without writing (zip-bomb guard)", () => {
+    const zip = new AdmZip();
+    zip.addFile("index.html", Buffer.from("<html><head></head></html>"));
+    zip.addFile("big.bin", Buffer.alloc(2 * 1024 * 1024, 0)); // 2 MB
+    const dest = makeTmpDir();
+    const result = safeExtractZip(zip.toBuffer(), dest, { maxTotalBytes: 1024 * 1024, maxFiles: 100, maxFileBytes: 1024 * 1024 });
+    expect(result).toEqual({ ok: false, error: "too-big-uncompressed" });
+    expect(existsSync(join(dest, "big.bin"))).toBe(false);
+    expect(existsSync(join(dest, "index.html"))).toBe(false); // nothing written
+  });
+  it("accepts a within-limit zip", () => {
+    const zip = new AdmZip();
+    zip.addFile("index.html", Buffer.from("<html><head></head></html>"));
+    const dest = makeTmpDir();
+    expect(safeExtractZip(zip.toBuffer(), dest, { maxTotalBytes: 1024 * 1024, maxFiles: 100, maxFileBytes: 1024 * 1024 }).ok).toBe(true);
+  });
 });
