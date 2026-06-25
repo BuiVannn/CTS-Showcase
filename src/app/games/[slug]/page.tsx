@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import GamePlayView from "@/components/games/GamePlayView";
+import GameDetailView from "@/components/games/GameDetailView";
 import { getGames } from "@/content/games";
 import { getCatalogGame } from "@/lib/game-catalog";
 
@@ -24,7 +24,7 @@ export default async function GamePlayPage({ params }: { params: Promise<{ slug:
   return (
     <>
       <Navbar />
-      <main><GamePlayView game={g} /></main>
+      <main><GameDetailView game={g} /></main>
       <Footer />
     </>
   );
