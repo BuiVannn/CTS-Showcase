@@ -56,7 +56,9 @@ Các hạng mục sau đã được phát triển và đưa lên website hiện 
 
 ### 3.7 Khu Game Hub (mô hình giống itch.io) — 🟡 ĐANG TRIỂN KHAI THEO LÁT CẮT
 **Đã xong:** **Lát cắt 1** (host + chơi game của lab, hub + trang chơi polish & song ngữ) · **Lát cắt 2a** (admin tải game lên qua form → giải nén an-toàn → **phục vụ sandbox từ origin tách `games.ctslab.net`**, tự vá khung game vừa màn). Đã xác minh kiến trúc bảo mật (origin tách, cookie host-only, chống path-traversal).
-**Đã có spec, chờ làm:** **Lát cắt 2b** (sinh viên tự nộp + **hàng đợi duyệt** + các tấm khiên: chống zip-bomb, quota, CSP frame-ancestors). **Sau nữa:** per-game subdomain `*.games.ctslab.net`, dashboard "game của tôi".
+**Đã xong (tiếp):** **Lát cắt 2b** (sinh viên tự nộp `/games/submit` + **hàng đợi duyệt** admin + các tấm khiên: chống zip-bomb, quota theo người, CSP frame-ancestors — đã code & deploy).
+**Đang redesign GameHub** (giao diện đẹp/chuyên nghiệp hơn, kiểu itch.io theo style CTS Lab) — chia 3 sub-project: **A ✅** mở rộng data model + **trang chi tiết game redesign** (hero, badge, mô tả Markdown, sidebar). **B 🟡** redesign trang hub + search/filter. **C** Creator Studio (dashboard + form tạo/sửa nhiều section).
+**Sau nữa:** per-game subdomain `*.games.ctslab.net`, upload ảnh bìa/screenshots.
 **Đề xuất:** xây **khu Game Hub** nơi sinh viên ngành game **đăng ký tài khoản, tải lên và đăng (deploy) game** lên website và **chơi trực tiếp** trên trình duyệt.
 **Hướng triển khai:** cho phép tải lên bản build game (WebGL); game của người dùng được **chạy ở miền tách biệt (sandbox)** để bảo đảm an toàn cho website; có **bước duyệt** trước khi công khai. Đây là hạng mục lớn, nên xem như một sản phẩm con và làm theo từng bước.
 
