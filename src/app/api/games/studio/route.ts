@@ -17,6 +17,10 @@ const LIMITS = {
 const MAX_PENDING = parseInt(process.env.GAMES_MAX_PENDING_PER_USER || "3", 10) || 3;
 const MAX_TOTAL = parseInt(process.env.GAMES_MAX_TOTAL_PER_USER || "10", 10) || 10;
 
+function str(form: FormData, k: string): string {
+  return String(form.get(k) || "").trim();
+}
+
 export async function POST(req: Request) {
   const session = await auth();
   const u = session?.user as { id?: string; email?: string | null } | undefined;
@@ -30,9 +34,11 @@ export async function POST(req: Request) {
 
   let form: FormData;
   try { form = await req.formData(); } catch { return NextResponse.json({ error: "bad" }, { status: 400 }); }
-  const title = String(form.get("title") || "").trim();
-  const author = String(form.get("author") || "").trim();
+
+  const title = str(form, "title");
+  const author = str(form, "author");
   const file = form.get("file");
+  const status = str(form, "status") === "draft" ? "draft" : "pending";
   if (!title || !author || !(file instanceof File)) return NextResponse.json({ error: "bad" }, { status: 400 });
   if (file.size > MAX_MB * 1024 * 1024) return NextResponse.json({ error: "too-large" }, { status: 413 });
 
@@ -49,10 +55,23 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: res.error }, { status: 400 });
   }
 
+  const now = new Date().toISOString();
   store.insert({
-    id: randomUUID(), slug, title, author, cover: null,
-    status: "pending", created_at: new Date().toISOString(),
-    owner_id: ownerId, owner_email: u?.email ?? null,
+    id: randomUUID(), slug, title, author,
+    cover: str(form, "cover") || null,
+    status, created_at: now, owner_id: ownerId, owner_email: u?.email ?? null,
   });
-  return NextResponse.json({ slug, status: "pending" }, { status: 202 });
+  store.update(slug, {
+    tagline: str(form, "tagline") || null,
+    description: str(form, "description") || null,
+    classification: str(form, "classification") || null,
+    project_type: str(form, "projectType") || null,
+    release_status: str(form, "releaseStatus") || null,
+    genre: str(form, "genre") || null,
+    tags: str(form, "tags") || null,
+    external_url: str(form, "externalUrl") || null,
+    video_url: str(form, "videoUrl") || null,
+    updated_at: now,
+  });
+  return NextResponse.json({ slug, status }, { status: 201 });
 }
