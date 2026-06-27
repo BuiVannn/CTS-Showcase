@@ -18,11 +18,25 @@ import { filterGames, deriveFacets, EMPTY_FILTER, type GameFilterState } from "@
 export default function GameHubView({ games }: { games: CatalogGame[] }) {
   const { t } = useLocale();
   const router = useRouter();
-  // Next's client Router Cache reuses the page snapshot on back/forward navigation
-  // (staleTimes does not cover back/forward). Refetch server data on mount so a
-  // newly published/edited game shows without a manual reload.
+  // Next's client Router Cache restores the cached hub tree on back/forward and
+  // tab revisits WITHOUT remounting, so a mount-only refresh misses those paths
+  // and a newly published/edited game won't appear until a full reload. Refetch
+  // server data whenever the hub becomes visible again (revalidate-on-focus).
   useEffect(() => {
-    router.refresh();
+    const refresh = () => {
+      if (document.visibilityState !== "hidden") router.refresh();
+    };
+    refresh(); // initial mount
+    document.addEventListener("visibilitychange", refresh);
+    window.addEventListener("focus", refresh);
+    window.addEventListener("pageshow", refresh);
+    window.addEventListener("popstate", refresh);
+    return () => {
+      document.removeEventListener("visibilitychange", refresh);
+      window.removeEventListener("focus", refresh);
+      window.removeEventListener("pageshow", refresh);
+      window.removeEventListener("popstate", refresh);
+    };
   }, [router]);
   const [filter, setFilter] = useState<GameFilterState>(EMPTY_FILTER);
   const facets = useMemo(() => deriveFacets(games), [games]);
