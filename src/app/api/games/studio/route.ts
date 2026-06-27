@@ -28,9 +28,6 @@ export async function POST(req: Request) {
   if (!ownerId) return NextResponse.json({ error: "auth" }, { status: 401 });
 
   const store = getGamesStore();
-  if (store.countByOwner(ownerId, "pending") >= MAX_PENDING || store.countByOwner(ownerId) >= MAX_TOTAL) {
-    return NextResponse.json({ error: "quota" }, { status: 429 });
-  }
 
   let form: FormData;
   try { form = await req.formData(); } catch { return NextResponse.json({ error: "bad" }, { status: 400 }); }
@@ -40,6 +37,13 @@ export async function POST(req: Request) {
   const file = form.get("file");
   const status = str(form, "status") === "draft" ? "draft" : "pending";
   if (!title || !author || !(file instanceof File)) return NextResponse.json({ error: "bad" }, { status: 400 });
+
+  if (store.countByOwner(ownerId) >= MAX_TOTAL) {
+    return NextResponse.json({ error: "quota" }, { status: 429 });
+  }
+  if (status === "pending" && store.countByOwner(ownerId, "pending") >= MAX_PENDING) {
+    return NextResponse.json({ error: "quota" }, { status: 429 });
+  }
   if (file.size > MAX_MB * 1024 * 1024) return NextResponse.json({ error: "too-large" }, { status: 413 });
 
   const base = slugify(title);
