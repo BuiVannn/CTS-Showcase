@@ -65,7 +65,7 @@ export default function GameForm({
 
   return (
     <div className="mt-8 max-w-3xl">
-      <div className="flex gap-1 overflow-x-auto border-b border-border">
+      <div className="flex flex-wrap gap-1 border-b border-border">
         {tabs.map((label, i) => (
           <button key={label} type="button" onClick={() => setTab(i)}
             className={`-mb-px border-b-2 px-3 py-2 text-sm font-medium transition-colors ${tab === i ? "border-blue text-blue" : "border-transparent text-ink-2 hover:text-ink"}`}>

@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Gamepad2 } from "lucide-react";
 import { useLocale } from "@/lib/locale";
 import type { CatalogGame } from "@/lib/game-catalog-map";
@@ -16,6 +17,13 @@ import { filterGames, deriveFacets, EMPTY_FILTER, type GameFilterState } from "@
 
 export default function GameHubView({ games }: { games: CatalogGame[] }) {
   const { t } = useLocale();
+  const router = useRouter();
+  // Next's client Router Cache reuses the page snapshot on back/forward navigation
+  // (staleTimes does not cover back/forward). Refetch server data on mount so a
+  // newly published/edited game shows without a manual reload.
+  useEffect(() => {
+    router.refresh();
+  }, [router]);
   const [filter, setFilter] = useState<GameFilterState>(EMPTY_FILTER);
   const facets = useMemo(() => deriveFacets(games), [games]);
   const filtered = useMemo(() => filterGames(games, filter), [games, filter]);
