@@ -35,3 +35,27 @@ describe("deriveFacets", () => {
     expect(f.tags).toEqual(["Math", "Unity", "Web"]);
   });
 });
+describe("filterGames — case-insensitive (fix)", () => {
+  const mixed: CatalogGame[] = [
+    g({ slug: "a", title: "Alpha", classification: "Game", genre: "Puzzle", tags: ["WebGL", "Unity"] }),
+    g({ slug: "b", title: "Beta", classification: "game", genre: "puzzle", tags: ["webgl"] }),
+  ];
+  it("matches tag/classification/genre regardless of case", () => {
+    expect(filterGames(mixed, { ...EMPTY_FILTER, tag: "webgl" }).map((x) => x.slug)).toEqual(["a", "b"]);
+    expect(filterGames(mixed, { ...EMPTY_FILTER, classification: "GAME" }).map((x) => x.slug)).toEqual(["a", "b"]);
+    expect(filterGames(mixed, { ...EMPTY_FILTER, genre: "PUZZLE" }).map((x) => x.slug)).toEqual(["a", "b"]);
+  });
+  it("search also matches genre + tags", () => {
+    expect(filterGames(mixed, { ...EMPTY_FILTER, query: "unity" }).map((x) => x.slug)).toEqual(["a"]);
+  });
+});
+describe("deriveFacets — collapses case (fix)", () => {
+  it("dedups WebGL/webgl to one facet", () => {
+    const f = deriveFacets([
+      g({ slug: "a", tags: ["WebGL"], classification: "Game" }),
+      g({ slug: "b", tags: ["webgl"], classification: "game" }),
+    ]);
+    expect(f.tags).toHaveLength(1);
+    expect(f.classifications).toHaveLength(1);
+  });
+});
