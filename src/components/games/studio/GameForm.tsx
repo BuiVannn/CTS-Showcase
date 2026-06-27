@@ -65,7 +65,7 @@ export default function GameForm({
 
   return (
     <div className="mt-8 max-w-3xl">
-      <div className="flex flex-wrap gap-2 border-b border-border">
+      <div className="flex gap-1 overflow-x-auto border-b border-border">
         {tabs.map((label, i) => (
           <button key={label} type="button" onClick={() => setTab(i)}
             className={`-mb-px border-b-2 px-3 py-2 text-sm font-medium transition-colors ${tab === i ? "border-blue text-blue" : "border-transparent text-ink-2 hover:text-ink"}`}>
@@ -84,8 +84,6 @@ export default function GameForm({
               <input className={`mt-1 ${inputCls}`} value={data.author} onChange={(e) => set("author", e.target.value)} /></label>
             <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.fTagline)}</span>
               <input className={`mt-1 ${inputCls}`} value={data.tagline} onChange={(e) => set("tagline", e.target.value)} /></label>
-            <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.fCover)}</span>
-              <input className={`mt-1 ${inputCls}`} value={data.cover} onChange={(e) => set("cover", e.target.value)} placeholder="https://…" /></label>
           </>
         )}
 
@@ -139,18 +137,24 @@ export default function GameForm({
         )}
 
         {tab === 4 && (
-          <div className="flex flex-wrap items-center gap-3">
-            {showDraftSubmit ? (
-              <>
-                <button type="button" disabled={busy} onClick={() => save("draft")} className="rounded-[var(--radius-pill)] border border-border px-5 py-2.5 text-sm font-semibold text-ink disabled:opacity-50">{t(ui.studio.saveDraft)}</button>
-                <button type="button" disabled={busy} onClick={() => save("pending")} className="rounded-[var(--radius-pill)] bg-red px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50">{t(ui.studio.submitReview)}</button>
-              </>
-            ) : (
-              <button type="button" disabled={busy} onClick={() => save("keep")} className="rounded-[var(--radius-pill)] bg-blue px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50">{t(ui.studio.saveChanges)}</button>
-            )}
-          </div>
+          <p className="text-sm text-ink-2">
+            {showDraftSubmit
+              ? "“Lưu nháp” lưu lại nhưng chưa gửi duyệt. “Gửi duyệt” gửi cho quản trị viên xem xét."
+              : "“Lưu thay đổi” cập nhật ngay. Tải build mới sẽ đưa game đã đăng về chờ duyệt lại."}
+          </p>
         )}
+      </div>
 
+      {/* Persistent action bar — visible on every tab */}
+      <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-border pt-4">
+        {showDraftSubmit ? (
+          <>
+            <button type="button" disabled={busy} onClick={() => save("draft")} className="rounded-[var(--radius-pill)] border border-border px-5 py-2.5 text-sm font-semibold text-ink disabled:opacity-50">{t(ui.studio.saveDraft)}</button>
+            <button type="button" disabled={busy} onClick={() => save("pending")} className="rounded-[var(--radius-pill)] bg-red px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50">{t(ui.studio.submitReview)}</button>
+          </>
+        ) : (
+          <button type="button" disabled={busy} onClick={() => save("keep")} className="rounded-[var(--radius-pill)] bg-blue px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50">{t(ui.studio.saveChanges)}</button>
+        )}
         {msg && <p className="text-sm text-ink-2">{msg}</p>}
       </div>
     </div>
