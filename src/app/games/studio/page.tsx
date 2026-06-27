@@ -6,6 +6,7 @@ import { auth } from "@/auth";
 import { signIn } from "@/auth";
 import { getGamesStore } from "@/lib/games-db";
 import StudioDashboard from "@/components/games/studio/StudioDashboard";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 export const metadata: Metadata = { title: "Studio — CTS Lab" };
 export const dynamic = "force-dynamic";
@@ -33,6 +34,7 @@ export default async function StudioPage() {
     <>
       <Navbar />
       <main className="section pt-28"><Container>
+        <Breadcrumb items={[{ label: "CTS Lab", href: "/" }, { label: "Games", href: "/games" }, { label: "Studio" }]} />
         <h1 className="text-section text-ink">Game Studio</h1>
         <StudioDashboard games={games} />
       </Container></main>

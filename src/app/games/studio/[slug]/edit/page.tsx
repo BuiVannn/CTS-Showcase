@@ -6,6 +6,7 @@ import Container from "@/components/ui/Container";
 import { auth } from "@/auth";
 import { getGamesStore } from "@/lib/games-db";
 import GameForm, { type GameFormData } from "@/components/games/studio/GameForm";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 export const metadata: Metadata = { title: "Sửa game — CTS Lab" };
 export const dynamic = "force-dynamic";
@@ -31,6 +32,7 @@ export default async function EditGamePage({ params }: { params: Promise<{ slug:
     <>
       <Navbar />
       <main className="section pt-28"><Container>
+        <Breadcrumb items={[{ label: "CTS Lab", href: "/" }, { label: "Games", href: "/games" }, { label: "Studio", href: "/games/studio" }, { label: "Sửa" }]} />
         <h1 className="text-section text-ink">Sửa: {g.title}</h1>
         <GameForm mode="edit" slug={slug} status={g.status} initial={initial} />
       </Container></main>
