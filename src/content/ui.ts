@@ -225,6 +225,7 @@ export const ui = {
     gamesCount: { en: "{n} games", vi: "{n} game" } as Localized,
     noResults: { en: "No games match your filters", vi: "Không có game khớp bộ lọc" } as Localized,
     clearFilters: { en: "Clear filters", vi: "Xoá bộ lọc" } as Localized,
+    notPublic: { en: "Not public yet — only you can see this.", vi: "Chưa công khai — chỉ bạn xem được." } as Localized,
   },
   studio: {
     myGames: { en: "My games", vi: "Game của tôi" } as Localized,

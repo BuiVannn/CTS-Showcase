@@ -18,13 +18,18 @@ import MessageContent from "@/components/home/MessageContent";
 const PRIMARY = "inline-flex items-center gap-2 rounded-[var(--radius-pill)] bg-red px-5 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90";
 const SECONDARY = "inline-flex items-center gap-2 rounded-[var(--radius-pill)] border border-border px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-blue hover:text-blue";
 
-export default function GameDetailView({ game }: { game: CatalogGame }) {
+export default function GameDetailView({ game, notPublic = false }: { game: CatalogGame; notPublic?: boolean }) {
   const { t } = useLocale();
   const badges = [game.releaseStatus, game.classification, game.projectType].filter(Boolean) as string[];
   const isExternal = game.projectType === "external" && !!game.externalUrl;
 
   return (
     <>
+      {notPublic && (
+        <div className="bg-red-soft px-4 py-2 text-center text-sm font-medium text-red" style={{ background: "var(--red-soft)" }}>
+          {t(ui.games.notPublic)}
+        </div>
+      )}
       <section className="section relative overflow-hidden pt-28 pb-0">
         <AmbientField tone="warm" />
         <Container>
