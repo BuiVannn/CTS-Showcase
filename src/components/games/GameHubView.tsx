@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Gamepad2 } from "lucide-react";
+import { Gamepad2, Search } from "lucide-react";
 import { useLocale } from "@/lib/locale";
 import type { CatalogGame } from "@/lib/game-catalog-map";
 import { ui } from "@/content/ui";
@@ -12,8 +12,7 @@ import { Stagger, StaggerItem } from "@/components/ui/Stagger";
 import AmbientField from "@/components/fx/AmbientField";
 import EmptyState from "@/components/ui/EmptyState";
 import GameCard from "@/components/games/GameCard";
-import GameFilters from "@/components/games/GameFilters";
-import { filterGames, deriveFacets, EMPTY_FILTER, type GameFilterState } from "@/lib/game-filter";
+import { filterGames, EMPTY_FILTER } from "@/lib/game-filter";
 
 export default function GameHubView({ games }: { games: CatalogGame[] }) {
   const { t } = useLocale();
@@ -38,9 +37,8 @@ export default function GameHubView({ games }: { games: CatalogGame[] }) {
       window.removeEventListener("popstate", refresh);
     };
   }, [router]);
-  const [filter, setFilter] = useState<GameFilterState>(EMPTY_FILTER);
-  const facets = useMemo(() => deriveFacets(games), [games]);
-  const filtered = useMemo(() => filterGames(games, filter), [games, filter]);
+  const [query, setQuery] = useState("");
+  const filtered = useMemo(() => filterGames(games, { ...EMPTY_FILTER, query }), [games, query]);
 
   return (
     <section className="section relative overflow-hidden pt-28">
@@ -58,8 +56,15 @@ export default function GameHubView({ games }: { games: CatalogGame[] }) {
           </Link>
         </div>
 
-        <div className="mt-8">
-          <GameFilters facets={facets} state={filter} onChange={setFilter} />
+        <div className="relative mt-8 max-w-md">
+          <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-dim" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t(ui.games.searchPlaceholder)}
+            aria-label={t(ui.games.searchPlaceholder)}
+            className="w-full rounded-[var(--radius-pill)] border border-border bg-card py-2 pl-9 pr-3 text-sm text-ink outline-none focus:border-blue"
+          />
         </div>
 
         {filtered.length > 0 ? (
@@ -71,7 +76,7 @@ export default function GameHubView({ games }: { games: CatalogGame[] }) {
         ) : (
           <div className="mt-12">
             <EmptyState title={t(ui.games.noResults)} icon={<Gamepad2 size={28} aria-hidden />}>
-              <button type="button" onClick={() => setFilter(EMPTY_FILTER)} className="text-sm text-blue hover:underline">
+              <button type="button" onClick={() => setQuery("")} className="text-sm text-blue hover:underline">
                 {t(ui.games.clearFilters)}
               </button>
             </EmptyState>

@@ -37,17 +37,15 @@ export default function GameForm({
   const router = useRouter();
   const [data, setData] = useState<GameFormData>(initial ?? EMPTY_FORM);
   const [file, setFile] = useState<File | null>(null);
-  const [tab, setTab] = useState(0);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const set = (k: keyof GameFormData, v: string) => setData((d) => ({ ...d, [k]: v }));
 
-  const tabs = [t(ui.studio.tabBasic), t(ui.studio.tabClassify), t(ui.studio.tabUpload), t(ui.studio.tabDetails), t(ui.studio.tabVisibility)];
   const showDraftSubmit = mode === "create" || status === "draft" || status === "rejected";
 
   async function save(intent: "draft" | "pending" | "keep") {
-    if (!data.title.trim() || !data.author.trim()) { setTab(0); setMsg(errorMsg("bad")); return; }
-    if (mode === "create" && !file) { setTab(2); setMsg("❌ Cần tải lên bản build (.zip)."); return; }
+    if (!data.title.trim() || !data.author.trim()) { setMsg(errorMsg("bad")); return; }
+    if (mode === "create" && !file) { setMsg("❌ Cần tải lên file game (.zip)."); return; }
     setBusy(true); setMsg(null);
     const form = new FormData();
     (Object.keys(data) as (keyof GameFormData)[]).forEach((k) => form.append(k, data[k]));
@@ -64,89 +62,42 @@ export default function GameForm({
   }
 
   return (
-    <div className="mt-8 max-w-3xl">
-      <div className="flex flex-wrap gap-1 border-b border-border">
-        {tabs.map((label, i) => (
-          <button key={label} type="button" onClick={() => setTab(i)}
-            className={`-mb-px border-b-2 px-3 py-2 text-sm font-medium transition-colors ${tab === i ? "border-blue text-blue" : "border-transparent text-ink-2 hover:text-ink"}`}>
-            {i + 1}. {label}
-          </button>
-        ))}
+    <div className="mt-8 max-w-2xl space-y-5">
+      <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.fTitle)} *</span>
+        <input className={`mt-1 ${inputCls}`} value={data.title} onChange={(e) => set("title", e.target.value)} /></label>
+      {mode === "edit" && <p className="-mt-3 text-xs text-dim">URL: /games/{slug}</p>}
+
+      <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.fAuthor)} *</span>
+        <input className={`mt-1 ${inputCls}`} value={data.author} onChange={(e) => set("author", e.target.value)} /></label>
+
+      <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.tabClassify)}</span>
+        <select className={`mt-1 ${inputCls}`} value={data.classification} onChange={(e) => set("classification", e.target.value)}>
+          <option value="game">{t(ui.studio.classGame)}</option>
+          <option value="app">{t(ui.studio.classApp)}</option>
+          <option value="tool">{t(ui.studio.classTool)}</option>
+          <option value="demo">{t(ui.studio.classDemo)}</option>
+          <option value="educational">{t(ui.studio.classEdu)}</option>
+        </select></label>
+
+      <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.fTags)}</span>
+        <input className={`mt-1 ${inputCls}`} value={data.tags} onChange={(e) => set("tags", e.target.value)} placeholder="Unity, WebGL, 2D" /></label>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.fDescription)}</span>
+          <textarea className={`mt-1 h-60 ${inputCls}`} value={data.description} onChange={(e) => set("description", e.target.value)} /></label>
+        <div><p className="text-sm text-ink-2">{t(ui.studio.preview2)}</p>
+          <div className="mt-1 h-60 overflow-auto rounded-[var(--radius-md)] border border-border bg-surface p-3">
+            {data.description ? <MessageContent content={data.description} /> : <p className="text-sm text-dim">—</p>}
+          </div></div>
       </div>
 
-      <div className="mt-6 space-y-4">
-        {tab === 0 && (
-          <>
-            <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.fTitle)} *</span>
-              <input className={`mt-1 ${inputCls}`} value={data.title} onChange={(e) => set("title", e.target.value)} /></label>
-            {mode === "edit" && <p className="text-xs text-dim">URL: /games/{slug}</p>}
-            <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.fAuthor)} *</span>
-              <input className={`mt-1 ${inputCls}`} value={data.author} onChange={(e) => set("author", e.target.value)} /></label>
-            <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.fTagline)}</span>
-              <input className={`mt-1 ${inputCls}`} value={data.tagline} onChange={(e) => set("tagline", e.target.value)} /></label>
-          </>
-        )}
+      <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.fBuild)}{mode === "create" ? " *" : ""}</span>
+        <input type="file" accept=".zip" className="mt-1 w-full text-sm text-ink-2 file:mr-3 file:rounded-[var(--radius-pill)] file:border-0 file:bg-blue file:px-4 file:py-2 file:text-white"
+          onChange={(e) => setFile(e.target.files?.[0] ?? null)} /></label>
+      {mode === "edit" && <p className="-mt-3 text-xs text-dim">{t(ui.studio.fBuildKeep)} — {t(ui.studio.rebuildNote)}</p>}
 
-        {tab === 1 && (
-          <>
-            <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.tabClassify)}</span>
-              <select className={`mt-1 ${inputCls}`} value={data.classification} onChange={(e) => set("classification", e.target.value)}>
-                <option value="game">{t(ui.studio.classGame)}</option><option value="app">{t(ui.studio.classApp)}</option>
-                <option value="tool">{t(ui.studio.classTool)}</option><option value="demo">{t(ui.studio.classDemo)}</option>
-                <option value="educational">{t(ui.studio.classEdu)}</option>
-              </select></label>
-            <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.tabUpload)}</span>
-              <select className={`mt-1 ${inputCls}`} value={data.projectType} onChange={(e) => set("projectType", e.target.value)}>
-                <option value="web">{t(ui.studio.typeWeb)}</option><option value="external">{t(ui.studio.typeExternal)}</option>
-                <option value="video">{t(ui.studio.typeVideo)}</option>
-              </select></label>
-            <label className="block text-sm"><span className="text-ink-2">Status</span>
-              <select className={`mt-1 ${inputCls}`} value={data.releaseStatus} onChange={(e) => set("releaseStatus", e.target.value)}>
-                <option value="in_dev">{t(ui.studio.relInDev)}</option><option value="released">{t(ui.studio.relReleased)}</option>
-                <option value="prototype">{t(ui.studio.relPrototype)}</option>
-              </select></label>
-            <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.fGenre)}</span>
-              <input className={`mt-1 ${inputCls}`} value={data.genre} onChange={(e) => set("genre", e.target.value)} /></label>
-            <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.fTags)}</span>
-              <input className={`mt-1 ${inputCls}`} value={data.tags} onChange={(e) => set("tags", e.target.value)} placeholder="Unity, WebGL" /></label>
-          </>
-        )}
-
-        {tab === 2 && (
-          <>
-            <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.fBuild)}</span>
-              <input type="file" accept=".zip" className="mt-1 w-full text-sm text-ink-2 file:mr-3 file:rounded-[var(--radius-pill)] file:border-0 file:bg-blue file:px-4 file:py-2 file:text-white"
-                onChange={(e) => setFile(e.target.files?.[0] ?? null)} /></label>
-            {mode === "edit" && <p className="text-xs text-dim">{t(ui.studio.fBuildKeep)} — {t(ui.studio.rebuildNote)}</p>}
-            <label className="block text-sm"><span className="text-ink-2">External URL</span>
-              <input className={`mt-1 ${inputCls}`} value={data.externalUrl} onChange={(e) => set("externalUrl", e.target.value)} placeholder="https://…" /></label>
-            <label className="block text-sm"><span className="text-ink-2">Video URL</span>
-              <input className={`mt-1 ${inputCls}`} value={data.videoUrl} onChange={(e) => set("videoUrl", e.target.value)} placeholder="https://…" /></label>
-          </>
-        )}
-
-        {tab === 3 && (
-          <div className="grid gap-4 lg:grid-cols-2">
-            <label className="block text-sm"><span className="text-ink-2">{t(ui.studio.fDescription)}</span>
-              <textarea className={`mt-1 h-72 ${inputCls}`} value={data.description} onChange={(e) => set("description", e.target.value)} /></label>
-            <div><p className="text-sm text-ink-2">{t(ui.studio.preview2)}</p>
-              <div className="mt-1 h-72 overflow-auto rounded-[var(--radius-md)] border border-border bg-surface p-3">
-                {data.description ? <MessageContent content={data.description} /> : <p className="text-sm text-dim">—</p>}
-              </div></div>
-          </div>
-        )}
-
-        {tab === 4 && (
-          <p className="text-sm text-ink-2">
-            {showDraftSubmit
-              ? "“Lưu nháp” lưu lại nhưng chưa gửi duyệt. “Gửi duyệt” gửi cho quản trị viên xem xét."
-              : "“Lưu thay đổi” cập nhật ngay. Tải build mới sẽ đưa game đã đăng về chờ duyệt lại."}
-          </p>
-        )}
-      </div>
-
-      {/* Persistent action bar — visible on every tab */}
-      <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-border pt-4">
+      {/* Action bar */}
+      <div className="flex flex-wrap items-center gap-3 border-t border-border pt-5">
         {showDraftSubmit ? (
           <>
             <button type="button" disabled={busy} onClick={() => save("draft")} className="rounded-[var(--radius-pill)] border border-border px-5 py-2.5 text-sm font-semibold text-ink disabled:opacity-50">{t(ui.studio.saveDraft)}</button>
