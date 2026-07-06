@@ -27,7 +27,7 @@ function PlatformControl({
     return (
       <span
         className="inline-flex items-center gap-2 rounded-[var(--radius-pill)] border border-border bg-surface px-4 py-2.5 text-sm text-dim opacity-70"
-        aria-label={`${platform} — ${t(ui.download.soon)}`}
+        aria-label={`${forLabel} — ${t(ui.download.soon)}`}
       >
         <PlatformIcon size={16} aria-hidden /> {forLabel} · <Clock size={13} aria-hidden /> {t(ui.download.soon)}
       </span>
@@ -37,7 +37,7 @@ function PlatformControl({
   // Official store badge (chỉ khi live + kind store).
   if (view.mode === "official") {
     const src = badgeSrc(view.store, locale, theme);
-    const alt = view.store === "play" ? "Get it on Google Play" : "Download on the App Store";
+    const alt = t(view.store === "play" ? ui.download.getOnPlay : ui.download.getOnAppStore);
     const badgeH = variant === "compact" ? "h-9" : "h-12";
     return (
       <a href={href} rel="nofollow" aria-label={alt} className="inline-flex transition hover:opacity-90">

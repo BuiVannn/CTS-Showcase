@@ -129,6 +129,8 @@ export const ui = {
     updated: { en: "Updated", vi: "Cập nhật" } as Localized,
     forAndroid: { en: "for Android", vi: "cho Android" } as Localized,
     forIos: { en: "for iOS", vi: "cho iOS" } as Localized,
+    getOnPlay: { en: "Get it on Google Play", vi: "Tải trên Google Play" } as Localized,
+    getOnAppStore: { en: "Download on the App Store", vi: "Tải trên App Store" } as Localized,
     centerTitle: { en: "Download our apps", vi: "Tải ứng dụng của chúng tôi" } as Localized,
     centerIntro: {
       en: "Get CTS Lab apps on your device. More platforms are on the way.",
