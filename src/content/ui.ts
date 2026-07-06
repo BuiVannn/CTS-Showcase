@@ -122,6 +122,25 @@ export const ui = {
     backText: { en: "Interested in our research and other projects?", vi: "Quan tâm đến nghiên cứu và các dự án khác của chúng tôi?" } as Localized,
     backCta: { en: "Explore our full ecosystem", vi: "Khám phá toàn bộ hệ sinh thái" } as Localized,
   },
+  download: {
+    apk: { en: "Download APK", vi: "Tải APK" } as Localized,
+    testflight: { en: "Join the beta", vi: "Tham gia bản beta" } as Localized,
+    soon: { en: "Coming soon", vi: "Sắp có" } as Localized,
+    updated: { en: "Updated", vi: "Cập nhật" } as Localized,
+    forAndroid: { en: "for Android", vi: "cho Android" } as Localized,
+    forIos: { en: "for iOS", vi: "cho iOS" } as Localized,
+    centerTitle: { en: "Download our apps", vi: "Tải ứng dụng của chúng tôi" } as Localized,
+    centerIntro: {
+      en: "Get CTS Lab apps on your device. More platforms are on the way.",
+      vi: "Cài ứng dụng CTS Lab lên thiết bị của bạn. Thêm nền tảng sẽ sớm ra mắt.",
+    } as Localized,
+    viewAll: { en: "View all apps", vi: "Xem tất cả ứng dụng" } as Localized,
+    bandTitle: { en: "Take our apps with you", vi: "Mang ứng dụng theo bên bạn" } as Localized,
+    bandLead: {
+      en: "Install CTS Lab apps on Android and iOS.",
+      vi: "Cài ứng dụng CTS Lab trên Android và iOS.",
+    } as Localized,
+  },
   device: {
     title: { en: "Order the physical device", vi: "Đặt thiết bị vật lý" } as Localized,
     blurb: {
