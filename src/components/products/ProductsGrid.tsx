@@ -6,10 +6,10 @@ import { getProducts } from "@/content/products";
 import { ui } from "@/content/ui";
 import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
-import Tag from "@/components/ui/Tag";
 import Reveal from "@/components/ui/Reveal";
 import { Stagger, StaggerItem } from "@/components/ui/Stagger";
 import HoverPreview from "@/components/ui/HoverPreview";
+import AppDownload from "@/components/products/AppDownload";
 
 export default function ProductsGrid() {
   const { t } = useLocale();
@@ -25,8 +25,8 @@ export default function ProductsGrid() {
         <Stagger className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((p) => (
             <StaggerItem key={p.id}>
-              <Link href={`/products/${p.slug}`} className="block h-full">
-                <div className="h-full rounded-[var(--radius-lg)] border border-border bg-card p-3 shadow-[var(--shadow-sm)] transition duration-300 hover:-translate-y-1 hover:border-blue">
+              <div className="flex h-full flex-col rounded-[var(--radius-lg)] border border-border bg-card p-3 shadow-[var(--shadow-sm)] transition duration-300 hover:-translate-y-1 hover:border-blue">
+                <Link href={`/products/${p.slug}`} className="block">
                   <HoverPreview
                     src={p.image.src}
                     alt={t(p.image.alt)}
@@ -41,18 +41,16 @@ export default function ProductsGrid() {
                       </div>
                     }
                   />
-                  <div className="px-1.5 pb-1">
+                  <div className="px-1.5 pt-2">
                     <Badge tone="neutral">{t(p.categoryLabel)}</Badge>
                     <h2 className="text-display mt-2 text-base text-ink">{p.name}</h2>
                     <p className="mt-1 text-sm text-ink-2">{t(p.excerpt)}</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {t(p.tags).slice(0, 3).map((tag) => (
-                        <Tag key={tag}>{tag}</Tag>
-                      ))}
-                    </div>
                   </div>
+                </Link>
+                <div className="mt-auto px-1.5 pb-1 pt-3">
+                  <AppDownload app={p} variant="compact" />
                 </div>
-              </Link>
+              </div>
             </StaggerItem>
           ))}
         </Stagger>
