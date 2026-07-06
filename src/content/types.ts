@@ -27,6 +27,24 @@ export interface ShowcaseItem {
   image: LocalImage;
 }
 
+export type Platform = "android" | "ios";
+export type DownloadKind = "apk" | "play" | "appstore" | "testflight";
+export type DownloadStatus = "available" | "soon";
+
+export interface PlatformDownload {
+  status: DownloadStatus;
+  kind?: DownloadKind;   // bắt buộc khi status="available" — quyết định badge/label
+  target?: string;       // đích thật (file URL / store URL); chỉ API route đọc
+  version?: string;      // apk: "1.2.0"
+  updatedAt?: string;    // apk: ISO date "2026-06-10"
+  size?: string;         // apk (tùy chọn): "48 MB"
+}
+
+export interface AppDownloads {
+  android?: PlatformDownload;
+  ios?: PlatformDownload;
+}
+
 export interface EcosystemApp {
   id: string;
   name: string; // brand name (PTalk, …)
@@ -39,7 +57,7 @@ export interface EcosystemApp {
   description: Localized; // long — /products
   features: Localized<string[]>;
   tags: Localized<string[]>;
-  downloadHref: string;
+  downloads?: AppDownloads;
   image: LocalImage;
   logo?: string; // public path to a tile logo, e.g. "/img/logos/ptalk.png"; falls back to `icon`
   device?: boolean; // true → show the "order physical device" block on the detail page

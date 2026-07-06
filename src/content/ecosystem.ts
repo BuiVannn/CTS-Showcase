@@ -35,7 +35,7 @@ export const ecosystem: EcosystemApp[] = [
       en: ["AI", "Voice", "Education"],
       vi: ["AI", "Giọng nói", "Giáo dục"],
     },
-    downloadHref: "#",
+    downloads: { android: { status: "soon" }, ios: { status: "soon" } },
     image: { src: "/img/ptalk.jpg", alt: { en: "PTalk", vi: "PTalk" } },
   },
   {
@@ -70,7 +70,7 @@ export const ecosystem: EcosystemApp[] = [
       en: ["Creative", "AI Tutor", "Vietnamese"],
       vi: ["Sáng tạo", "Gia sư AI", "Tiếng Việt"],
     },
-    downloadHref: "#",
+    downloads: { android: { status: "soon" }, ios: { status: "soon" } },
     image: { src: "/img/vietCreative.jpg", alt: { en: "VietCreative", vi: "VietCreative" } },
   },
   {
@@ -105,7 +105,7 @@ export const ecosystem: EcosystemApp[] = [
       en: ["Generative AI", "Video", "Storytelling"],
       vi: ["AI tạo sinh", "Video", "Kể chuyện"],
     },
-    downloadHref: "#",
+    downloads: { android: { status: "soon" }, ios: { status: "soon" } },
     image: { src: "/img/vietCreative.jpg", alt: { en: "Vision Tale", vi: "Vision Tale" } },
   },
   {
@@ -140,7 +140,7 @@ export const ecosystem: EcosystemApp[] = [
       en: ["Math", "Music", "AI"],
       vi: ["Toán", "Âm nhạc", "AI"],
     },
-    downloadHref: "#",
+    downloads: { android: { status: "soon" }, ios: { status: "soon" } },
     image: { src: "/img/unilearn.jpg", alt: { en: "Unilearn", vi: "Unilearn" } },
   },
   {
@@ -172,7 +172,11 @@ export const ecosystem: EcosystemApp[] = [
       ],
     },
     tags: { en: ["AI", "Kids", "Learning"], vi: ["AI", "Trẻ em", "Học tập"] },
-    downloadHref: "#",
+    downloads: {
+      // TODO(user): đổi `target` sang host thật khi chốt (games origin :8090 / public/ / thư mục ngoài repo).
+      android: { status: "available", kind: "apk", target: "/downloads/kidmentor.apk", version: "1.0.0", updatedAt: "2026-07-06" },
+      ios: { status: "soon" },
+    },
     // image = existing placeholder so /products + Hệ sinh thái cards never break;
     // logo = convention path the user drops a file at (grid shows it when present).
     image: { src: "/img/1account.png", alt: { en: "KidMentor", vi: "KidMentor" } },
@@ -208,7 +212,11 @@ export const ecosystem: EcosystemApp[] = [
       ],
     },
     tags: { en: ["AI", "Voice", "Assistant"], vi: ["AI", "Giọng nói", "Trợ lý"] },
-    downloadHref: "#",
+    downloads: {
+      // TODO(user): đổi `target` sang host thật khi chốt (games origin :8090 / public/ / thư mục ngoài repo).
+      android: { status: "available", kind: "apk", target: "/downloads/ptalk-signature.apk", version: "1.0.0", updatedAt: "2026-07-06" },
+      ios: { status: "soon" },
+    },
     image: { src: "/img/1account.png", alt: { en: "PTalk Signature", vi: "PTalk Signature" } },
     logo: "/img/logos/logo_ptalk_signature.png",
     device: true,
@@ -242,7 +250,7 @@ export const ecosystem: EcosystemApp[] = [
       ],
     },
     tags: { en: ["Bluetooth", "Devices", "Connectivity"], vi: ["Bluetooth", "Thiết bị", "Kết nối"] },
-    downloadHref: "#",
+    downloads: { android: { status: "soon" }, ios: { status: "soon" } },
     image: { src: "/img/1account.png", alt: { en: "P-Connect", vi: "P-Connect" } },
     logo: "/img/logos/logo_p_connect.png",
   },

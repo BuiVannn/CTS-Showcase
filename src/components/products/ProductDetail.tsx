@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Check, ArrowRight } from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
 import { useLocale } from "@/lib/locale";
 import { getProduct } from "@/content/products";
 import { APP_ICONS } from "@/lib/app-icons";
@@ -96,12 +96,7 @@ export default function ProductDetail({ slug }: { slug: string }) {
 
             <Reveal delay={0.14}>
               <div className="mt-8 flex flex-wrap gap-3">
-                {p.downloadHref !== "#" && (
-                  <Button href={p.downloadHref} variant="blue">
-                    <Download size={16} /> {t(ui.products.download)}
-                  </Button>
-                )}
-                <Button href="/products" variant={p.downloadHref !== "#" ? "ghost" : "blue"}>
+                <Button href="/products" variant="blue">
                   {t(ui.products.backCta)} <ArrowRight size={16} />
                 </Button>
               </div>
