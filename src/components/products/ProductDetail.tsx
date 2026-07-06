@@ -14,6 +14,7 @@ import Reveal from "@/components/ui/Reveal";
 import { Stagger, StaggerItem } from "@/components/ui/Stagger";
 import SectionGlow from "@/components/ui/SectionGlow";
 import DeviceOrderBlock from "@/components/products/DeviceOrderBlock";
+import AppDownload from "@/components/products/AppDownload";
 
 export default function ProductDetail({ slug }: { slug: string }) {
   const { t, locale } = useLocale();
@@ -95,8 +96,17 @@ export default function ProductDetail({ slug }: { slug: string }) {
             )}
 
             <Reveal delay={0.14}>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Button href="/products" variant="blue">
+              <div className="mt-8">
+                <h2 className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-dim">
+                  {locale === "vi" ? "Tải ứng dụng" : "Get the app"}
+                </h2>
+                <div className="mt-3"><AppDownload app={p} variant="full" /></div>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.16}>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Button href="/products" variant="ghost">
                   {t(ui.products.backCta)} <ArrowRight size={16} />
                 </Button>
               </div>
