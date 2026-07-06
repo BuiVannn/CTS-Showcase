@@ -40,6 +40,7 @@ export const site: SiteConfig = {
   nav: [
     { id: "/", label: { en: "Home", vi: "Trang chủ" } },
     { id: "/products", label: { en: "Products", vi: "Sản phẩm" } },
+    { id: "/download", label: { en: "Download", vi: "Tải app" } },
     { id: "/games", label: { en: "Games", vi: "Games" } },
     { id: "/vr-tour", label: { en: "VR Tour", vi: "Tham quan VR" } },
   ],
