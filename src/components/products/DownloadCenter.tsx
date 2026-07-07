@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale } from "@/lib/locale";
-import { getProducts } from "@/content/products";
+import { getDownloadApps } from "@/content/products";
 import { ui } from "@/content/ui";
 import Container from "@/components/ui/Container";
 import Reveal from "@/components/ui/Reveal";
@@ -10,7 +10,7 @@ import AppDownload from "@/components/products/AppDownload";
 
 export default function DownloadCenter() {
   const { t } = useLocale();
-  const apps = getProducts();
+  const apps = getDownloadApps();
   return (
     <section className="section pt-28">
       <Container>

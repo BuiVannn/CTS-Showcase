@@ -1,9 +1,25 @@
 import { describe, it, expect } from "vitest";
-import { getProducts, getProduct } from "./products";
+import { getProducts, getProduct, getDownloadApps } from "./products";
 
 describe("getProducts", () => {
   it("returns all ecosystem products", () => {
     expect(getProducts().length).toBeGreaterThanOrEqual(6);
+  });
+});
+
+describe("getDownloadApps", () => {
+  it("curated order for /download, excludes PTalk (core/device, not a downloadable app)", () => {
+    expect(getDownloadApps().map((a) => a.slug)).toEqual([
+      "unilearn",
+      "viet-creative",
+      "kidmentor",
+      "ptalk-signature",
+      "p-connect",
+    ]);
+  });
+  it("PTalk vẫn là sản phẩm (getProducts) nhưng không có trên /download", () => {
+    expect(getProducts().some((a) => a.slug === "ptalk")).toBe(true);
+    expect(getDownloadApps().some((a) => a.slug === "ptalk")).toBe(false);
   });
 });
 
