@@ -4,6 +4,27 @@
 **Người viết:** team frontend (phần giao diện tải app đã build xong và **đang chờ** file).
 **Ngày:** 2026-07-07.
 
+---
+
+> ## ✅ ĐÃ TRIỂN KHAI — LIVE 2026-07-07 (as-built)
+>
+> Cấu hình thực tế **khác vài chi tiết** so với hướng dẫn bên dưới (hướng dẫn viết trước khi làm):
+>
+> - **Cổng nội bộ:** `127.0.0.1:8092` (không phải `8085`).
+> - **File:** `/var/www/ctslab-downloads/{kidmentor.apk, ptalk-signature.apk}` — chủ `namnx:namnx`,
+>   quyền `644` (world-readable) nên `www-data` đọc được; **không cần chown www-data**.
+> - **vhost:** `/etc/nginx/sites-available/ctslab-downloads` (symlink `sites-enabled`). Dùng regex
+>   `location ~ ^/downloads/(?<apk>[A-Za-z0-9._-]+\.apk)$` + `alias /var/www/ctslab-downloads/$apk;`
+>   → chỉ phục vụ đúng `*.apk`, chặn traversal/dir-listing. `default_type` = content-type APK.
+> - **Tunnel:** route `ctslab.net` Path `downloads/*` → `http://localhost:8092`, **xếp trên** catch-all
+>   `ctslab.net *` → `:3001` (đã thêm trên CF dashboard).
+> - **⚠️ Bug đã sửa (commit `d8940b12`):** route `/api/download/[slug]` từng absolutize target bằng
+>   `req.url` → sau tunnel host = `localhost:3001` → 302 trỏ tới `https://localhost:3001/downloads/...`
+>   (URL chết). Đã đổi sang emit `Location` **tương đối** (`res.target` nguyên văn) → trình duyệt tự
+>   resolve theo origin thật `ctslab.net`. Store URL tuyệt đối vẫn pass-through.
+> - **Nghiệm thu §8:** bước 1/2/3 PASS (200 + đúng header; 206 + Content-Range; 302→200 qua domain thật).
+> - **CHƯA làm (tùy chọn §6):** Cloudflare Cache Rule cho `.apk` — hiện `cf-cache-status: MISS`.
+
 > **TL;DR** — Frontend đã sẵn sàng. Nó chuyển hướng người dùng tới URL cố định
 > `https://ctslab.net/downloads/<slug>.apk`. Việc của bạn: làm cho URL đó trả về
 > đúng file APK từ đĩa, có hỗ trợ **resume (range request)** và đúng **content-type**.
