@@ -3,7 +3,7 @@ import { getProducts, getProduct } from "./products";
 
 describe("getProducts", () => {
   it("returns all ecosystem products", () => {
-    expect(getProducts().length).toBeGreaterThanOrEqual(7);
+    expect(getProducts().length).toBeGreaterThanOrEqual(6);
   });
 });
 

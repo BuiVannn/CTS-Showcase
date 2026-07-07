@@ -18,8 +18,21 @@ describe("ecosystem downloads", () => {
       }
     }
   });
-  it("đúng 2 app có android apk sẵn (KidMentor, PTalk Signature)", () => {
-    const ready = ecosystem.filter((a) => a.downloads?.android?.status === "available").map((a) => a.id).sort();
-    expect(ready).toEqual(["kidmentor", "ptalk-signature"]);
+  it("đúng 2 app dùng APK trực tiếp cho Android (KidMentor, PTalk Signature)", () => {
+    const apk = ecosystem
+      .filter((a) => a.downloads?.android?.kind === "apk")
+      .map((a) => a.id)
+      .sort();
+    expect(apk).toEqual(["kidmentor", "ptalk-signature"]);
+  });
+  it("Unilearn có sẵn trên cả hai store (Play + App Store)", () => {
+    const uni = ecosystem.find((a) => a.id === "unilearn");
+    expect(uni?.downloads?.android).toMatchObject({ status: "available", kind: "play" });
+    expect(uni?.downloads?.ios).toMatchObject({ status: "available", kind: "appstore" });
+    expect(uni?.downloads?.android?.target).toContain("play.google.com");
+    expect(uni?.downloads?.ios?.target).toContain("apps.apple.com");
+  });
+  it("Vision Tale đã được gỡ khỏi hệ sinh thái", () => {
+    expect(ecosystem.some((a) => a.id === "vision-tale")).toBe(false);
   });
 });

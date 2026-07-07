@@ -5,7 +5,7 @@ import ProductsGrid from "@/components/products/ProductsGrid";
 
 export const metadata: Metadata = {
   title: "Sản phẩm",
-  description: "Hệ sinh thái ứng dụng AI của CTS Lab: PTalk, VietCreative, Vision Tale, Unilearn.",
+  description: "Hệ sinh thái ứng dụng AI của CTS Lab: PTalk, VietCreative, Unilearn.",
 };
 
 export default function ProductsPage() {

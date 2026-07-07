@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Smartphone, Download, Apple, Clock } from "lucide-react";
 import { useLocale } from "@/lib/locale";
 import { useTheme } from "@/lib/theme-context";
@@ -21,6 +22,7 @@ function PlatformControl({
   const href = downloadApiHref(slug, platform);
   const PlatformIcon = platform === "ios" ? Apple : Smartphone;
   const forLabel = platform === "ios" ? t(ui.download.forIos) : t(ui.download.forAndroid);
+  const [badgeFailed, setBadgeFailed] = useState(false);
 
   // "Sắp có" — chip tĩnh, không phải link, không dùng badge official.
   if (view.mode === "soon") {
@@ -36,13 +38,31 @@ function PlatformControl({
 
   // Official store badge (chỉ khi live + kind store).
   if (view.mode === "official") {
-    const src = badgeSrc(view.store, locale, theme);
-    const alt = t(view.store === "play" ? ui.download.getOnPlay : ui.download.getOnAppStore);
-    const badgeH = variant === "compact" ? "h-9" : "h-12";
+    const label = t(view.store === "play" ? ui.download.getOnPlay : ui.download.getOnAppStore);
+    const compact = variant === "compact";
+    // Ưu tiên badge chính thức. Nếu chưa có file asset (ảnh lỗi) → nút store gọn,
+    // KHÔNG tự vẽ giả badge official (tránh vi phạm brand guideline + tránh vỡ ảnh).
+    if (!badgeFailed) {
+      return (
+        <a href={href} rel="nofollow" aria-label={label} className="inline-flex transition hover:opacity-90">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={badgeSrc(view.store, locale, theme)}
+            alt={label}
+            className={`${compact ? "h-9" : "h-12"} w-auto`}
+            onError={() => setBadgeFailed(true)}
+          />
+        </a>
+      );
+    }
     return (
-      <a href={href} rel="nofollow" aria-label={alt} className="inline-flex transition hover:opacity-90">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt={alt} className={`${badgeH} w-auto`} />
+      <a
+        href={href}
+        rel="nofollow"
+        aria-label={label}
+        className={`inline-flex items-center gap-2 rounded-[var(--radius-pill)] border border-border bg-card px-4 ${compact ? "py-2 text-[0.8rem]" : "py-2.5 text-sm"} font-semibold text-ink transition hover:border-blue`}
+      >
+        <PlatformIcon size={compact ? 14 : 16} aria-hidden /> {label}
       </a>
     );
   }

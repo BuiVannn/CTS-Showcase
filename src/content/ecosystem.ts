@@ -1,7 +1,5 @@
 import type { EcosystemApp } from "./types";
 
-// NOTE: "Vision Tale" currently reuses /img/vietCreative.jpg (no dedicated asset yet).
-// Flagged for the content owner to supply a real Vision Tale still.
 export const ecosystem: EcosystemApp[] = [
   {
     id: "ptalk",
@@ -74,41 +72,6 @@ export const ecosystem: EcosystemApp[] = [
     image: { src: "/img/vietCreative.jpg", alt: { en: "VietCreative", vi: "VietCreative" } },
   },
   {
-    id: "vision-tale",
-    name: "Vision Tale",
-    slug: "vision-tale",
-    year: 2025,
-    category: "video-ai",
-    categoryLabel: { en: "Video AI", vi: "Video AI" },
-    icon: "film",
-    excerpt: {
-      en: "Write scripts, design characters, arrange scenes — then watch AI render your story into an animated video.",
-      vi: "Viết kịch bản, thiết kế nhân vật, dàn cảnh — rồi xem AI dựng câu chuyện của bạn thành video hoạt hình.",
-    },
-    description: {
-      en: "An AI-powered filmmaking tool where students write scripts, design custom characters, and arrange scene-by-scene storyboards — then watch their vision rendered into a fully animated video.",
-      vi: "Công cụ làm phim ứng dụng AI, nơi học sinh viết kịch bản, thiết kế nhân vật riêng và sắp xếp storyboard theo từng cảnh — rồi xem ý tưởng của mình được dựng thành video hoạt hình hoàn chỉnh.",
-    },
-    features: {
-      en: [
-        "Generative AI video rendering from text prompts",
-        "Deep character customization & scene-by-scene control",
-        "Storyboard workflow teaching narrative structure & visual logic",
-      ],
-      vi: [
-        "Dựng video bằng AI tạo sinh từ câu lệnh văn bản",
-        "Tuỳ biến nhân vật sâu & kiểm soát theo từng cảnh",
-        "Quy trình storyboard dạy cấu trúc tự sự & logic hình ảnh",
-      ],
-    },
-    tags: {
-      en: ["Generative AI", "Video", "Storytelling"],
-      vi: ["AI tạo sinh", "Video", "Kể chuyện"],
-    },
-    downloads: { android: { status: "soon" }, ios: { status: "soon" } },
-    image: { src: "/img/vietCreative.jpg", alt: { en: "Vision Tale", vi: "Vision Tale" } },
-  },
-  {
     id: "unilearn",
     name: "Unilearn",
     slug: "unilearn",
@@ -140,7 +103,10 @@ export const ecosystem: EcosystemApp[] = [
       en: ["Math", "Music", "AI"],
       vi: ["Toán", "Âm nhạc", "AI"],
     },
-    downloads: { android: { status: "soon" }, ios: { status: "soon" } },
+    downloads: {
+      android: { status: "available", kind: "play", target: "https://play.google.com/store/apps/details?id=uni.learn.app&hl=vi" },
+      ios: { status: "available", kind: "appstore", target: "https://apps.apple.com/vn/app/unilearn-gia-s%C6%B0-ai/id6747472124" },
+    },
     image: { src: "/img/unilearn.jpg", alt: { en: "Unilearn", vi: "Unilearn" } },
   },
   {

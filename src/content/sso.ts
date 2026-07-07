@@ -14,8 +14,8 @@ export const sso: {
   eyebrow: { en: "Identity", vi: "Định danh" },
   title: { en: "One Account", vi: "Một tài khoản" },
   description: {
-    en: "Access every CTS Lab application with a single account. Sign in once and move seamlessly across PTalk, VietCreative, Vision Tale, Unilearn, and more.",
-    vi: "Truy cập mọi ứng dụng của CTS Lab chỉ với một tài khoản. Đăng nhập một lần và di chuyển liền mạch giữa PTalk, VietCreative, Vision Tale, Unilearn và hơn thế nữa.",
+    en: "Access every CTS Lab application with a single account. Sign in once and move seamlessly across PTalk, VietCreative, Unilearn, and more.",
+    vi: "Truy cập mọi ứng dụng của CTS Lab chỉ với một tài khoản. Đăng nhập một lần và di chuyển liền mạch giữa PTalk, VietCreative, Unilearn và hơn thế nữa.",
   },
   caption: { en: "Single Sign-On", vi: "Đăng nhập một lần" },
   bannerTitle: {
