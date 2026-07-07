@@ -44,12 +44,17 @@ function PlatformControl({
     // KHÔNG tự vẽ giả badge official (tránh vi phạm brand guideline + tránh vỡ ảnh).
     if (!badgeFailed) {
       return (
-        <a href={href} rel="nofollow" aria-label={label} className="inline-flex transition hover:opacity-90">
+        <a
+          href={href}
+          rel="nofollow"
+          aria-label={label}
+          className="group inline-flex rounded-[10px] transition duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={badgeSrc(view.store, locale, theme)}
             alt={label}
-            className={`${compact ? "h-9" : "h-12"} w-auto`}
+            className={`${compact ? "h-10" : "h-12"} w-auto drop-shadow-sm transition duration-200 group-hover:drop-shadow-md`}
             onError={() => setBadgeFailed(true)}
           />
         </a>
