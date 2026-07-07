@@ -17,6 +17,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
 
   try { getDownloadsStore().increment(slug, platform); } catch { /* đếm lỗi không chặn tải */ }
 
-  const dest = res.target.startsWith("http") ? res.target : new URL(res.target, req.url).toString();
-  return NextResponse.redirect(dest, 302);
+  // res.target is either an absolute store URL ("https://…") or a root-relative
+  // path ("/downloads/<slug>.apk"). Emit it verbatim as the Location header — a
+  // relative Location is resolved by the browser against the real request origin
+  // (ctslab.net). Do NOT absolutize with req.url: behind the CF tunnel the host is
+  // localhost:3001, which would send users to a dead URL.
+  return new NextResponse(null, { status: 302, headers: { Location: res.target } });
 }
