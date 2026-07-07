@@ -2,7 +2,7 @@
 
 import { Check, ArrowRight } from "lucide-react";
 import { useLocale } from "@/lib/locale";
-import { getProduct } from "@/content/products";
+import { getProduct, isDownloadApp } from "@/content/products";
 import { APP_ICONS } from "@/lib/app-icons";
 import { ui } from "@/content/ui";
 import Container from "@/components/ui/Container";
@@ -95,14 +95,16 @@ export default function ProductDetail({ slug }: { slug: string }) {
               </Reveal>
             )}
 
-            <Reveal delay={0.14}>
-              <div className="mt-8">
-                <h2 className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-dim">
-                  {locale === "vi" ? "Tải ứng dụng" : "Get the app"}
-                </h2>
-                <div className="mt-3"><AppDownload app={p} variant="full" /></div>
-              </div>
-            </Reveal>
+            {isDownloadApp(p.slug) && (
+              <Reveal delay={0.14}>
+                <div className="mt-8">
+                  <h2 className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-dim">
+                    {locale === "vi" ? "Tải ứng dụng" : "Get the app"}
+                  </h2>
+                  <div className="mt-3"><AppDownload app={p} variant="full" /></div>
+                </div>
+              </Reveal>
+            )}
 
             <Reveal delay={0.16}>
               <div className="mt-6 flex flex-wrap gap-3">

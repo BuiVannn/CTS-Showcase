@@ -11,13 +11,21 @@ export function getProduct(slug: string): EcosystemApp | undefined {
   return ecosystem.find((p) => p.slug === slug);
 }
 
-// Apps listed on the /download page, in curated order. Excludes core/device
-// products that aren't downloadable apps (PTalk is a core product + physical
-// device, so it stays in Products but not on the download page).
+// Downloadable apps, in curated order. Excludes core/device products that
+// aren't downloadable apps (PTalk is a core product + physical device, so it
+// stays in Products but has no download UI anywhere). Single source of truth
+// for BOTH the /download page order AND whether a product shows download
+// buttons on the grid + detail pages.
 const DOWNLOAD_APP_SLUGS = ["unilearn", "viet-creative", "kidmentor", "ptalk-signature", "p-connect"];
 
 export function getDownloadApps(): EcosystemApp[] {
   return DOWNLOAD_APP_SLUGS
     .map((slug) => getProduct(slug))
     .filter((a): a is EcosystemApp => a !== undefined);
+}
+
+/** True if the product is a downloadable app (shows download buttons); false
+ *  for core/device products like PTalk. */
+export function isDownloadApp(slug: string): boolean {
+  return DOWNLOAD_APP_SLUGS.includes(slug);
 }

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLocale } from "@/lib/locale";
-import { getProducts } from "@/content/products";
+import { getProducts, isDownloadApp } from "@/content/products";
 import { ui } from "@/content/ui";
 import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
@@ -47,9 +47,11 @@ export default function ProductsGrid() {
                     <p className="mt-1 text-sm text-ink-2">{t(p.excerpt)}</p>
                   </div>
                 </Link>
-                <div className="mt-auto px-1.5 pb-1 pt-3">
-                  <AppDownload app={p} variant="compact" />
-                </div>
+                {isDownloadApp(p.slug) && (
+                  <div className="mt-auto px-1.5 pb-1 pt-3">
+                    <AppDownload app={p} variant="compact" />
+                  </div>
+                )}
               </div>
             </StaggerItem>
           ))}

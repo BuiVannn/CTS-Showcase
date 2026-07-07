@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getProducts, getProduct, getDownloadApps } from "./products";
+import { getProducts, getProduct, getDownloadApps, isDownloadApp } from "./products";
 
 describe("getProducts", () => {
   it("returns all ecosystem products", () => {
@@ -20,6 +20,11 @@ describe("getDownloadApps", () => {
   it("PTalk vẫn là sản phẩm (getProducts) nhưng không có trên /download", () => {
     expect(getProducts().some((a) => a.slug === "ptalk")).toBe(true);
     expect(getDownloadApps().some((a) => a.slug === "ptalk")).toBe(false);
+  });
+  it("isDownloadApp: PTalk là core (false), app tải được là true", () => {
+    expect(isDownloadApp("ptalk")).toBe(false);
+    expect(isDownloadApp("unilearn")).toBe(true);
+    expect(isDownloadApp("p-connect")).toBe(true);
   });
 });
 
