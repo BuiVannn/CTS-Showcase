@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale } from "@/lib/locale";
 import { ui } from "@/content/ui";
+import type { Localized } from "@/content/types";
 import MessageContent from "@/components/home/MessageContent";
 
 export type GameFormData = {
@@ -20,20 +21,24 @@ export const EMPTY_FORM: GameFormData = {
 
 const inputCls = "w-full rounded-[var(--radius-md)] border border-border bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-blue";
 
-function errorMsg(code: string | undefined): string {
-  const m: Record<string, string> = {
-    quota: "Bạn đã đạt giới hạn số game.", "too-large": "File quá lớn.",
-    "too-big-uncompressed": "Game giải nén quá lớn.", "no-index": "Zip thiếu index.html.",
-    "invalid-zip": "File zip không hợp lệ.", "unsafe-path": "Zip chứa đường dẫn không an toàn.",
-    bad: "Thiếu thông tin bắt buộc.", forbidden: "Bạn không có quyền.",
-  };
-  return `❌ ${m[code ?? ""] ?? "Lỗi: " + (code ?? "")}`;
-}
-
 export default function GameForm({
   mode, initial, slug, status,
 }: { mode: "create" | "edit"; initial?: GameFormData; slug?: string; status?: string }) {
   const { t } = useLocale();
+  const errorMsg = (code: string | undefined): string => {
+    const m: Record<string, Localized> = {
+      quota: ui.studio.errQuota,
+      "too-large": ui.studio.errTooLarge,
+      "too-big-uncompressed": ui.studio.errTooBig,
+      "no-index": ui.studio.errNoIndex,
+      "invalid-zip": ui.studio.errInvalidZip,
+      "unsafe-path": ui.studio.errUnsafePath,
+      bad: ui.studio.errBad,
+      forbidden: ui.studio.errForbidden,
+    };
+    const key = code ?? "";
+    return `❌ ${m[key] ? t(m[key]) : `${t(ui.studio.errGeneric)}: ${code ?? ""}`}`;
+  };
   const router = useRouter();
   const [data, setData] = useState<GameFormData>(initial ?? EMPTY_FORM);
   const [file, setFile] = useState<File | null>(null);
@@ -45,7 +50,7 @@ export default function GameForm({
 
   async function save(intent: "draft" | "pending" | "keep") {
     if (!data.title.trim() || !data.author.trim()) { setMsg(errorMsg("bad")); return; }
-    if (mode === "create" && !file) { setMsg("❌ Cần tải lên file game (.zip)."); return; }
+    if (mode === "create" && !file) { setMsg(`❌ ${t(ui.studio.errNeedZip)}`); return; }
     setBusy(true); setMsg(null);
     const form = new FormData();
     (Object.keys(data) as (keyof GameFormData)[]).forEach((k) => form.append(k, data[k]));

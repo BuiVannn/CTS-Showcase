@@ -52,7 +52,7 @@ export default function GameHubView({ games }: { games: CatalogGame[] }) {
             <p className="mt-2 font-mono text-xs text-dim">{t(ui.games.gamesCount).replace("{n}", String(games.length))}</p>
           </div>
           <Link href="/games/studio" className="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-border px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-blue hover:text-blue">
-            + Đăng game của bạn
+            {t(ui.games.submitYourGame)}
           </Link>
         </div>
 

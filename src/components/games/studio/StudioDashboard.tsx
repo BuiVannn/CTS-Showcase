@@ -10,11 +10,19 @@ import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
 
 type Item = { slug: string; title: string; status: string };
-const STATUS_VI: Record<string, string> = { draft: "Nháp", pending: "Chờ duyệt", published: "Đã đăng", rejected: "Bị từ chối" };
 const STATUS_TONE: Record<string, "red" | "blue" | "neutral"> = { draft: "neutral", pending: "neutral", published: "blue", rejected: "red" };
 
 export default function StudioDashboard({ games }: { games: Item[] }) {
   const { t } = useLocale();
+  const statusLabel = (s: string) => {
+    const map: Record<string, typeof ui.studio.statusDraft> = {
+      draft: ui.studio.statusDraft,
+      pending: ui.studio.statusPending,
+      published: ui.studio.statusPublished,
+      rejected: ui.studio.statusRejected,
+    };
+    return map[s] ? t(map[s]) : s;
+  };
   const router = useRouter();
   const [err, setErr] = useState<string | null>(null);
 
@@ -23,7 +31,7 @@ export default function StudioDashboard({ games }: { games: Item[] }) {
     setErr(null);
     const res = await fetch(`/api/games/${encodeURIComponent(slug)}`, { method: "DELETE" });
     if (res.ok) router.refresh();
-    else setErr("❌ Xoá không thành công.");
+    else setErr(`❌ ${t(ui.studio.deleteFailed)}`);
   }
 
   return (
@@ -43,7 +51,7 @@ export default function StudioDashboard({ games }: { games: Item[] }) {
             <li key={g.slug} className="rounded-[var(--radius-lg)] border border-border bg-card p-4 shadow-[var(--shadow-sm)]">
               <div className="flex items-start justify-between gap-3">
                 <h3 className="text-display text-base text-ink">{g.title}</h3>
-                <Badge tone={STATUS_TONE[g.status] ?? "neutral"}>{STATUS_VI[g.status] ?? g.status}</Badge>
+                <Badge tone={STATUS_TONE[g.status] ?? "neutral"}>{statusLabel(g.status)}</Badge>
               </div>
               <div className="mt-4 flex items-center gap-4 text-xs">
                 <Link href={`/games/${g.slug}`} className="inline-flex items-center gap-1 text-ink-2 hover:text-blue"><Eye size={14} /> {t(ui.studio.preview)}</Link>
