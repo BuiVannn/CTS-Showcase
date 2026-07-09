@@ -1,4 +1,4 @@
-import { ecosystem } from "./ecosystem";
+import { ecosystem, vrDevices } from "./ecosystem";
 import type { EcosystemApp } from "./types";
 
 /** Repository seam: today reads the static `ecosystem` array; swap to an API/DB
@@ -8,7 +8,7 @@ export function getProducts(): EcosystemApp[] {
 }
 
 export function getProduct(slug: string): EcosystemApp | undefined {
-  return ecosystem.find((p) => p.slug === slug);
+  return [...ecosystem, ...vrDevices].find((p) => p.slug === slug);
 }
 
 // Downloadable apps, in curated order. Excludes core/device products that
@@ -28,4 +28,9 @@ export function getDownloadApps(): EcosystemApp[] {
  *  for core/device products like PTalk. */
 export function isDownloadApp(slug: string): boolean {
   return DOWNLOAD_APP_SLUGS.includes(slug);
+}
+
+/** VR-headset products for the VR Device group on /download. */
+export function getVrDevices(): EcosystemApp[] {
+  return vrDevices;
 }

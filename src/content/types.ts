@@ -10,14 +10,15 @@ export interface LocalImage {
   alt: Localized;
 }
 
-export type IconKey = "mic" | "paintbrush" | "film" | "music" | "graduation" | "signature" | "bluetooth";
+export type IconKey = "mic" | "paintbrush" | "film" | "music" | "graduation" | "signature" | "bluetooth" | "vr";
 
 export type EcosystemCategory =
   | "ai-voice"
   | "creative-ai"
   | "video-ai"
   | "learning-ai"
-  | "connectivity";
+  | "connectivity"
+  | "vr";
 
 export interface ShowcaseItem {
   id: string;
@@ -27,7 +28,7 @@ export interface ShowcaseItem {
   image: LocalImage;
 }
 
-export type Platform = "android" | "ios";
+export type Platform = "android" | "ios" | "vr";
 export type DownloadKind = "apk" | "play" | "appstore" | "testflight";
 export type DownloadStatus = "available" | "soon";
 
@@ -43,6 +44,7 @@ export interface PlatformDownload {
 export interface AppDownloads {
   android?: PlatformDownload;
   ios?: PlatformDownload;
+  vr?: PlatformDownload;
 }
 
 export interface EcosystemApp {

@@ -221,3 +221,41 @@ export const ecosystem: EcosystemApp[] = [
     logo: "/img/logos/logo_p_connect.png",
   },
 ];
+
+/** VR-headset products (Meta Quest / standalone). Kept SEPARATE from `ecosystem`
+ *  so the /products grid + ecosystem tests (which require android+ios on every
+ *  ecosystem app) stay unchanged. Surfaced only in the VR group on /download. */
+export const vrDevices: EcosystemApp[] = [
+  {
+    id: "stem-vr",
+    name: "STEM VR",
+    slug: "stem-vr",
+    year: 2025,
+    category: "vr",
+    categoryLabel: { en: "VR Learning", vi: "Học tập VR" },
+    icon: "vr",
+    excerpt: {
+      en: "Immersive STEM lessons for Meta Quest and standalone VR headsets.",
+      vi: "Bài học STEM nhập vai cho Meta Quest và các kính VR độc lập.",
+    },
+    description: {
+      en: "STEM VR turns abstract science and technology lessons into hands-on, immersive experiences on Meta Quest and other standalone VR headsets.",
+      vi: "STEM VR biến các bài học khoa học và công nghệ trừu tượng thành trải nghiệm nhập vai, thực hành trực tiếp trên Meta Quest và các kính VR độc lập khác.",
+    },
+    features: {
+      en: [
+        "Immersive, hands-on STEM simulations",
+        "Runs on Meta Quest and standalone VR headsets",
+        "Curriculum-aligned lesson modules",
+      ],
+      vi: [
+        "Mô phỏng STEM nhập vai, thực hành trực tiếp",
+        "Chạy trên Meta Quest và kính VR độc lập",
+        "Học phần bám sát chương trình",
+      ],
+    },
+    tags: { en: ["VR", "STEM", "Immersive"], vi: ["VR", "STEM", "Nhập vai"] },
+    downloads: { vr: { status: "soon" } },
+    image: { src: "/img/vr.jpg", alt: { en: "STEM VR", vi: "STEM VR" } },
+  },
+];
