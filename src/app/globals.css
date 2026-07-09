@@ -227,7 +227,6 @@ html.cursor-none input, html.cursor-none textarea, html.cursor-none [contentedit
     transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1),
     box-shadow 0.18s ease,
     filter 0.18s ease;
-  will-change: transform;
 }
 [data-theme="dark"] .store-btn {
   color: var(--ink);

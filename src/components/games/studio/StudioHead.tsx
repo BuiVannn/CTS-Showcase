@@ -28,7 +28,7 @@ export default function StudioHead({ page, titleSuffix }: { page: Page; titleSuf
   return (
     <Reveal>
       <Breadcrumb items={crumbs} />
-      <span className="eyebrow eyebrow-draw mt-4 block">{t(ui.studio.pageTitle)}</span>
+      <span className="eyebrow eyebrow-draw mt-4 block">{t(ui.games.breadcrumb)}</span>
       <h1 className="text-section mt-2 text-ink">
         {t(titleKey)}
         {titleSuffix ? `: ${titleSuffix}` : ""}
