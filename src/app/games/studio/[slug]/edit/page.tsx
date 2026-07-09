@@ -3,10 +3,11 @@ import { redirect, notFound } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Container from "@/components/ui/Container";
+import AmbientField from "@/components/fx/AmbientField";
 import { auth } from "@/auth";
 import { getGamesStore } from "@/lib/games-db";
 import GameForm, { type GameFormData } from "@/components/games/studio/GameForm";
-import Breadcrumb from "@/components/ui/Breadcrumb";
+import StudioHead from "@/components/games/studio/StudioHead";
 
 export const metadata: Metadata = { title: "Sửa game — CTS Lab" };
 export const dynamic = "force-dynamic";
@@ -31,11 +32,17 @@ export default async function EditGamePage({ params }: { params: Promise<{ slug:
   return (
     <>
       <Navbar />
-      <main className="section pt-28"><Container>
-        <Breadcrumb items={[{ label: "CTS Lab", href: "/" }, { label: "Games", href: "/games" }, { label: "Studio", href: "/games/studio" }, { label: "Sửa" }]} />
-        <h1 className="text-section text-ink">Sửa: {g.title}</h1>
-        <GameForm mode="edit" slug={slug} status={g.status} initial={initial} />
-      </Container></main>
+      <main>
+        <section className="section relative overflow-hidden pt-28">
+          <AmbientField tone="warm" />
+          <Container>
+            <StudioHead page="edit" titleSuffix={g.title} />
+            <div className="mt-8 rounded-[var(--radius-lg)] border border-border bg-card p-5 shadow-[var(--shadow-sm)] sm:p-7">
+              <GameForm mode="edit" slug={slug} status={g.status} initial={initial} />
+            </div>
+          </Container>
+        </section>
+      </main>
       <Footer />
     </>
   );

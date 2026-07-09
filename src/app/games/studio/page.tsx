@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Container from "@/components/ui/Container";
+import AmbientField from "@/components/fx/AmbientField";
 import { auth } from "@/auth";
 import { signIn } from "@/auth";
 import { getGamesStore } from "@/lib/games-db";
 import StudioDashboard from "@/components/games/studio/StudioDashboard";
-import Breadcrumb from "@/components/ui/Breadcrumb";
+import StudioHead from "@/components/games/studio/StudioHead";
+import SignInButton from "@/components/games/studio/SignInButton";
 
 export const metadata: Metadata = { title: "Studio — CTS Lab" };
 export const dynamic = "force-dynamic";
@@ -19,12 +21,17 @@ export default async function StudioPage() {
     return (
       <>
         <Navbar />
-        <main className="section pt-28"><Container>
-          <h1 className="text-section text-ink">Game Studio</h1>
-          <form action={async () => { "use server"; await signIn("authentik"); }} className="mt-6">
-            <button type="submit" className="rounded-[var(--radius-pill)] bg-blue px-5 py-2.5 text-sm font-semibold text-white">Đăng nhập</button>
-          </form>
-        </Container></main>
+        <main>
+          <section className="section relative overflow-hidden pt-28">
+            <AmbientField tone="warm" />
+            <Container>
+              <StudioHead page="dashboard" />
+              <form action={async () => { "use server"; await signIn("authentik"); }} className="mt-8">
+                <SignInButton />
+              </form>
+            </Container>
+          </section>
+        </main>
         <Footer />
       </>
     );
@@ -33,11 +40,15 @@ export default async function StudioPage() {
   return (
     <>
       <Navbar />
-      <main className="section pt-28"><Container>
-        <Breadcrumb items={[{ label: "CTS Lab", href: "/" }, { label: "Games", href: "/games" }, { label: "Studio" }]} />
-        <h1 className="text-section text-ink">Game Studio</h1>
-        <StudioDashboard games={games} />
-      </Container></main>
+      <main>
+        <section className="section relative overflow-hidden pt-28">
+          <AmbientField tone="warm" />
+          <Container>
+            <StudioHead page="dashboard" />
+            <StudioDashboard games={games} />
+          </Container>
+        </section>
+      </main>
       <Footer />
     </>
   );
