@@ -26,7 +26,8 @@ async function resolve(slug: string): Promise<{ game: import("@/lib/game-catalog
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const r = await resolve(slug);
-  return { title: r ? r.game.title : "Không tìm thấy" };
+  const title = r ? (r.game.title?.trim() || "Game") : "Không tìm thấy";
+  return { title };
 }
 
 export default async function GamePlayPage({ params }: { params: Promise<{ slug: string }> }) {
