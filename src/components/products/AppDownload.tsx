@@ -1,112 +1,92 @@
 "use client";
 
-import { useState } from "react";
-import { Smartphone, Download, Apple, Clock } from "lucide-react";
+import { Smartphone, Apple, Glasses, Download, Clock } from "lucide-react";
 import { useLocale } from "@/lib/locale";
-import { useTheme } from "@/lib/theme-context";
 import { ui } from "@/content/ui";
 import { APP_ICONS } from "@/lib/app-icons";
-import { describeDownload, downloadApiHref, badgeSrc } from "@/lib/app-download";
-import type { EcosystemApp, Platform, PlatformDownload } from "@/content/types";
+import { describeDownload, downloadApiHref } from "@/lib/app-download";
+import type { EcosystemApp, Platform, PlatformDownload, Localized } from "@/content/types";
 
 type Variant = "full" | "row" | "compact";
+type T = ReturnType<typeof useLocale>["t"];
 
-/** 1 nút/badge cho 1 platform. */
-function PlatformControl({
-  slug, platform, pd, variant, locale, theme, t,
-}: {
-  slug: string; platform: Platform; pd: PlatformDownload | undefined; variant: Variant;
-  locale: "en" | "vi"; theme: "light" | "dark"; t: ReturnType<typeof useLocale>["t"];
-}) {
+const PLATFORM: Record<Platform, { glyph: typeof Smartphone; name: Localized }> = {
+  android: { glyph: Smartphone, name: ui.download.nAndroid },
+  ios: { glyph: Apple, name: ui.download.nIos },
+  vr: { glyph: Glasses, name: ui.download.nVr },
+};
+
+/** Which platforms an app offers: VR-only devices show one button; everything
+ *  else shows Android + iOS (a missing platform renders as "coming soon"). */
+function platformsFor(app: EcosystemApp): Platform[] {
+  return app.downloads?.vr ? ["vr"] : ["android", "ios"];
+}
+
+/** One unified 3D store button — identical for play / appstore / apk / testflight. */
+function StoreButton({
+  slug, platform, pd, variant, t,
+}: { slug: string; platform: Platform; pd: PlatformDownload | undefined; variant: Variant; t: T }) {
   const view = describeDownload(pd);
-  const href = downloadApiHref(slug, platform);
-  const PlatformIcon = platform === "ios" ? Apple : Smartphone;
-  const forLabel = platform === "ios" ? t(ui.download.forIos) : t(ui.download.forAndroid);
-  const [badgeFailed, setBadgeFailed] = useState(false);
+  const { glyph: Glyph, name } = PLATFORM[platform];
+  const single = platform === "vr";
+  const glyphSize = variant === "compact" ? 15 : 17;
+  const cls = `store-btn${variant === "compact" ? " store-btn--compact" : ""}${single ? " store-btn--single" : ""}`;
 
-  // "Sắp có" — chip tĩnh, không phải link, không dùng badge official.
   if (view.mode === "soon") {
     return (
-      <span
-        className="inline-flex items-center gap-2 rounded-[var(--radius-pill)] border border-border bg-surface px-4 py-2.5 text-sm text-dim opacity-70"
-        aria-label={`${forLabel} — ${t(ui.download.soon)}`}
-      >
-        <PlatformIcon size={16} aria-hidden /> {forLabel} · <Clock size={13} aria-hidden /> {t(ui.download.soon)}
+      <span className={`${cls} store-btn--soon`} aria-label={`${t(ui.download.downloadFor)} ${t(name)} — ${t(ui.download.soon)}`}>
+        <span className="store-btn__glyph"><Glyph size={glyphSize} aria-hidden /></span>
+        <span className="store-btn__label">
+          <span className="store-btn__top">{t(ui.download.downloadFor)}</span>
+          <span className="store-btn__main">{t(name)} · {t(ui.download.soon)}</span>
+        </span>
+        <Clock size={variant === "compact" ? 12 : 14} aria-hidden className="opacity-70" />
       </span>
     );
   }
 
-  // Official store badge (chỉ khi live + kind store).
-  if (view.mode === "official") {
-    const label = t(view.store === "play" ? ui.download.getOnPlay : ui.download.getOnAppStore);
-    const compact = variant === "compact";
-    // Ưu tiên badge chính thức. Nếu chưa có file asset (ảnh lỗi) → nút store gọn,
-    // KHÔNG tự vẽ giả badge official (tránh vi phạm brand guideline + tránh vỡ ảnh).
-    if (!badgeFailed) {
-      return (
-        <a
-          href={href}
-          rel="nofollow"
-          aria-label={label}
-          className="group inline-flex rounded-[10px] transition duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={badgeSrc(view.store, locale, theme)}
-            alt={label}
-            className={`${compact ? "h-10" : "h-12"} w-auto drop-shadow-sm transition duration-200 group-hover:drop-shadow-md`}
-            onError={() => setBadgeFailed(true)}
-          />
-        </a>
-      );
-    }
-    return (
-      <a
-        href={href}
-        rel="nofollow"
-        aria-label={label}
-        className={`inline-flex items-center gap-2 rounded-[var(--radius-pill)] border border-border bg-card px-4 ${compact ? "py-2 text-[0.8rem]" : "py-2.5 text-sm"} font-semibold text-ink transition hover:border-blue`}
-      >
-        <PlatformIcon size={compact ? 14 : 16} aria-hidden /> {label}
-      </a>
-    );
-  }
-
-  // APK / TestFlight — nút custom, luôn <a> (không next/link) + rel nofollow.
-  const label = view.mode === "apk" ? t(ui.download.apk) : t(ui.download.testflight);
-  const compact = variant === "compact";
   return (
     <a
-      href={href}
+      href={downloadApiHref(slug, platform)}
       rel="nofollow"
-      className={`group inline-flex items-center gap-2 rounded-[var(--radius-pill)] bg-blue px-4 ${compact ? "py-2 text-[0.8rem]" : "py-2.5 text-sm"} font-semibold text-white transition hover:brightness-110 active:scale-[0.98]`}
+      aria-label={`${t(ui.download.downloadFor)} ${t(name)}`}
+      className={cls}
     >
-      <PlatformIcon size={compact ? 14 : 16} aria-hidden />
-      <span className="flex flex-col items-start leading-tight">
-        <span>{label} {compact ? "" : forLabel}</span>
-        {!compact && view.mode === "apk" && (view.version || view.updatedAt) && (
-          <span className="text-[0.65rem] font-normal opacity-80">
-            {view.version ? `v${view.version}` : ""}{view.version && view.updatedAt ? " · " : ""}
-            {view.updatedAt ? `${t(ui.download.updated)} ${view.updatedAt}` : ""}
-          </span>
-        )}
+      <span className="store-btn__glyph"><Glyph size={glyphSize} aria-hidden /></span>
+      <span className="store-btn__label">
+        <span className="store-btn__top">{t(ui.download.downloadFor)}</span>
+        <span className="store-btn__main">{t(name)}</span>
       </span>
-      <Download size={compact ? 13 : 15} className="opacity-80" aria-hidden />
+      <Download size={variant === "compact" ? 13 : 15} aria-hidden className="opacity-70" />
     </a>
   );
 }
 
-export default function AppDownload({ app, variant }: { app: EcosystemApp; variant: Variant }) {
-  const { t, locale } = useLocale();
-  const { theme } = useTheme();
-  const Icon = APP_ICONS[app.icon] ?? APP_ICONS.mic;
+/** APK version/updated caption (full/row only) — kept OUT of the button so every
+ *  button stays pixel-identical. */
+function ApkCaption({ app, t }: { app: EcosystemApp; t: T }) {
+  for (const p of platformsFor(app)) {
+    const v = describeDownload(app.downloads?.[p]);
+    if (v.mode === "apk" && (v.version || v.updatedAt)) {
+      return (
+        <p className="font-mono text-[0.65rem] text-dim">
+          {v.version ? `v${v.version}` : ""}
+          {v.version && v.updatedAt ? " · " : ""}
+          {v.updatedAt ? `${t(ui.download.updated)} ${v.updatedAt}` : ""}
+        </p>
+      );
+    }
+  }
+  return null;
+}
 
-  const controls = (
-    <>
-      <PlatformControl slug={app.slug} platform="android" pd={app.downloads?.android} variant={variant} locale={locale} theme={theme} t={t} />
-      <PlatformControl slug={app.slug} platform="ios" pd={app.downloads?.ios} variant={variant} locale={locale} theme={theme} t={t} />
-    </>
-  );
+export default function AppDownload({ app, variant }: { app: EcosystemApp; variant: Variant }) {
+  const { t } = useLocale();
+  const Icon = APP_ICONS[app.icon] ?? APP_ICONS.mic;
+  const platforms = platformsFor(app);
+  const controls = platforms.map((p) => (
+    <StoreButton key={p} slug={app.slug} platform={p} pd={app.downloads?.[p]} variant={variant} t={t} />
+  ));
 
   if (variant === "row") {
     return (
@@ -120,11 +100,19 @@ export default function AppDownload({ app, variant }: { app: EcosystemApp; varia
             <p className="text-xs text-ink-2">{t(app.categoryLabel)}</p>
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2">{controls}</div>
+        <div className="flex flex-col items-start gap-1.5 sm:items-end">
+          <div className="flex flex-wrap items-center gap-2 sm:justify-end">{controls}</div>
+          <ApkCaption app={app} t={t} />
+        </div>
       </div>
     );
   }
 
-  // full + compact: hàng nút; compact nhỏ hơn (do PlatformControl tự co theo variant).
-  return <div className="flex flex-wrap items-center gap-3">{controls}</div>;
+  // full + compact: a row of buttons; compact shrinks via the CSS modifier.
+  return (
+    <div className="flex flex-col gap-1.5">
+      <div className="flex flex-wrap items-center gap-3">{controls}</div>
+      {variant === "full" && <ApkCaption app={app} t={t} />}
+    </div>
+  );
 }
