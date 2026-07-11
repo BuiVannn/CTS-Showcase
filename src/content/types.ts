@@ -130,3 +130,16 @@ export interface SiteConfig {
   footerTagline: Localized;
   videoUrl: string;
 }
+
+/** Tin tức — nguồn sự thật ở Dashboard, web đọc qua /api/public/news (xem content/news.ts). */
+export interface NewsPost {
+  slug: string;
+  category: string;
+  cover: string | null;
+  featured: boolean;
+  publishedAt: string; // ISO
+  title: Localized;
+  excerpt: Localized;
+  /** HTML — đã sanitize ở Dashboard (lúc lưu và lúc trả API). */
+  body: Localized;
+}
