@@ -103,6 +103,21 @@ export const ui = {
     menu: { en: "Menu", vi: "Menu" } as Localized,
     backToTop: { en: "Back to top", vi: "Lên đầu trang" } as Localized,
   },
+  news: {
+    eyebrow: { en: "Newsroom", vi: "Bản tin" } as Localized,
+    title: { en: "News", vi: "Tin tức" } as Localized,
+    intro: {
+      en: "Latest news, events and milestones from CTS Lab.",
+      vi: "Tin tức, sự kiện và cột mốc mới nhất của CTS Lab.",
+    } as Localized,
+    empty: {
+      en: "No news yet — please check back soon.",
+      vi: "Chưa có tin nào — mời bạn quay lại sau.",
+    } as Localized,
+    featured: { en: "Featured", vi: "Nổi bật" } as Localized,
+    back: { en: "All news", vi: "Tất cả tin tức" } as Localized,
+    readMore: { en: "Read more", vi: "Đọc tiếp" } as Localized,
+  },
   footer: {
     contact: { en: "Contact", vi: "Liên hệ" } as Localized,
     follow: { en: "Follow us", vi: "Theo dõi" } as Localized,
