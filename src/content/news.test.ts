@@ -1,6 +1,10 @@
 import { describe, it, expect, vi } from "vitest";
 import { mapNewsPost, getNews, getNewsBySlug } from "./news";
 
+// Fixture này là bản chép tay của JSON mà Dashboard trả — nó PHẢI khớp `PublicNews` /
+// `toPublicNewsCard` trong `src/lib/public-news.ts` của repo Dashboard. Không có tooling
+// nào ràng buộc 2 bên; nếu Dashboard đổi tên field, chỉ sửa ở đây thì test vẫn xanh mà
+// contract thật đã vỡ — người đổi tên PHẢI tự nhớ cập nhật cả 2 nơi.
 const raw = {
   slug: "robot-clover", category: "san-pham", cover: "https://ctslab.net/a.png",
   featured: true, publishedAt: "2026-07-01T03:00:00.000Z",
@@ -55,13 +59,18 @@ describe("getNewsBySlug", () => {
     expect((await getNewsBySlug("robot-clover", f as unknown as typeof fetch))?.slug).toBe("robot-clover");
   });
 
-  it("404 → null", async () => {
+  it("404 → null (bài thật sự không tồn tại)", async () => {
     const f = vi.fn().mockResolvedValue({ ok: false, status: 404, json: async () => ({}) } as unknown as Response);
     expect(await getNewsBySlug("x", f as unknown as typeof fetch)).toBeNull();
   });
 
-  it("fetch throw → null", async () => {
+  it("500 → ném lỗi (KHÔNG được biến outage thành 404 bị cache)", async () => {
+    const f = vi.fn().mockResolvedValue({ ok: false, status: 500, json: async () => ({}) } as unknown as Response);
+    await expect(getNewsBySlug("x", f as unknown as typeof fetch)).rejects.toThrow();
+  });
+
+  it("fetch throw (Dashboard sập/mạng hỏng) → ném lỗi, KHÔNG trả null", async () => {
     const f = vi.fn().mockRejectedValue(new Error("boom"));
-    expect(await getNewsBySlug("x", f as unknown as typeof fetch)).toBeNull();
+    await expect(getNewsBySlug("x", f as unknown as typeof fetch)).rejects.toThrow("boom");
   });
 });

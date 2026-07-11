@@ -2,6 +2,13 @@ import type { Localized, NewsPost } from "./types";
 
 export type { NewsPost };
 
+if (!process.env.DASHBOARD_API_URL && process.env.NODE_ENV === "production") {
+  // Thiếu biến này ở production → /news im lặng trả "Chưa có tin nào" MÃI MÃI
+  // (trông như nội dung rỗng hợp lệ, thực ra là lỗi cấu hình). Cảnh báo một lần lúc load module.
+  console.warn(
+    "[news] DASHBOARD_API_URL is not set in production — falling back to http://localhost:4321, which will not work.",
+  );
+}
 const BASE = process.env.DASHBOARD_API_URL || "http://localhost:4321";
 const REVALIDATE = 60; // giây — ISR: sửa tin ở dashboard, web tự làm mới sau ~1 phút
 
@@ -67,14 +74,13 @@ export async function getNews(
 }
 
 export async function getNewsBySlug(slug: string, f: Fetch = fetch): Promise<NewsPost | null> {
-  try {
-    const res = await f(`${BASE}/api/public/news/${encodeURIComponent(slug)}`, {
-      next: { revalidate: REVALIDATE },
-    });
-    if (!res.ok) return null;
-    return mapNewsPost(await res.json());
-  } catch (e) {
-    console.warn("[news] getNewsBySlug failed:", e);
-    return null;
-  }
+  const res = await f(`${BASE}/api/public/news/${encodeURIComponent(slug)}`, {
+    next: { revalidate: REVALIDATE },
+  });
+  // 404 = bài thật sự không tồn tại → trang gọi notFound().
+  if (res.status === 404) return null;
+  // Bất kỳ lỗi nào khác (API sập, 500, mạng hỏng) KHÔNG được biến thành 404:
+  // 404 sẽ bị cache và làm crawler de-index bài viết THẬT. Ném ra để error boundary xử lý.
+  if (!res.ok) throw new Error(`news API ${res.status}`);
+  return mapNewsPost(await res.json());
 }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useLocale } from "@/lib/locale";
 import { ui } from "@/content/ui";
 import type { NewsPost } from "@/content/news";
+import type { Localized } from "@/content/types";
 import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
 import Reveal from "@/components/ui/Reveal";
@@ -11,6 +12,9 @@ import { Stagger, StaggerItem } from "@/components/ui/Stagger";
 
 export default function NewsGrid({ posts }: { posts: NewsPost[] }) {
   const { t, locale } = useLocale();
+  // Dashboard đảm bảo title/body EN không rỗng cho bài đã publish, nhưng KHÔNG bắt buộc excerpt
+  // — admin có thể đăng bài chỉ có excerpt tiếng Việt. Fallback để khách EN vẫn thấy tóm tắt.
+  const pick = (l: Localized) => t(l) || l.vi || l.en;
   const fmtDate = (iso: string) =>
     iso
       ? new Date(iso).toLocaleDateString(locale === "vi" ? "vi-VN" : "en-US", {
@@ -52,8 +56,8 @@ export default function NewsGrid({ posts }: { posts: NewsPost[] }) {
                       {p.featured && <Badge tone="red">{t(ui.news.featured)}</Badge>}
                       <span className="text-xs text-ink-2">{fmtDate(p.publishedAt)}</span>
                     </div>
-                    <h2 className="mt-2 text-base font-semibold text-ink">{t(p.title)}</h2>
-                    <p className="mt-1 line-clamp-3 text-sm leading-relaxed text-ink-2">{t(p.excerpt)}</p>
+                    <h2 className="mt-2 text-base font-semibold text-ink">{pick(p.title)}</h2>
+                    <p className="mt-1 line-clamp-3 text-sm leading-relaxed text-ink-2">{pick(p.excerpt)}</p>
                     <span className="mt-3 text-sm font-semibold text-blue">{t(ui.news.readMore)} →</span>
                   </div>
                 </Link>

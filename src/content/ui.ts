@@ -117,6 +117,12 @@ export const ui = {
     featured: { en: "Featured", vi: "Nổi bật" } as Localized,
     back: { en: "All news", vi: "Tất cả tin tức" } as Localized,
     readMore: { en: "Read more", vi: "Đọc tiếp" } as Localized,
+    errorTitle: { en: "News is temporarily unavailable", vi: "Tin tức tạm thời không khả dụng" } as Localized,
+    errorBody: {
+      en: "We couldn't load this article. Please try again.",
+      vi: "Không tải được bài viết. Vui lòng thử lại.",
+    } as Localized,
+    retry: { en: "Try again", vi: "Thử lại" } as Localized,
   },
   footer: {
     contact: { en: "Contact", vi: "Liên hệ" } as Localized,

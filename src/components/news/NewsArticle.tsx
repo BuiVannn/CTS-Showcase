@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useLocale } from "@/lib/locale";
 import { ui } from "@/content/ui";
 import type { NewsPost } from "@/content/news";
+import type { Localized } from "@/content/types";
 import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
 
@@ -14,8 +15,11 @@ export default function NewsArticle({ post }: { post: NewsPost }) {
         day: "2-digit", month: "long", year: "numeric",
       })
     : "";
-  const body = t(post.body);
-  const excerpt = t(post.excerpt);
+  // Dashboard đảm bảo title/body EN không rỗng cho bài đã publish, nhưng KHÔNG bắt buộc excerpt
+  // — admin có thể đăng bài chỉ có excerpt tiếng Việt. Fallback để khách EN vẫn thấy tóm tắt.
+  const pick = (l: Localized) => t(l) || l.vi || l.en;
+  const body = pick(post.body);
+  const excerpt = pick(post.excerpt);
 
   return (
     <article className="section pt-28">
@@ -29,7 +33,7 @@ export default function NewsArticle({ post }: { post: NewsPost }) {
           <span className="text-xs text-ink-2">{date}</span>
         </div>
 
-        <h1 className="text-section mt-3 text-ink">{t(post.title)}</h1>
+        <h1 className="text-section mt-3 text-ink">{pick(post.title)}</h1>
         {excerpt && <p className="mt-3 text-base leading-relaxed text-ink-2">{excerpt}</p>}
 
         {post.cover && (
