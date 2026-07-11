@@ -191,13 +191,40 @@ Timeout gọi Dashboard: **3s**. Cache: `next: { revalidate }` + `tags` để re
 
 | Lát | Nội dung | Điều kiện |
 |---|---|---|
-| **W1** | Dựng port + DTO + adapter `local` (không đổi hành vi). Có test. | Không phụ thuộc Dashboard |
-| **W2** | **News**: routes + UI, chạy trên adapter `local` (seed JSON trong repo). | Không phụ thuộc Dashboard |
+| **W1** | Dựng port + DTO + `parse` + adapter `local` cho **Games**; rewire `getCatalog()`/studio đọc qua port. **Không đổi hành vi.** | Không phụ thuộc Dashboard |
+| **W2** | **News**: `NewsSource` + seed JSON + routes `/news`, `/news/[slug]` + UI + nav. | Không phụ thuộc Dashboard |
 | **W3** | Adapter `dashboard` cho News → bật ENV. | Cần API news |
-| **W4** | Games: catalog qua port; Studio proxy; gỡ `/admin`. | Cần API games |
-| **W5** | Downloads qua port; gỡ SQLite hoàn toàn. | Cần API downloads |
+| **W4** | Games qua API Dashboard; **Studio proxy**; gỡ `/admin` + `/api/admin/games`. | Cần API games + **chốt Q6** |
+| **W5** | Downloads: **nâng dữ liệu lên server + truyền props** (§13) → rồi qua API. Gỡ SQLite hoàn toàn. | Cần API downloads |
 
 Mỗi lát: hành vi người dùng **không đổi** (trừ W2 thêm News). Có thể lùi bằng ENV.
+
+---
+
+## §13. ⚠️ Ràng buộc client/server (phát hiện khi khảo sát — quyết định thứ tự làm)
+
+**Games đã đúng kiến trúc:** `src/lib/game-catalog.ts` có `import "server-only"`; page server gọi `getCatalog()` rồi **truyền `games` qua props** xuống `GameHubView` (client). ⇒ Đổi nguồn dữ liệu game **không đụng client**. Đây là lý do W1 làm Games trước.
+
+**Products/Downloads thì KHÔNG:** các component sau là **client component** và **import thẳng content tĩnh**:
+
+| File | Gọi gì |
+|---|---|
+| `src/components/products/DownloadCenter.tsx` | `getDownloadApps()`, `getVrDevices()` |
+| `src/components/products/ProductDetail.tsx` | `getProduct()`, `isDownloadApp()` |
+| `src/components/products/ProductsGrid.tsx` | `getProducts()`, `isDownloadApp()` |
+| `src/components/home/DownloadBand.tsx` | `getProducts()` |
+| `src/components/home/OneAccountApps.tsx` | `getProducts()` |
+| `src/components/home/EcosystemBento.tsx` | `getProducts()` |
+| `src/components/home/HomeStats.tsx` | `getProducts()` |
+
+Chúng chạy được vì `ecosystem.ts` là **module tĩnh, bundle được vào client**. Khi khối `downloads` chuyển sang **fetch từ server**, các component này **sẽ vỡ** — client không gọi được hàm server.
+
+**Quy tắc bắt buộc cho W5:**
+1. **Metadata sản phẩm giữ tĩnh** (D4) ⇒ `getProducts()/getProduct()/isDownloadApp()` **vẫn sync, vẫn import được từ client**. Không đụng.
+2. **Chỉ khối `downloads`** phải **nâng lên server**: page server fetch → **truyền props** xuống client component (đúng khuôn `GameHubView` đang làm).
+3. **Không** tạo route API nội bộ cho client tự fetch — sẽ sinh waterfall + loading state không cần thiết.
+
+> Đây là lý do **Downloads là lát cuối (W5)**, không phải lát đầu: nó là refactor client→props, không chỉ là đổi nguồn.
 
 ---
 
@@ -240,23 +267,36 @@ src/lib/dashboard/
     news.seed.json  # seed News cho adapter local (W2)
 ```
 
-**Interface (`port.ts`) — chốt cứng, đổi phải sửa spec trước:**
+**Interface (`port.ts`) — chốt cứng, đổi phải sửa spec trước.**
+Chia **theo domain**, xây dần từng lát (đừng dựng một interface khổng lồ rồi để trống — sẽ thành code chết):
+
 ```ts
-export interface DataSource {
-  // đọc — công khai
-  getPublishedGames(): Promise<CatalogGame[]>;
-  getGameBySlug(slug: string): Promise<CatalogGame | undefined>;
+// W1 — Games (đọc)
+export interface GamesSource {
+  getPublishedGames(): Promise<CatalogGame[]>;                     // lab (tĩnh) + user đã published
+  getGameBySlug(slug: string): Promise<CatalogGame | undefined>;   // chỉ game published
+  getUserGame(slug: string): Promise<UserGame | undefined>;        // MỌI trạng thái (owner/admin xem bản nháp)
+  getMyGames(ownerId: string): Promise<StudioGameSummary[]>;       // bảng trong Studio
+}
+
+// W2 — News
+export interface NewsSource {
   getNewsList(opts?: { page?: number; pageSize?: number }): Promise<NewsList>;
   getNewsBySlug(slug: string): Promise<NewsItem | undefined>;
-  getDownloadApps(): Promise<DownloadApp[]>;
-  resolveDownloadTarget(slug: string, platform: Platform): Promise<string | undefined>; // server-only
-  recordDownloadHit(slug: string, platform: Platform): Promise<void>;                   // fire-and-forget
+}
 
-  // Studio (ghi) — chỉ proxy, KHÔNG chứa luật nghiệp vụ
-  getMyGames(ownerId: string): Promise<StudioGame[]>;
+// W4 — Studio (ghi) — CHỈ proxy, KHÔNG chứa luật nghiệp vụ
+export interface StudioSink {
   submitGame(ownerId: string, form: FormData): Promise<StudioResult>;
   updateGame(ownerId: string, slug: string, form: FormData): Promise<StudioResult>;
   deleteGame(ownerId: string, slug: string): Promise<StudioResult>;
+}
+
+// W5 — Downloads
+export interface DownloadsSource {
+  getDownloadApps(): Promise<DownloadApp[]>;
+  resolveDownloadTarget(slug: string, platform: Platform): Promise<string | undefined>; // server-only
+  recordDownloadHit(slug: string, platform: Platform): Promise<void>;                   // fire-and-forget
 }
 
 type StudioResult =
@@ -267,6 +307,8 @@ type StudioError =
   | "quota" | "too-large" | "too-big-uncompressed" | "invalid-zip"
   | "no-index" | "unsafe-path" | "forbidden" | "notfound" | "unavailable";
 ```
+
+**Bộ test hợp đồng (`*.contract.ts`)** — với mỗi interface trên, có một suite mà **mọi adapter phải qua** (local lẫn dashboard). Adapter mới **không được** viết bộ test riêng dễ hơn. Đặt đuôi `.contract.ts` (không phải `.test.ts`) để vitest không chạy độc lập.
 
 **Ràng buộc:**
 - Hàm đọc **async** hết (kể cả adapter `local` đọc đồng bộ) — để đổi adapter không phải sửa call-site.
