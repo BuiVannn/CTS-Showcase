@@ -350,3 +350,35 @@ html.cursor-none input, html.cursor-none textarea, html.cursor-none [contentedit
     transform: none;
   }
 }
+
+/* ─── Thân bài Tin tức (HTML từ trình soạn rich-text của Dashboard) ─── */
+.news-body { font-size: 15px; line-height: 1.75; color: var(--ink-2); }
+.news-body > * + * { margin-top: 1em; }
+.news-body h2 { font-size: 1.4em; font-weight: 700; color: var(--ink); margin-top: 1.6em; }
+.news-body h3 { font-size: 1.15em; font-weight: 700; color: var(--ink); margin-top: 1.4em; }
+.news-body strong { color: var(--ink); font-weight: 700; }
+.news-body a { color: var(--blue); text-decoration: underline; }
+.news-body ul, .news-body ol { padding-left: 1.4em; }
+.news-body ul { list-style: disc; }
+.news-body ol { list-style: decimal; }
+.news-body li + li { margin-top: .35em; }
+.news-body blockquote {
+  border-left: 3px solid var(--blue);
+  padding-left: 1em;
+  color: var(--ink-2);
+  font-style: italic;
+}
+.news-body img { max-width: 100%; height: auto; border-radius: var(--radius-lg); }
+.news-body code {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: .9em;
+  background: var(--surface);
+  padding: .15em .4em;
+  border-radius: 6px;
+}
+.news-body pre {
+  background: var(--surface);
+  padding: 1em;
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+}
