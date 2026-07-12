@@ -357,6 +357,15 @@ export const ui = {
     errGeneric: { en: "Error", vi: "Lỗi" } as Localized,
     errNeedZip: { en: "Please upload a game file (.zip).", vi: "Cần tải lên file game (.zip)." } as Localized,
   },
+  homeNews: {
+    eyebrow: { en: "Newsroom", vi: "Bản tin" } as Localized,
+    title: { en: "What's new at the lab", vi: "Lab có gì mới" } as Localized,
+    lead: {
+      en: "Milestones, events and releases — the latest from CTS Lab.",
+      vi: "Cột mốc, sự kiện và ra mắt — mới nhất từ CTS Lab.",
+    } as Localized,
+    cta: { en: "All news", vi: "Xem tất cả tin tức" } as Localized,
+  },
   gamesTeaser: {
     eyebrow: { en: "Play", vi: "Chơi" } as Localized,
     title: { en: "The lab's games hub", vi: "Khu game của lab" } as Localized,

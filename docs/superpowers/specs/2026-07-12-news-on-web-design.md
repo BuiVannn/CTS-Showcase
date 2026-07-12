@@ -240,6 +240,30 @@ Build + chạy production trong **git worktree riêng** (repo chính không bị
 
 > Dữ liệu kiểm thử: API giả bám đúng hợp đồng (15 bài, 1 featured không phải bài mới nhất, `pageSize=12` → 2 trang). **Không đụng DB thật.** Vẫn cần bạn tạo tin thật ở Dashboard `/v2/news` để kiểm nội dung/sanitize thật.
 
+---
+
+## §14. Khối Tin tức trên TRANG CHỦ (bổ sung 2026-07-12)
+
+**Vị trí:** giữa `ShowcaseSection` và `EcosystemBento`. Mạch trang chủ đi từ *"lab đã làm gì"* sang *"sản phẩm dùng được"* — chèn tin tức đúng khớp nối đó, đọc như "và đây là những gì đang diễn ra".
+
+**Bố cục:** 1 thẻ lớn + 2 thẻ nhỏ (`HomeNews.tsx`). Chỉ có 1 tin → thẻ lớn chiếm trọn chiều ngang (`lg:col-span-3`), trông có chủ đích chứ không như thiếu. Tin không có ảnh bìa → nền `AmbientField` thay vì ô xám trống.
+
+**Cửa sổ fetch RỘNG hơn số tin hiển thị** (`HOME_NEWS_WINDOW = 12`, hiển thị `HOME_NEWS_COUNT = 3`).
+⚠️ Đây là điểm dễ làm sai: API sắp thuần theo thời gian, **không** hỗ trợ sort theo `featured`. Nếu chỉ xin đúng 3 tin thì một tin được ghim "nổi bật" nhưng không nằm trong 3 tin mới nhất **sẽ không bao giờ lên được trang chủ** — trái hẳn mục đích của việc ghim. Lấy rộng rồi tự `pinFeatured()` + cắt. Vẫn 1 lượt gọi; payload danh sách không kèm `body` nên rẻ.
+
+**Ba quy tắc an toàn (đã kiểm chứng thật):**
+1. **Không tin nào → `HomeNews` trả `null`, ẩn HẲN cả section.** Không khung rỗng, không chữ "chưa có tin". Trang chủ là mặt tiền.
+2. **Dashboard sập → trang chủ vẫn 200.** `getNews()` nuốt lỗi trả rỗng → rơi vào quy tắc 1. *(Ngược hẳn `/news/[slug]`, nơi outage PHẢI ném lỗi. Bất đối xứng này là cố ý.)*
+3. **`next build` KHÔNG fail khi Dashboard sập** — quan trọng: deploy trùng lúc Dashboard restart vẫn an toàn. Đã kiểm bằng cách build với API trỏ vào cổng chết.
+
+**Trang chủ chuyển từ tĩnh (○) sang ISR** (`revalidate = 60`): `page.tsx` thành async server component, fetch rồi truyền props xuống client component — đúng khuôn `/news`, đúng ràng buộc client/server ở spec mẹ §13.
+
+> ⚠️ **Bẫy khi kiểm thử ISR:** đổi `DASHBOARD_API_URL` lúc *chạy* rồi tưởng đã test được outage là **SAI** — trang đã prerender lúc *build* nên vẫn phục vụ bản cũ có tin. Muốn test outage thật phải **build luôn trong lúc API chết**. Tôi đã suýt kết luận nhầm vì chuyện này.
+
+**Kiểm chứng (Chromium thật, worktree riêng):** 1 tin thật → thẻ lớn full-width + nền AmbientField ✅ · 15 tin, nổi bật đứng thứ 7 → trang chủ ra `tin-07 → tin-01 → tin-02` ✅ (chứng minh cửa sổ rộng là cần) · Dashboard sập → trang chủ 200, khối ẩn hẳn ✅ · 146 test xanh.
+
+---
+
 ### Một điều tôi đã NGHI SAI — ghi lại để đừng ai "sửa" lại
 Tôi từng nghi `generateMetadata` (cũng gọi `getNewsBySlug` và cũng ném khi API sập) sẽ **chặn error boundary render**, vì docs Next ghi `error.js` chỉ bọc `layout/page/loading/not-found`. **Kiểm chứng bằng trình duyệt thật: SAI.** Error boundary vẫn render bình thường ở bản gốc. Đã **gỡ bỏ** thay đổi thừa đó.
 ⚠️ **Đừng thêm `try/catch` vào `generateMetadata`** — không cần, chỉ làm rối.

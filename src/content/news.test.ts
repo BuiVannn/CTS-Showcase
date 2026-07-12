@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { mapNewsPost, getNews, getNewsBySlug, parsePage, pinFeatured } from "./news";
+import { mapNewsPost, getNews, getNewsBySlug, parsePage, pinFeatured, pickHomeNews, HOME_NEWS_COUNT } from "./news";
 import type { NewsPost } from "./types";
 
 // Fixture này là bản chép tay của JSON mà Dashboard trả — nó PHẢI khớp `PublicNews` /
@@ -78,6 +78,34 @@ describe("pinFeatured", () => {
     const orig = [p("a", false), p("b", true)];
     pinFeatured(orig);
     expect(orig.map((x) => x.slug)).toEqual(["a", "b"]);
+  });
+});
+
+describe("pickHomeNews", () => {
+  const p = (slug: string, featured = false): NewsPost => ({
+    slug, category: "", cover: null, featured, publishedAt: "",
+    title: { vi: "", en: "" }, excerpt: { vi: "", en: "" }, body: { vi: "", en: "" },
+  });
+
+  it("lấy đúng 3 tin", () => {
+    const got = pickHomeNews([p("a"), p("b"), p("c"), p("d"), p("e")]);
+    expect(got).toHaveLength(HOME_NEWS_COUNT);
+    expect(got.map((x) => x.slug)).toEqual(["a", "b", "c"]);
+  });
+
+  it("tin NỔI BẬT lọt vào top 3 dù nằm sâu trong cửa sổ (đây là lý do fetch rộng hơn 3)", () => {
+    // API sắp theo thời gian → tin nổi bật đứng thứ 8. Nếu chỉ fetch 3 tin thì nó biến mất.
+    const posts = [p("a"), p("b"), p("c"), p("d"), p("e"), p("f"), p("g"), p("noi-bat", true)];
+    expect(pickHomeNews(posts).map((x) => x.slug)).toEqual(["noi-bat", "a", "b"]);
+  });
+
+  it("ít hơn 3 tin → trả về đúng số có, không độn thêm", () => {
+    expect(pickHomeNews([p("a")]).map((x) => x.slug)).toEqual(["a"]);
+    expect(pickHomeNews([p("a"), p("b")]).map((x) => x.slug)).toEqual(["a", "b"]);
+  });
+
+  it("không có tin nào → mảng rỗng (trang chủ sẽ ẩn hẳn khối)", () => {
+    expect(pickHomeNews([])).toEqual([]);
   });
 });
 

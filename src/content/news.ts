@@ -66,6 +66,23 @@ export function pinFeatured(posts: NewsPost[]): NewsPost[] {
   return [...posts].sort((a, b) => Number(b.featured) - Number(a.featured));
 }
 
+/** Số tin hiện trên trang chủ: 1 thẻ lớn + 2 thẻ nhỏ. */
+export const HOME_NEWS_COUNT = 3;
+
+/**
+ * Cửa sổ tin fetch về cho trang chủ — RỘNG HƠN số tin hiển thị, có chủ đích.
+ * API sắp thuần theo thời gian; nếu chỉ xin đúng 3 tin thì một tin được ghim "nổi bật"
+ * nhưng không nằm trong 3 tin mới nhất sẽ KHÔNG BAO GIỜ lên được trang chủ — trái hẳn
+ * mục đích của việc ghim. Lấy rộng rồi tự ghim + cắt. Vẫn 1 lượt gọi, và payload danh
+ * sách không kèm `body` nên rẻ.
+ */
+export const HOME_NEWS_WINDOW = 12;
+
+/** Chọn tin cho trang chủ: nổi bật trước, trong mỗi nhóm giữ thứ tự thời gian. */
+export function pickHomeNews(posts: NewsPost[]): NewsPost[] {
+  return pinFeatured(posts).slice(0, HOME_NEWS_COUNT);
+}
+
 /**
  * Repository seam (đúng tinh thần `getGames()`): web KHÔNG chạm DB, chỉ đọc API công khai
  * của Dashboard. Dashboard chết → trả rỗng để trang hiện empty-state thay vì 500.
