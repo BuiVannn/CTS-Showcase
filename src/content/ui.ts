@@ -123,6 +123,10 @@ export const ui = {
       vi: "Không tải được bài viết. Vui lòng thử lại.",
     } as Localized,
     retry: { en: "Try again", vi: "Thử lại" } as Localized,
+    pagination: { en: "Pagination", vi: "Phân trang" } as Localized,
+    prev: { en: "Previous", vi: "Trang trước" } as Localized,
+    next: { en: "Next", vi: "Trang sau" } as Localized,
+    page: { en: "Page", vi: "Trang" } as Localized,
   },
   footer: {
     contact: { en: "Contact", vi: "Liên hệ" } as Localized,

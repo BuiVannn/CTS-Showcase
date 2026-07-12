@@ -11,9 +11,29 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = await getNewsBySlug(slug);
   if (!post) return { title: "Không tìm thấy" };
+
+  const title = post.title.vi || post.title.en || "Tin tức";
+  const description = post.excerpt.vi || post.excerpt.en || undefined;
+  // Dashboard đã lọc scheme của `cover` (safeCoverUrl) — dùng thẳng làm ảnh chia sẻ.
+  const images = post.cover ? [post.cover] : undefined;
+
   return {
-    title: post.title.vi || post.title.en || "Tin tức",
-    description: post.excerpt.vi || post.excerpt.en || undefined,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      // `publishedAt` CÓ THỂ là chuỗi rỗng (xem content/news.ts) — đừng để lọt "" vào metadata.
+      publishedTime: post.publishedAt || undefined,
+      images,
+    },
+    twitter: {
+      card: images ? "summary_large_image" : "summary",
+      title,
+      description,
+      images,
+    },
   };
 }
 

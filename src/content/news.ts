@@ -45,6 +45,28 @@ export interface NewsList {
 }
 
 /**
+ * Đọc `?page=` từ URL. Đây là dữ liệu người dùng: có thể thiếu, là rác, số âm, hoặc
+ * lặp lại (`?page=2&page=3` → Next đưa vào mảng). Mọi thứ không hợp lệ đều về trang 1.
+ */
+export function parsePage(raw: string | string[] | undefined): number {
+  const v = Array.isArray(raw) ? raw[0] : raw;
+  const n = Number.parseInt(v ?? "", 10);
+  return Number.isFinite(n) && n >= 1 ? n : 1;
+}
+
+/**
+ * Ghim tin nổi bật lên đầu, giữ nguyên thứ tự thời gian API đã sắp trong từng nhóm
+ * (Array.sort ổn định từ ES2019).
+ *
+ * Chỉ ghim trong PHẠM VI TRANG HIỆN TẠI: API sắp thuần theo `published_at DESC` và không
+ * hỗ trợ sort theo `featured`, nên muốn ghim xuyên toàn bộ dataset sẽ phải gọi thêm một
+ * lượt API rồi tự trộn — không đáng, vì trang 1 (nơi người đọc thực sự nhìn) đã đúng.
+ */
+export function pinFeatured(posts: NewsPost[]): NewsPost[] {
+  return [...posts].sort((a, b) => Number(b.featured) - Number(a.featured));
+}
+
+/**
  * Repository seam (đúng tinh thần `getGames()`): web KHÔNG chạm DB, chỉ đọc API công khai
  * của Dashboard. Dashboard chết → trả rỗng để trang hiện empty-state thay vì 500.
  */

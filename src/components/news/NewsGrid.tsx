@@ -10,7 +10,20 @@ import Badge from "@/components/ui/Badge";
 import Reveal from "@/components/ui/Reveal";
 import { Stagger, StaggerItem } from "@/components/ui/Stagger";
 
-export default function NewsGrid({ posts }: { posts: NewsPost[] }) {
+/** Trang 1 dùng URL sạch `/news` (canonical), từ trang 2 mới thêm `?page=`. */
+function pageHref(n: number): string {
+  return n <= 1 ? "/news" : `/news?page=${n}`;
+}
+
+export default function NewsGrid({
+  posts,
+  page,
+  totalPages,
+}: {
+  posts: NewsPost[];
+  page: number;
+  totalPages: number;
+}) {
   const { t, locale } = useLocale();
   // Dashboard đảm bảo title/body EN không rỗng cho bài đã publish, nhưng KHÔNG bắt buộc excerpt
   // — admin có thể đăng bài chỉ có excerpt tiếng Việt. Fallback để khách EN vẫn thấy tóm tắt.
@@ -32,7 +45,17 @@ export default function NewsGrid({ posts }: { posts: NewsPost[] }) {
         </Reveal>
 
         {posts.length === 0 ? (
-          <p className="mt-10 text-sm text-ink-2">{t(ui.news.empty)}</p>
+          <div className="mt-10">
+            <p className="text-sm text-ink-2">{t(ui.news.empty)}</p>
+            {/* Trang rỗng vì đi quá số trang có thật (hoặc Dashboard đang sập) — luôn chừa
+                đường quay lại, đừng để người đọc kẹt ở ngõ cụt. Tuyệt đối KHÔNG notFound()
+                ở đây: API sập cũng cho mảng rỗng, mà 404 lúc đó là nói dối (xem spec §5.1). */}
+            {page > 1 && (
+              <Link href="/news" className="mt-3 inline-block text-sm font-semibold text-blue hover:underline">
+                ← {t(ui.news.back)}
+              </Link>
+            )}
+          </div>
         ) : (
           <Stagger className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {posts.map((p) => (
@@ -64,6 +87,30 @@ export default function NewsGrid({ posts }: { posts: NewsPost[] }) {
               </StaggerItem>
             ))}
           </Stagger>
+        )}
+
+        {totalPages > 1 && (
+          <nav className="mt-12 flex items-center justify-center gap-4" aria-label={t(ui.news.pagination)}>
+            {page > 1 ? (
+              <Link href={pageHref(page - 1)} className="text-sm font-semibold text-blue hover:underline">
+                ← {t(ui.news.prev)}
+              </Link>
+            ) : (
+              <span className="text-sm font-semibold text-dim">← {t(ui.news.prev)}</span>
+            )}
+
+            <span className="font-mono text-xs text-ink-2">
+              {t(ui.news.page)} {page}/{totalPages}
+            </span>
+
+            {page < totalPages ? (
+              <Link href={pageHref(page + 1)} className="text-sm font-semibold text-blue hover:underline">
+                {t(ui.news.next)} →
+              </Link>
+            ) : (
+              <span className="text-sm font-semibold text-dim">{t(ui.news.next)} →</span>
+            )}
+          </nav>
         )}
       </Container>
     </section>

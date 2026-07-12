@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
-import { mapNewsPost, getNews, getNewsBySlug } from "./news";
+import { mapNewsPost, getNews, getNewsBySlug, parsePage, pinFeatured } from "./news";
+import type { NewsPost } from "./types";
 
 // Fixture này là bản chép tay của JSON mà Dashboard trả — nó PHẢI khớp `PublicNews` /
 // `toPublicNewsCard` trong `src/lib/public-news.ts` của repo Dashboard. Không có tooling
@@ -30,6 +31,53 @@ describe("mapNewsPost", () => {
   it("thiếu bản dịch → chuỗi rỗng, không vỡ", () => {
     const p = mapNewsPost({ ...raw, excerpt: undefined })!;
     expect(p.excerpt).toEqual({ vi: "", en: "" });
+  });
+
+  it("publishedAt thiếu → chuỗi rỗng (KHÔNG để lọt undefined ra `new Date()` → Invalid Date)", () => {
+    expect(mapNewsPost({ ...raw, publishedAt: undefined })!.publishedAt).toBe("");
+  });
+});
+
+describe("parsePage", () => {
+  // `?page=` là dữ liệu người dùng: có thể thiếu, là rác, số âm, hoặc lặp lại thành mảng.
+  it("thiếu / rác / <1 → về trang 1", () => {
+    expect(parsePage(undefined)).toBe(1);
+    expect(parsePage("")).toBe(1);
+    expect(parsePage("abc")).toBe(1);
+    expect(parsePage("0")).toBe(1);
+    expect(parsePage("-3")).toBe(1);
+  });
+
+  it("số hợp lệ → dùng luôn", () => {
+    expect(parsePage("2")).toBe(2);
+    expect(parsePage("17")).toBe(17);
+  });
+
+  it("?page=3&page=4 → Next đưa vào mảng, lấy phần tử đầu", () => {
+    expect(parsePage(["3", "4"])).toBe(3);
+  });
+});
+
+describe("pinFeatured", () => {
+  const p = (slug: string, featured: boolean): NewsPost => ({
+    slug, category: "", cover: null, featured, publishedAt: "",
+    title: { vi: "", en: "" }, excerpt: { vi: "", en: "" }, body: { vi: "", en: "" },
+  });
+
+  it("ghim tin nổi bật lên đầu", () => {
+    expect(pinFeatured([p("a", false), p("b", true), p("c", false)]).map((x) => x.slug))
+      .toEqual(["b", "a", "c"]);
+  });
+
+  it("giữ nguyên thứ tự thời gian API đã sắp, trong TỪNG nhóm (sort ổn định)", () => {
+    expect(pinFeatured([p("a", true), p("b", false), p("c", true), p("d", false)]).map((x) => x.slug))
+      .toEqual(["a", "c", "b", "d"]);
+  });
+
+  it("không làm biến đổi mảng gốc", () => {
+    const orig = [p("a", false), p("b", true)];
+    pinFeatured(orig);
+    expect(orig.map((x) => x.slug)).toEqual(["a", "b"]);
   });
 });
 
