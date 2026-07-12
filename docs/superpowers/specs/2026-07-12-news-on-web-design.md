@@ -218,3 +218,28 @@ Ngoài ra giữ nguyên toàn bộ phần tốt của patch: seam có **fetch ti
 3. Commit **G2 ghim featured** (+ test).
 4. Commit **G3 OG image**.
 5. Verify trong **git worktree** (§9!) với staging `:4322`, sau khi có tin thật.
+
+---
+
+## §13. Kết quả kiểm chứng (2026-07-12) — ĐÃ CHẠY THẬT
+
+Build + chạy production trong **git worktree riêng** (repo chính không bị đụng: `.next` giữ nguyên mtime, pm2 `cts-redesign` không restart, `localhost:3001` vẫn 200). Kiểm bằng **Chromium headless thật** (không chỉ `curl`, vì error boundary render sau hydrate — `curl` chỉ thấy shell rỗng và sẽ cho kết luận SAI).
+
+| Kịch bản | Kỳ vọng | Kết quả |
+|---|---|---|
+| API sống, 0 tin → `/news` | 200 + empty-state | ✅ 200, "No news yet" |
+| API sống, slug lạ → `/news/xxx` | **404 thật** | ✅ 404 |
+| 🚨 **API SẬP** → `/news` (danh sách) | suy giảm êm, 200 | ✅ 200 + empty-state, không vỡ |
+| 🚨 **API SẬP** → `/news/<slug>` | **500, KHÔNG phải 404** | ✅ **500** + error boundary render (tiêu đề lỗi + nút "Thử lại" + navbar/footer) |
+| **G1** phân trang | `Page 1/2`, link trang 2, trang 1 URL sạch | ✅ `Previous \| Page 1/2 \| Next → /news?page=2`; trang 2 đúng 3 tin cuối; Previous về `/news` |
+| **G2** ghim featured | tin nổi bật lên đầu, còn lại giữ thứ tự thời gian | ✅ `tin-07 → tin-01 → tin-02 → …` (tin-07 featured, không phải mới nhất) |
+| **G3** OG image | og:image + twitter card | ✅ `og:image`, `og:type=article`, `article:published_time`, `twitter:card=summary_large_image` |
+| Thân bài HTML | render đủ allowlist | ✅ `h2 strong ul li blockquote pre code a[href]` trong `.news-body` |
+| Song ngữ | payload có **cả** vi+en | ✅ cả hai bản có trong payload → đổi ngôn ngữ không cần reload |
+| Test / typecheck / lint | xanh | ✅ **142 test**, tsc sạch, eslint sạch |
+
+> Dữ liệu kiểm thử: API giả bám đúng hợp đồng (15 bài, 1 featured không phải bài mới nhất, `pageSize=12` → 2 trang). **Không đụng DB thật.** Vẫn cần bạn tạo tin thật ở Dashboard `/v2/news` để kiểm nội dung/sanitize thật.
+
+### Một điều tôi đã NGHI SAI — ghi lại để đừng ai "sửa" lại
+Tôi từng nghi `generateMetadata` (cũng gọi `getNewsBySlug` và cũng ném khi API sập) sẽ **chặn error boundary render**, vì docs Next ghi `error.js` chỉ bọc `layout/page/loading/not-found`. **Kiểm chứng bằng trình duyệt thật: SAI.** Error boundary vẫn render bình thường ở bản gốc. Đã **gỡ bỏ** thay đổi thừa đó.
+⚠️ **Đừng thêm `try/catch` vào `generateMetadata`** — không cần, chỉ làm rối.
