@@ -51,6 +51,9 @@ Thumbs.db
 # misc
 *.pem
 
+# krpano dev-server binaries — never deploy or commit
+public/vr-tour/**/tour_testingserver*
+
 # ide
 .vscode/settings.json
 .idea/
