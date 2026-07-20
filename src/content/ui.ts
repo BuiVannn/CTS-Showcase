@@ -202,6 +202,8 @@ export const ui = {
     enter: { en: "Start", vi: "Bắt đầu" } as Localized,
     statusCampus: { en: "PTIT CAMPUS · 360°", vi: "KHUÔN VIÊN PTIT · 360°" } as Localized,
     statusCie: { en: "CIE CENTER · 360°", vi: "TRUNG TÂM CIE · 360°" } as Localized,
+    statusFpt: { en: "LAB FPT · 360°", vi: "LAB FPT · 360°" } as Localized,
+    statusViettel: { en: "LAB VIETTEL · 360°", vi: "LAB VIETTEL · 360°" } as Localized,
   },
   home: {
     heroEyebrow: { en: "Learn · Create · Play ecosystem", vi: "Hệ sinh thái Học · Sáng tạo · Chơi" } as Localized,
