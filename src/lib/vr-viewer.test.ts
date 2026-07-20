@@ -5,6 +5,10 @@ import {
   CIE_MODE,
   CIE_TOUR_SRC,
   CAMPUS_TOUR_SRC,
+  FPT_MODE,
+  VIETTEL_MODE,
+  FPT_TOUR_SRC,
+  VIETTEL_TOUR_SRC,
 } from "./vr-viewer";
 
 const ORIGIN = "http://localhost:3001";
@@ -38,5 +42,25 @@ describe("parseViewerMessage", () => {
   it("rejects non-object payloads", () => {
     expect(parseViewerMessage(null, ORIGIN, ORIGIN)).toBeNull();
     expect(parseViewerMessage("cts-vr-load", ORIGIN, ORIGIN)).toBeNull();
+  });
+
+  it("returns FPT_MODE for the FPT tour url", () => {
+    const data = { type: "cts-vr-load", src: FPT_TOUR_SRC };
+    expect(parseViewerMessage(data, ORIGIN, ORIGIN)).toEqual(FPT_MODE);
+  });
+
+  it("returns VIETTEL_MODE for the Viettel tour url", () => {
+    const data = { type: "cts-vr-load", src: VIETTEL_TOUR_SRC };
+    expect(parseViewerMessage(data, ORIGIN, ORIGIN)).toEqual(VIETTEL_MODE);
+  });
+
+  it("rejects a prototype-pollution src like 'constructor'", () => {
+    const data = { type: "cts-vr-load", src: "constructor" };
+    expect(parseViewerMessage(data, ORIGIN, ORIGIN)).toBeNull();
+  });
+
+  it("rejects a non-string src", () => {
+    const data = { type: "cts-vr-load", src: 123 };
+    expect(parseViewerMessage(data, ORIGIN, ORIGIN)).toBeNull();
   });
 });
