@@ -7,6 +7,14 @@ import ViewerChrome from "@/components/viewer/ViewerChrome";
 import ViewerEntry from "@/components/viewer/ViewerEntry";
 import { CAMPUS_MODE, parseViewerMessage, type ViewerMode } from "@/lib/vr-viewer";
 
+/** Status/eyebrow label per tour area. */
+const STATUS_BY_AREA = {
+  campus: ui.vrTour.statusCampus,
+  cie: ui.vrTour.statusCie,
+  fpt: ui.vrTour.statusFpt,
+  viettel: ui.vrTour.statusViettel,
+} as const;
+
 /**
  * Fullscreen VR tour. Drives the krpano iframe from `mode.src` state so the
  * "Trung tâm CIE" location can swap the viewport to its standalone sub-tour
@@ -46,8 +54,8 @@ export default function VRTourShell() {
     if (!isFirstLoadRef.current) setShowEntry(false);
   }
 
-  const isCie = mode.area === "cie";
-  const back = isCie
+  const isSubtour = mode.area !== "campus";
+  const back = isSubtour
     ? {
         label: t(ui.vrTour.backToCampus),
         onClick: () => {
@@ -59,7 +67,7 @@ export default function VRTourShell() {
         },
       }
     : { label: t(ui.vrTour.backHome), href: "/" };
-  const status = isCie ? t(ui.vrTour.statusCie) : t(ui.vrTour.statusCampus);
+  const status = t(STATUS_BY_AREA[mode.area]);
 
   return (
     <ViewerChrome back={back} label={t(ui.vrTour.eyebrow)} status={status}>
@@ -75,7 +83,7 @@ export default function VRTourShell() {
       {showEntry && (
         <ViewerEntry
           variant={isFirstLoad ? "hero" : "loader"}
-          title={isCie ? t(ui.vrTour.statusCie) : t(ui.vrTour.entryTitle)}
+          title={isSubtour ? status : t(ui.vrTour.entryTitle)}
           lead={t(ui.vrTour.entryLead)}
           meta={status}
           ready={ready}
