@@ -36,12 +36,26 @@ const sceneData = {
         purpose: 'Nơi làm việc của Ban Giám hiệu và các phòng ban chức năng.',
         thumb: 'panos/GPBK2218_1773131077123.tiles/thumb.jpg'
     },
-    'scene_10': { 
-        title: 'Tòa A2', 
-        description: 'Tòa nhà giảng đường chính với quy mô lớn, nơi diễn ra các buổi học quan trọng.', 
+    'scene_10': {
+        title: 'Tòa A2',
+        description: 'Tòa nhà giảng đường chính với quy mô lớn, nơi diễn ra các buổi học quan trọng.',
         roomType: 'Giảng đường',
         purpose: 'Giảng dạy và học tập các môn lý thuyết.',
         thumb: 'panos/10.tiles/thumb.jpg'
+    },
+    "scene_lab_fpt": {
+        title: 'Lab FPT',
+        description: 'Phòng lab hợp tác với FPT trong khuôn viên PTIT.',
+        roomType: 'Lab',
+        purpose: 'Không gian thực hành và nghiên cứu.',
+        thumb: 'vtour-fpt/panos/fpt1.tiles/thumb.jpg'
+    },
+    "scene_lab_viettel": {
+        title: 'Lab Viettel',
+        description: 'Phòng lab hợp tác với Viettel trong khuôn viên PTIT.',
+        roomType: 'Lab',
+        purpose: 'Không gian thực hành và nghiên cứu.',
+        thumb: 'vtour-viettel/panos/Viettel_Sanh.tiles/thumb.jpg'
     },
 };
 
@@ -70,6 +84,18 @@ const sceneGroups = [
     "title": "Trung tâm CIE",
     "scenes": [
       "scene_gpbk2224_1773131289876"
+    ]
+  },
+  {
+    "title": "Lab FPT",
+    "scenes": [
+      "scene_lab_fpt"
+    ]
+  },
+  {
+    "title": "Lab Viettel",
+    "scenes": [
+      "scene_lab_viettel"
     ]
   },
   {
@@ -139,6 +165,14 @@ const sceneGroups = [
     ]
   }
 ];
+
+// Sidebar entries that open a standalone sub-tour in the parent shell
+// (posted as a cts-vr-load message) instead of loading a krpano scene.
+const SUBTOUR_BY_SCENE = {
+  'scene_gpbk2224_1773131289876': '/vr-tour/vtour-cie/tour.html',
+  'scene_lab_fpt': '/vr-tour/vtour-fpt/tour.html',
+  'scene_lab_viettel': '/vr-tour/vtour-viettel/tour.html',
+};
 
 const SCENE_GROUPS_STORAGE_KEY = 'ptit_scene_groups_v1';
 let customSceneGroups = null;
@@ -1489,10 +1523,11 @@ function initSidebar() {
              `;
              
              item.onclick = () => {
-                 // CIE opens its dedicated standalone sub-tour in the parent shell.
-                 if (scene.sceneName === 'scene_gpbk2224_1773131289876') {
+                 // Some sidebar entries open a standalone sub-tour in the parent shell.
+                 const subtourSrc = SUBTOUR_BY_SCENE[scene.sceneName];
+                 if (subtourSrc) {
                      window.parent.postMessage(
-                         { type: 'cts-vr-load', src: '/vr-tour/vtour-cie/tour.html' },
+                         { type: 'cts-vr-load', src: subtourSrc },
                          location.origin
                      );
                      return;
