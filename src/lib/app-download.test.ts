@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { downloadApiHref, resolveDownload, describeDownload, badgeSrc } from "./app-download";
+import { downloadApiHref, isPlatform, resolveDownload, describeDownload, badgeSrc } from "./app-download";
 import type { EcosystemApp } from "@/content/types";
 
 const app = (downloads: EcosystemApp["downloads"]) => ({ slug: "x", downloads } as EcosystemApp);
@@ -7,6 +7,19 @@ const app = (downloads: EcosystemApp["downloads"]) => ({ slug: "x", downloads } 
 describe("downloadApiHref", () => {
   it("build đúng route trung gian", () => {
     expect(downloadApiHref("kidmentor", "android")).toBe("/api/download/kidmentor?platform=android");
+  });
+});
+
+describe("isPlatform", () => {
+  it("nhận android / ios / vr", () => {
+    expect(isPlatform("android")).toBe(true);
+    expect(isPlatform("ios")).toBe(true);
+    expect(isPlatform("vr")).toBe(true);
+  });
+  it("từ chối giá trị lạ hoặc thiếu", () => {
+    expect(isPlatform(null)).toBe(false);
+    expect(isPlatform("")).toBe(false);
+    expect(isPlatform("windows")).toBe(false);
   });
 });
 

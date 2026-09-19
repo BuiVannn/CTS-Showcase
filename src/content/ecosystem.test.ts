@@ -18,12 +18,12 @@ describe("ecosystem downloads", () => {
       }
     }
   });
-  it("đúng 2 app dùng APK trực tiếp cho Android (KidMentor, PTalk Signature)", () => {
+  it("các app dùng APK trực tiếp cho Android", () => {
     const apk = ecosystem
       .filter((a) => a.downloads?.android?.kind === "apk")
       .map((a) => a.id)
       .sort();
-    expect(apk).toEqual(["kidmentor", "ptalk-signature"]);
+    expect(apk).toEqual(["kidmentor", "p-connect", "ptalk-signature", "viet-creative"]);
   });
   it("Unilearn có sẵn trên cả hai store (Play + App Store)", () => {
     const uni = ecosystem.find((a) => a.id === "unilearn");

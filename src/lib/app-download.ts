@@ -5,6 +5,13 @@ export function downloadApiHref(slug: string, platform: Platform): string {
   return `/api/download/${slug}?platform=${platform}`;
 }
 
+const PLATFORMS: readonly Platform[] = ["android", "ios", "vr"];
+
+/** Validate the untrusted `?platform=` query value. */
+export function isPlatform(value: string | null): value is Platform {
+  return PLATFORMS.includes(value as Platform);
+}
+
 export type ResolveResult =
   | { ok: true; target: string }
   | { ok: false; reason: "no-platform" | "not-available" | "no-target" };

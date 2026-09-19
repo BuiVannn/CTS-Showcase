@@ -68,7 +68,10 @@ export const ecosystem: EcosystemApp[] = [
       en: ["Creative", "AI Tutor", "Vietnamese"],
       vi: ["Sáng tạo", "Gia sư AI", "Tiếng Việt"],
     },
-    downloads: { android: { status: "soon" }, ios: { status: "soon" } },
+    downloads: {
+      android: { status: "available", kind: "apk", target: "/downloads/viet-creative.apk", version: "1.0.0", updatedAt: "2026-09-19" },
+      ios: { status: "soon" },
+    },
     image: { src: "/img/vietCreative.jpg", alt: { en: "VietCreative", vi: "VietCreative" } },
   },
   {
@@ -216,7 +219,10 @@ export const ecosystem: EcosystemApp[] = [
       ],
     },
     tags: { en: ["Bluetooth", "Devices", "Connectivity"], vi: ["Bluetooth", "Thiết bị", "Kết nối"] },
-    downloads: { android: { status: "soon" }, ios: { status: "soon" } },
+    downloads: {
+      android: { status: "available", kind: "apk", target: "/downloads/p-connect.apk", version: "1.0.0", updatedAt: "2026-09-19" },
+      ios: { status: "soon" },
+    },
     image: { src: "/img/1account.png", alt: { en: "P-Connect", vi: "P-Connect" } },
     logo: "/img/logos/logo_p_connect.png",
   },
@@ -255,7 +261,9 @@ export const vrDevices: EcosystemApp[] = [
       ],
     },
     tags: { en: ["VR", "STEM", "Immersive"], vi: ["VR", "STEM", "Nhập vai"] },
-    downloads: { vr: { status: "soon" } },
+    downloads: {
+      vr: { status: "available", kind: "apk", target: "/downloads/stem-vr.apk", version: "1.0.1", updatedAt: "2026-09-19" },
+    },
     image: { src: "/img/vr.jpg", alt: { en: "STEM VR", vi: "STEM VR" } },
   },
 ];

@@ -165,8 +165,8 @@ export const ui = {
       vi: "Cài ứng dụng CTS Lab lên điện thoại hoặc máy tính bảng.",
     } as Localized,
     vrGroupLead: {
-      en: "Immersive learning on Meta Quest and standalone VR headsets.",
-      vi: "Học tập nhập vai trên Meta Quest và kính VR độc lập.",
+      en: "Immersive learning on Meta Quest and standalone VR headsets. The APK installs via developer mode (SideQuest or adb).",
+      vi: "Học tập nhập vai trên Meta Quest và kính VR độc lập. Cài APK qua chế độ nhà phát triển (SideQuest hoặc adb).",
     } as Localized,
     getOnPlay: { en: "Get it on Google Play", vi: "Tải trên Google Play" } as Localized,
     getOnAppStore: { en: "Download on the App Store", vi: "Tải trên App Store" } as Localized,

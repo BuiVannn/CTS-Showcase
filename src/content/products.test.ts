@@ -54,17 +54,17 @@ describe("getProduct", () => {
 });
 
 describe("getVrDevices", () => {
-  it("returns STEM VR as a VR-only download (coming soon)", () => {
+  it("returns STEM VR as a VR-only APK download", () => {
     const vr = getVrDevices();
     expect(vr.map((a) => a.slug)).toEqual(["stem-vr"]);
-    expect(vr[0].downloads?.vr?.status).toBe("soon");
+    expect(vr[0].downloads?.vr).toMatchObject({ status: "available", kind: "apk", target: "/downloads/stem-vr.apk" });
     expect(vr[0].downloads?.android).toBeUndefined();
   });
   it("STEM VR is NOT a mobile download app and NOT in the products grid", () => {
     expect(getDownloadApps().some((a) => a.slug === "stem-vr")).toBe(false);
     expect(getProducts().some((a) => a.slug === "stem-vr")).toBe(false);
   });
-  it("getProduct resolves stem-vr (so the download route can find it later)", () => {
+  it("getProduct resolves stem-vr (so the download route can find it)", () => {
     expect(getProduct("stem-vr")?.name).toBe("STEM VR");
   });
 });
