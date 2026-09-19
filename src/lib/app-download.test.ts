@@ -28,6 +28,20 @@ describe("resolveDownload", () => {
     const r = resolveDownload(app({ android: { status: "available", kind: "apk", target: "/d/k.apk" } }), "android");
     expect(r).toEqual({ ok: true, target: "/d/k.apk" });
   });
+  it("apk tự host + version → gắn ?v= để CDN không phát bản cũ", () => {
+    const r = resolveDownload(app({ android: { status: "available", kind: "apk", target: "/downloads/k.apk", version: "1.0.1", updatedAt: "2026-09-20" } }), "android");
+    expect(r).toEqual({ ok: true, target: "/downloads/k.apk?v=1.0.1_2026-09-20" });
+  });
+  it("apk chỉ có version → ?v=version", () => {
+    const r = resolveDownload(app({ android: { status: "available", kind: "apk", target: "/downloads/k.apk", version: "2.0" } }), "android");
+    expect(r).toEqual({ ok: true, target: "/downloads/k.apk?v=2.0" });
+  });
+  it("URL tuyệt đối (store) hoặc target đã có query → giữ nguyên", () => {
+    const abs = resolveDownload(app({ android: { status: "available", kind: "play", target: "https://play.google.com/x", version: "1" } }), "android");
+    expect(abs).toEqual({ ok: true, target: "https://play.google.com/x" });
+    const q = resolveDownload(app({ android: { status: "available", kind: "apk", target: "/d/k.apk?x=1", version: "1" } }), "android");
+    expect(q).toEqual({ ok: true, target: "/d/k.apk?x=1" });
+  });
   it("thiếu app → no-platform", () => {
     expect(resolveDownload(undefined, "android")).toEqual({ ok: false, reason: "no-platform" });
   });

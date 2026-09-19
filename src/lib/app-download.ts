@@ -22,7 +22,17 @@ export function resolveDownload(app: EcosystemApp | undefined, platform: Platfor
   if (!pd) return { ok: false, reason: "no-platform" };
   if (pd.status !== "available") return { ok: false, reason: "not-available" };
   if (!pd.target) return { ok: false, reason: "no-target" };
-  return { ok: true, target: pd.target };
+  return { ok: true, target: versionedTarget(pd) };
+}
+
+/** APK tự host (đường dẫn gốc "/downloads/…") được Cloudflare cache theo URL → thay file
+ *  cùng tên thì CDN vẫn phát bản cũ. Gắn `?v=<version>_<updatedAt>` để mỗi lần cập nhật
+ *  version/ngày là một URL mới (nginx bỏ qua query). URL tuyệt đối / đã có query: giữ nguyên. */
+function versionedTarget(pd: PlatformDownload): string {
+  const target = pd.target!;
+  if (!target.startsWith("/") || target.includes("?") || !pd.version) return target;
+  const v = pd.updatedAt ? `${pd.version}_${pd.updatedAt}` : pd.version;
+  return `${target}?v=${encodeURIComponent(v)}`;
 }
 
 export type DownloadView =
