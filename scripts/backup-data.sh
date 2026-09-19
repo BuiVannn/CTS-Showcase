@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sao lưu dữ liệu KHÔNG nằm trong git của ctslab.net → Google Drive (rclone remote `gdrive`).
+# Sao lưu dữ liệu KHÔNG nằm trong git của ctslab.net → Google Drive của xuannamservice@gmail.com (rclone remote `gdrive-cts`).
 # Hướng dẫn khôi phục: docs/backup.md. Cron: hằng ngày 20:00 UTC (= 03:00 giờ VN).
 #
 # Mỗi lần chạy:
@@ -18,7 +18,7 @@ GAMES_ROOT=/home/namnx/ctslab-games-root
 APK_DIR=/var/www/ctslab-downloads
 LOCAL_DIR=/home/namnx/backups/ctslab-web
 PASSFILE=/home/namnx/.config/ctslab-backup/passphrase
-REMOTE=gdrive:Backups/ctslab-web
+REMOTE=gdrive-cts:Backups/ctslab-web  # Drive của xuannamservice@gmail.com
 KEEP_LOCAL=7
 KEEP_REMOTE_DAYS=30
 
