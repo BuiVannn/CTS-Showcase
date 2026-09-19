@@ -57,3 +57,17 @@ public/vr-tour/**/tour_testingserver*
 # ide
 .vscode/settings.json
 .idea/
+# bản sao .next tạo khi deploy (cp -a .next .next.bak-<ngày>) — chỉ để quay lui trên server
+/.next.bak-*/
+/.next.old/
+
+# dữ liệu runtime SQLite (lượt tải, game, ptalk-usage) — sống trên server, không commit
+/data/
+*.db-shm
+
+# file tạm lớn (zip tour VR, apk) và bản build game thử (đã có trong ctslab-games-root)
+/folder_tmp/
+/game/
+
+# bản backup tour VR khi thay tour mới
+public/vr-tour/*.bak-*/
