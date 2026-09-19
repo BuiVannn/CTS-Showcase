@@ -143,7 +143,7 @@ export const ecosystem: EcosystemApp[] = [
     tags: { en: ["AI", "Kids", "Learning"], vi: ["AI", "Trẻ em", "Học tập"] },
     downloads: {
       // TODO(user): đổi `target` sang host thật khi chốt (games origin :8090 / public/ / thư mục ngoài repo).
-      android: { status: "available", kind: "apk", target: "/downloads/kidmentor.apk", version: "1.0.0", updatedAt: "2026-07-06" },
+      android: { status: "available", kind: "apk", target: "/downloads/kidmentor.apk", version: "1.0.1", updatedAt: "2026-09-20" },
       ios: { status: "soon" },
     },
     // image = existing placeholder so /products + Hệ sinh thái cards never break;
